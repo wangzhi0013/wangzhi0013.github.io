@@ -1,0 +1,28 @@
+body{
+    text-align: center;
+    margin: 0;
+}
+.bd{
+    /*border: 0;*/
+    width: 250px;
+    border-radius:20px;
+    margin:20px 0 0 0;
+    padding: 0 15px 0 15px ;
+    font-size: 15px;
+    line-height: 40px;
+
+}
+#anniu{
+    margin-top: 60px;
+    background: darkcyan;
+    width: 80px;
+    height: 40px;
+    border-radius:20px;
+    border: 0;
+    font-size: 15px;
+    border: 0;
+    box-shadow: 2px 2px 5px 0 darkcyan;
+}
+#anniu:focus{
+    background: #036558;
+}
