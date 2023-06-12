@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
+    <title>hexo配置</title>
     <url>/2023/06/11/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<h5 id="推送到github"><a href="#推送到github" class="headerlink" title="推送到github"></a>推送到github</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
+      <tags>
+        <tag>配置</tag>
+        <tag>命令行</tag>
+      </tags>
   </entry>
   <entry>
     <title>代码演示</title>
@@ -24,9 +17,63 @@
     <content><![CDATA[<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">a</span> ()&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="fastjson"><a href="#fastjson" class="headerlink" title="fastjson"></a>fastjson</h1><p>json格式的数据，@type，rmi和一些出网行为<br>shiro<br>550<br>cookie中的rememberme&#x3D;deleteme<br>命令-序列化-AES加密-&gt;base64-&gt;rememberme<br>721<br>AES-128-CBC  加密的cookike  rememberme 不要key<br>通过padding 加密生成的代码构造rememberme<br>log4j<br>{jndi:ldap&#x2F;&#x2F;}<br>{jndi:rmi&#x2F;&#x2F;}</p>
 ]]></content>
+      <categories>
+        <category>测试</category>
+      </categories>
       <tags>
-        <tag>演示</tag>
         <tag>配置</tag>
+        <tag>演示</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ssrf笔记</title>
+    <url>/2023/06/12/ssrf%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h3 id="ssrf"><a href="#ssrf" class="headerlink" title="ssrf"></a>ssrf</h3><h4 id="漏洞出现点"><a href="#漏洞出现点" class="headerlink" title="漏洞出现点"></a>漏洞出现点</h4><h5 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h5><p>通过url 地址分享文章，例如如下地址:</p>
+<p><a href="http://share.xxx.com/index.?url=http://127.0.0.1">http://share.xxx.com/index.?url=http://127.0.0.1</a></p>
+<p>通过ur参数的获取来实现点击链接的时候跳到指定的分享文章。如果在此功能中没有对目标地址的范围做过滤与</p>
+<p>限制则就存在着SSRF漏洞。</p>
+<h5 id="图片加载与下载"><a href="#图片加载与下载" class="headerlink" title="图片加载与下载"></a>图片加载与下载</h5><p>通过URL地址加载或下载图片</p>
+<p><a href="http://image.xxx.com/image.php?image=http://127.0.0.1">http://image.xxx.com/image.php?image=http://127.0.0.1</a></p>
+<p>图片加载存在于很多的编辑器中，编辑器上传图片处，有的是加载远程图片到服务器内。还有一些采用了加载远程图片的形式，本地文章加载了设定好的远程图片服务器上的图片地址，如果没对加载的参数做限制可能造成SSRF</p>
+<h5 id="图片、文章收藏功能"><a href="#图片、文章收藏功能" class="headerlink" title="图片、文章收藏功能"></a>图片、文章收藏功能</h5><p><a href="http://title.xxx.com/title?title=file://etc/passwd">http://title.xxx.com/title?title=file://etc/passwd</a></p>
+<p>例如title参数是文章的标题地址，代表了一个文章的地址链接，请求后返回文章是否保存收藏的返回信息。如果保存，收藏功能采用了此种形式保存文章，则在没有限制参数的形式下可能存在SSRF.</p>
+<h5 id="代理服务，文件包含，多媒体加载，在线编程，站长工具，RSS-xml"><a href="#代理服务，文件包含，多媒体加载，在线编程，站长工具，RSS-xml" class="headerlink" title="代理服务，文件包含，多媒体加载，在线编程，站长工具，RSS,xml,"></a>代理服务，文件包含，多媒体加载，在线编程，站长工具，RSS,xml,</h5><h4 id="漏洞验证"><a href="#漏洞验证" class="headerlink" title="漏洞验证"></a>漏洞验证</h4><p>SSRF漏洞是让服务器发送请求的安全漏洞，所以我们就可以通过抓包分析发送的请求是否是由服务器发送的，从而来判断是否存在SSRF漏洞。，</p>
+<p>如果网站访问的百度页面，抓包的内容组并没有请求百度，那就说明请求是由服务器发出的，存在ssrf漏洞</p>
+<h5 id="SSRF常用协议"><a href="#SSRF常用协议" class="headerlink" title="SSRF常用协议"></a>SSRF常用协议</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">file:///  看文件，端口扫描，命令执行</span><br><span class="line"></span><br><span class="line">dict://   端口扫描，命令执行</span><br><span class="line"></span><br><span class="line">sftp://  传输</span><br><span class="line"></span><br><span class="line">ftp://</span><br><span class="line"></span><br><span class="line">tftp://  </span><br><span class="line"></span><br><span class="line">ldap://  轻量级目录访问</span><br><span class="line"></span><br><span class="line">gopher://   万金油</span><br></pre></td></tr></table></figure>
+
+<h5 id="常见触发参数名"><a href="#常见触发参数名" class="headerlink" title="常见触发参数名"></a>常见触发参数名</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">share	wap	url	link	src	source</span><br><span class="line"></span><br><span class="line">target	u	3g	display	sourceURI</span><br><span class="line"></span><br><span class="line">imageURL	domain</span><br></pre></td></tr></table></figure>
+
+<h4 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h4><p><strong>@绕过</strong> </p>
+<p><a href="http://www.cbaidu/">http://www.baidu</a><a href="mailto:&#x2e;&#x63;&#x6f;&#x6d;&#64;&#49;&#x32;&#55;&#x2e;&#x30;&#46;&#x30;&#x2e;&#x31;">&#x2e;&#x63;&#x6f;&#x6d;&#64;&#49;&#x32;&#55;&#x2e;&#x30;&#46;&#x30;&#x2e;&#x31;</a>:8080</p>
+<p><strong>ip地址转换成进制</strong>绕过</p>
+<p>ping 2130706433</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/35329361/1685932689118-1545318e-a582-4769-b926-3bb6b69527ad.png" alt="img"></p>
+<p>127.0.0.1先转换成2进制，去掉小数点在转回十进制</p>
+<p><strong>302 redirect</strong>绕过</p>
+<p>当url存在临时(302)永久(301)跳转时，则继续请求跳转后的url，那么我们可以通过http的连接302跳转到gopher协议上</p>
+<p>ssrf限制只能用http或者https协议时，可以通过header函数绕过</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">header(<span class="string">&quot;Location:file:///etc/passwd&quot;</span>);</span><br><span class="line">?&gt;</span><br><span class="line">&lt;?php</span><br><span class="line">header(<span class="string">&quot;Location:dict://127.0.0.1:6666/info&quot;</span>);</span><br><span class="line">?&gt;</span><br><span class="line">&lt;?php</span><br><span class="line">header(<span class="string">&quot;Location:gopher://127.0.0.1:6666/info&quot;</span>);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>xip.io</strong>绕过</p>
+<p>dns解析这个host时会自动去掉后缀</p>
+<p><a href="http://10.0.0.1.xip.io/">http://10.0.0.1.xip.io</a> &#x3D; 10.0.0.1</p>
+<p><a href="http://www.10.0.0.1.xip.io/">www.10.0.0.1.xip.io</a>   &#x3D; 10.0.0.1</p>
+<p><a href="http://mysite.10.0.0.1.xip.io=10.0.0.1">http://mysite.10.0.0.1.xip.io=10.0.0.1</a></p>
+<p>foo.<a href="http://bar.10.0.0.1.xip.io/">http://bar.10.0.0.1.xip.io</a> &#x3D;10.0.0.1</p>
+<p>10.0.0.1.xip.name resolves to 10.0.0.1</p>
+<p><a href="http://www.10.0.0.2.xip.name/">www.10.0.0.2.xip.name</a> resolves to 10.0.0.2</p>
+<p>foo.10.0.0.3.xip.name resolves to 10.0.0.3</p>
+<p>bar.baz.10.0.0.4.xip.name resolves to 10.0.0.4</p>
+<p><strong>封闭式字母数字</strong>绕过</p>
+<p> ⓗ  ⓣ   ⓣ  Ⓟ  Ⓔ      &#x3D; <a href="http://example.com/">http://example.com</a></p>
+<p>封闭式字母数字网址 <a href="https://haomeili.net/ZhiShi/34">https://haomeili.net/ZhiShi/34</a></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">diverse = <span class="string">&#x27;&#x27;&#x27;①②③④⑤⑥⑦⑧⑨⑴⑵⑶⑷⑸⑹⑺⑻⑼⒈⒉⒊⒋⒌⒍⒎⒏⒐⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪⓵⓶⓷⓸⓹⓺⓻⓼⓽&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">general = <span class="string">&#x27;&#x27;&#x27;123456789123456789123456789abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz0123456789&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment"># 创建转换表</span></span><br><span class="line">decode = <span class="built_in">str</span>.maketrans(diverse, general)</span><br><span class="line">encode = <span class="built_in">str</span>.maketrans(general, diverse)</span><br><span class="line"><span class="comment"># 定义一个字符串</span></span><br><span class="line">text = <span class="string">&quot;www.baidu.com&quot;</span></span><br><span class="line"><span class="comment"># 使用转换表进行加密</span></span><br><span class="line">new_text = text.translate(encode)</span><br><span class="line"><span class="comment"># 输出结果</span></span><br><span class="line"><span class="built_in">print</span>(new_text)</span><br></pre></td></tr></table></figure>
+
+<p> <strong>DNS rebinding</strong>  </p>
+]]></content>
+      <tags>
+        <tag>网络安全</tag>
+        <tag>web</tag>
       </tags>
   </entry>
   <entry>
@@ -35,18 +82,18 @@
     <content><![CDATA[{"name":"string","short_name":"Junzhou","theme_color":"#49b1f5","background_color":"#49b1f5","display":"standalone","scope":"/","start_url":"/","icons":[{"src":"images/pwaicons/36.png","sizes":"36x36","type":"image/png"},{"src":"images/pwaicons/48.png","sizes":"48x48","type":"image/png"},{"src":"images/pwaicons/72.png","sizes":"72x72","type":"image/png"},{"src":"images/pwaicons/96.png","sizes":"96x96","type":"image/png"},{"src":"images/pwaicons/144.png","sizes":"144x144","type":"image/png"},{"src":"images/pwaicons/192.png","sizes":"192x192","type":"image/png"},{"src":"images/pwaicons/512.png","sizes":"512x512","type":"image/png"}],"splash_pages":null}]]></content>
   </entry>
   <entry>
-    <title>categories</title>
-    <url>/categories/index.html</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>好朋友们</title>
+    <title>wangzhi的好朋友们</title>
     <url>/link/index.html</url>
     <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>这是一个标签页</title>
     <url>/tags/index.html</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>categories</title>
+    <url>/categories/index.html</url>
     <content><![CDATA[]]></content>
   </entry>
 </search>
