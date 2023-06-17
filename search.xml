@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>hexo配置</title>
-    <url>/2023/06/11/hello-world/</url>
-    <content><![CDATA[<h5 id="推送到github"><a href="#推送到github" class="headerlink" title="推送到github"></a>推送到github</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo g    # generate生成</span><br><span class="line">hexo d    # deploy 推送</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>配置</tag>
-        <tag>命令行</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>shiro550分析复现</title>
     <url>/2023/06/12/shiro%E5%A4%8D%E7%8E%B0/</url>
     <content><![CDATA[<h3 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/apache/shiro.git</span><br><span class="line"><span class="built_in">cd</span> shiro</span><br><span class="line">git checkout shiro-root-1.2.4</span><br></pre></td></tr></table></figure>
@@ -279,6 +268,172 @@
       <tags>
         <tag>配置</tag>
         <tag>演示</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>加固和应急响应</title>
+    <url>/2023/06/16/%E5%8A%A0%E5%9B%BA%E5%92%8C%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/</url>
+    <content><![CDATA[<h4 id="加固"><a href="#加固" class="headerlink" title="加固"></a>加固</h4><p>国标</p>
+<p>GB&#x2F;T25058 信息安全技术 信息系统安全等级保护实施指南</p>
+<p>GB&#x2F;T22240 信息安全技术 信息系统安全等级保护定级指南</p>
+<p>GB&#x2F;T22239 信息安全技术 网络安全等级保护基本要求</p>
+<p>GB&#x2F;T25070 信息安全技术 网络安全等级保护安全设计技术要求</p>
+<p>GB&#x2F;T28449 信息安全技术  网络安全等级保护评测过程指南</p>
+<h5 id="版本升级"><a href="#版本升级" class="headerlink" title="版本升级"></a>版本升级</h5><p>windows有弹框，linux没提示</p>
+<h5 id="关闭端口服务"><a href="#关闭端口服务" class="headerlink" title="关闭端口服务"></a>关闭端口服务</h5><p>端口能不开就不开，最小安装原则</p>
+<h5 id="修改配置项"><a href="#修改配置项" class="headerlink" title="修改配置项"></a>修改配置项</h5><p>修改安全配置，参数，可以为网络和 应用提供必要的安全防护</p>
+<h5 id="主机和网络ACL策略"><a href="#主机和网络ACL策略" class="headerlink" title="主机和网络ACL策略"></a>主机和网络ACL策略</h5><p>iptables,对于流量进行严格的控制，白名单</p>
+<h5 id="修改代码"><a href="#修改代码" class="headerlink" title="修改代码"></a>修改代码</h5><h5 id="部署设备防护"><a href="#部署设备防护" class="headerlink" title="部署设备防护"></a>部署设备防护</h5><h4 id="linux加固方向"><a href="#linux加固方向" class="headerlink" title="linux加固方向"></a>linux加固方向</h4><h5 id="账号管理和认证授权"><a href="#账号管理和认证授权" class="headerlink" title="账号管理和认证授权"></a>账号管理和认证授权</h5><h6 id="修改目录权限"><a href="#修改目录权限" class="headerlink" title="修改目录权限"></a>修改目录权限</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 750 directory</span><br><span class="line"><span class="comment"># 默认目录权限是755   文件权限是644</span></span><br><span class="line"><span class="comment"># 改为750 640或者 700 600 </span></span><br><span class="line"><span class="built_in">chown</span> username:groupname directory</span><br><span class="line"></span><br><span class="line"><span class="comment">#更改账户组文件的权限</span></span><br><span class="line"><span class="built_in">chmod</span> 644 /etc/passwd</span><br><span class="line"><span class="built_in">chmod</span> 600 /etc/shadow</span><br><span class="line"><span class="built_in">chmod</span> 644 /etc/group</span><br><span class="line"><span class="comment">#去除多余的写入操作  全改</span></span><br><span class="line"><span class="built_in">chmod</span> -R go-w /etc</span><br></pre></td></tr></table></figure>
+
+<p>visudo</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#visudo中  !以后的为不允许使用该命令</span></span><br><span class="line">username   host=/usr/sbin/useradd, !/usr/bin/vim /etc/hosts,!/usr/bin/passwd root</span><br></pre></td></tr></table></figure>
+
+<p>检查高权限文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.find / -type f \( -perm -00007 \) -a -ctime -1 -exec ls -lg &#123;&#125; \;</span><br><span class="line">ctime -1 :一天内状态改变过的项</span><br><span class="line">mtime:内容修改</span><br><span class="line">atime:被访问</span><br></pre></td></tr></table></figure>
+
+<h6 id="禁止任何人su为root账户"><a href="#禁止任何人su为root账户" class="headerlink" title="禁止任何人su为root账户"></a>禁止任何人su为root账户</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 修改su的配置为配置文件</span></span><br><span class="line">/etc/pam.d/su</span><br><span class="line">	auth  sufficient   /lib/security/pam.rootok.so</span><br><span class="line">	auth  required     /lib/security/pam_wheel.so</span><br><span class="line">	group=wheel</span><br><span class="line"><span class="comment">#如果需要su切换，将用户加入wheel组</span></span><br><span class="line">gpasswd -a username wheel</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="去除不需要的账号，修改默认账号shell环境"><a href="#去除不需要的账号，修改默认账号shell环境" class="headerlink" title="去除不需要的账号，修改默认账号shell环境"></a>去除不需要的账号，修改默认账号shell环境</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#删除/锁定多余的用户与组</span></span><br><span class="line">userdel -r username</span><br><span class="line">groupdel groupname</span><br><span class="line">passwd -l username</span><br><span class="line"><span class="comment">#修改程序账户的登录shell</span></span><br><span class="line">usermod -s /sbin/nologin username</span><br></pre></td></tr></table></figure>
+
+<h6 id="限制超级管理员远程登录"><a href="#限制超级管理员远程登录" class="headerlink" title="限制超级管理员远程登录"></a>限制超级管理员远程登录</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 修改远程管理程序ssh的配置文件</span></span><br><span class="line">vi /etc/ssh/sshd_config</span><br><span class="line">   permitRootLogin <span class="built_in">yes</span></span><br><span class="line">   ↓</span><br><span class="line">   permitRootLogin no</span><br><span class="line"><span class="comment">#重启sshd服务</span></span><br><span class="line">systemctl restart sshd</span><br></pre></td></tr></table></figure>
+
+<h6 id="去掉所有suid和sgid"><a href="#去掉所有suid和sgid" class="headerlink" title="去掉所有suid和sgid"></a>去掉所有suid和sgid</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 防止提权</span><br><span class="line">#查找具有suid和sgid的对象</span><br><span class="line">find / -type f \( -perm -04000 -o -perm -02000 \) -exec ls -lg &#123;&#125; \;</span><br><span class="line">find / -type f \( -perm -04000 -o -perm -02000 \) |xargs -l &#123;&#125; ls -lh &#123;&#125;</span><br><span class="line">chmod ugo-s 对象</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="删除root以外UID为0的用户"><a href="#删除root以外UID为0的用户" class="headerlink" title="删除root以外UID为0的用户"></a>删除root以外UID为0的用户</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#检查哪些账户的UID为0</span></span><br><span class="line">awk -F: <span class="string">&#x27;($3 == 0) &#123; print $1 &#125;&#x27;</span> /etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p>删除账户</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">userdel -r username</span><br></pre></td></tr></table></figure>
+
+<p>或者编辑passwd与shadow文件</p>
+<h6 id="不应存在位于高权组的账户"><a href="#不应存在位于高权组的账户" class="headerlink" title="不应存在位于高权组的账户"></a>不应存在位于高权组的账户</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 检查哪些账户属于其他组</span></span><br><span class="line">grep -v ^<span class="comment"># /etc/login.defs |grep &quot;^GID_MIN&quot; | awk &#x27;&#123;print $2&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line">awk -F: <span class="string">&#x27;$3&gt;500&#123;print $1&#125;&#x27;</span> /etc/passwd |xargs -I &#123;&#125; grep &#123;&#125; /etc/group</span><br><span class="line"></span><br><span class="line">grep -v <span class="string">&quot;/sbin/nologin&quot;</span> /etc/passwd | awk -F: <span class="string">&#x27;&#123;print $1&#125;&#x27;</span> | xargs -I &#123;&#125; grep &#123;&#125; /etc/group</span><br></pre></td></tr></table></figure>
+
+<h6 id="缩短默认密码生存周期"><a href="#缩短默认密码生存周期" class="headerlink" title="缩短默认密码生存周期"></a>缩短默认密码生存周期</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 修改文件密码策略文件</span></span><br><span class="line">vi /etc/login.defs</span><br><span class="line">	PASS_MAX_DAYS 90   	<span class="comment">#最长使用期限90天</span></span><br><span class="line">	PASS_MIN_DAYS 0     <span class="comment">#最短使用期限0天</span></span><br><span class="line">	PASS_MIN_LEN  8     <span class="comment">#密码最小长度8位</span></span><br><span class="line">	PASS_WARN_AGE 7     <span class="comment">#最长期限到期前7天提醒更改密码</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h6 id="设置密码强度策略"><a href="#设置密码强度策略" class="headerlink" title="设置密码强度策略"></a>设置密码强度策略</h6><p>目的：规范使用高强度密码，延长被爆破的时间</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 修改pam认证文件</span></span><br><span class="line">vi /etc/pam.d/system-auth</span><br><span class="line">	password requisite, pam_cracklib.so</span><br><span class="line">	try_first_pass retry=3 dcredit=-1 1credit=-1</span><br><span class="line">	ucredit=-1 ocredit=-1 minclass=3 minlen=8</span><br><span class="line"></span><br><span class="line"><span class="comment">#centos7以后设置密码复杂度</span></span><br><span class="line">authconfig --passminlen=8 --update    <span class="comment"># 密码最短八位</span></span><br><span class="line">authconfig --enablereqlower --update  <span class="comment">#包含一个小写</span></span><br><span class="line">authconfig --enablerequpper --update  <span class="comment">#包含一个大写</span></span><br><span class="line">authconfig --enablereqdigit --update  <span class="comment">#包含一个数字</span></span><br><span class="line">authconfig --enablereqother --update  <span class="comment">#包含一个字符</span></span><br><span class="line"></span><br><span class="line">在文件/etc/security/pwquality.conf</span><br></pre></td></tr></table></figure>
+
+<h6 id="设置强制密码历史"><a href="#设置强制密码历史" class="headerlink" title="设置强制密码历史"></a>设置强制密码历史</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 修改pam认证文件</span></span><br><span class="line">/etc/pam.d/system-auth</span><br><span class="line">	password sufficient pam_unix.so sha512 shadow</span><br><span class="line">	nullok try_first_pass use_authtok remember=5</span><br></pre></td></tr></table></figure>
+
+<h6 id="设置账户锁定策略"><a href="#设置账户锁定策略" class="headerlink" title="设置账户锁定策略"></a>设置账户锁定策略</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 修改pam认证文件</span></span><br><span class="line">/etc/pam.d/system-auth</span><br><span class="line">/etc/pam.d/sshd</span><br><span class="line">/etc/pam.d/login</span><br><span class="line">	auth required pam_tally2.so deny=6</span><br><span class="line">	unlock_time=300 even_deny_root</span><br><span class="line">	root_unlock_time=60</span><br><span class="line"><span class="comment">#强制解锁账户的命令</span></span><br><span class="line">pam_tally2 --user zhangsan --reset</span><br></pre></td></tr></table></figure>
+
+<h6 id="修改umask值"><a href="#修改umask值" class="headerlink" title="修改umask值"></a>修改umask值</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#修改启动脚本文件</span></span><br><span class="line">/etc/profile</span><br><span class="line">/etc/csh.login</span><br><span class="line">/etc/csh.cshrc</span><br><span class="line">/etc/bashrc</span><br><span class="line"><span class="comment">#在文件末尾加入umask值 反码</span></span><br><span class="line"><span class="built_in">umask</span> 027   <span class="comment"># 权限750</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="限制硬件资源"><a href="#限制硬件资源" class="headerlink" title="限制硬件资源"></a>限制硬件资源</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#修改限制文件  减缓ddos带来的危害  </span></span><br><span class="line"><span class="comment">#加入以下内容</span></span><br><span class="line">vi /etc/security/limits.conf</span><br><span class="line">	soft core  0</span><br><span class="line">	hard core  0</span><br><span class="line">	hard rss   5000   <span class="comment">#限制5m的内存</span></span><br><span class="line">	hard <span class="built_in">nproc</span> 20     <span class="comment">#限制20个进程</span></span><br><span class="line">	</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在文件末尾加入信息</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">session required /lib64/security/pam_limit.so</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>日常收集进程数使用</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ps aux | grep httpd | wc -l</span><br></pre></td></tr></table></figure>
+
+<h6 id="启用日志功能，使用日志服务器"><a href="#启用日志功能，使用日志服务器" class="headerlink" title="启用日志功能，使用日志服务器"></a>启用日志功能，使用日志服务器</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#日志接收方</span></span><br><span class="line"><span class="comment"># 修改应用服务器日志配置文件</span></span><br><span class="line">vi /etc/rsyslog.conf</span><br><span class="line">	<span class="comment">#开启接收日志功能</span></span><br><span class="line">	<span class="variable">$ModLoad</span> imudp</span><br><span class="line">	<span class="variable">$UDPServerRun</span> 514</span><br><span class="line">	<span class="variable">$template</span> Remote,<span class="string">&quot;/var/1og/%<span class="variable">$YEAR</span>%-%<span class="variable">$MONTH</span>%-%<span class="variable">$DAY</span>%/%fromhost-ip%.log&quot;</span> <span class="comment">#远程日志路径</span></span><br><span class="line">	:formhost-ip,isequal,<span class="string">&quot;127.0.0.1&quot;</span> ?Remote <span class="comment">#本地日志不存储远程文件 </span></span><br><span class="line"><span class="comment"># 重启服务</span></span><br><span class="line">systemctl restart rsyslog</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#日志发送方</span></span><br><span class="line"><span class="comment"># 确认关键日志审计是否存在</span></span><br><span class="line">*.info;mail.none;authpriv.none;cron.none   /var/log/messages</span><br><span class="line">authpriv.*                                 /var/log/secure</span><br><span class="line"><span class="comment">#添加两行转发日志信息</span></span><br><span class="line">*.info;mail.none;authpriv.none;cron.none   @192.168.2.1</span><br><span class="line">authpriv.*                                 @192.168.2.1</span><br><span class="line"></span><br><span class="line"><span class="comment">#重启服务</span></span><br><span class="line">systemctl restart rsyslog</span><br><span class="line"><span class="comment">#设置权限为640</span></span><br><span class="line"><span class="built_in">ls</span> -al /var/log/</span><br><span class="line"><span class="built_in">chmod</span> -R 640 /var/log</span><br></pre></td></tr></table></figure>
+
+<h6 id="设置关键文件底层属性"><a href="#设置关键文件底层属性" class="headerlink" title="设置关键文件底层属性"></a>设置关键文件底层属性</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 修改关键文件和日志的底层属性，降低篡改风险</span></span><br><span class="line">chattr +a /var/log/message</span><br><span class="line">chattr +i /var/log/message.*</span><br><span class="line">chattr +i /var/etc/shadow</span><br><span class="line">chattr +i /var/etc/passwd</span><br><span class="line">chattr +i /var/etc/group</span><br><span class="line"><span class="comment"># 不只限于上述文件，可用lsattr查看更改结果</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="对用户使用ls-rm设置别名"><a href="#对用户使用ls-rm设置别名" class="headerlink" title="对用户使用ls,rm设置别名"></a>对用户使用ls,rm设置别名</h6><p>目的，让ls随时看清文件属性</p>
+<p>让rm需要确认后删除目标实施方法</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#修改当前用户的登录启动脚本</span></span><br><span class="line">vi ~/.bashrc</span><br><span class="line">	<span class="built_in">alias</span>  <span class="built_in">ls</span>=<span class="string">&quot;ls -alh&quot;</span></span><br><span class="line">	<span class="built_in">alias</span>  <span class="built_in">rm</span>=<span class="string">&quot;rm-i&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="对开放目录设置粘滞键"><a href="#对开放目录设置粘滞键" class="headerlink" title="对开放目录设置粘滞键"></a>对开放目录设置粘滞键</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 目的，允许小规模开放目录，用户作为暂存目录使用</span><br><span class="line">chmod +t /tmp/</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="通讯协议"><a href="#通讯协议" class="headerlink" title="通讯协议"></a>通讯协议</h5><h6 id="使用加密的远程管理ssh"><a href="#使用加密的远程管理ssh" class="headerlink" title="使用加密的远程管理ssh"></a>使用加密的远程管理ssh</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 修改配置文件</span></span><br><span class="line">vi /etc/ssh/sshd_config</span><br><span class="line">	PermitRootLogin   no</span><br><span class="line">	Port              20202</span><br><span class="line">	Protocol          2</span><br><span class="line">systemctl restart sshd</span><br></pre></td></tr></table></figure>
+
+<h6 id="设置访问控制列表"><a href="#设置访问控制列表" class="headerlink" title="设置访问控制列表"></a>设置访问控制列表</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 修改拒绝策略 </span></span><br><span class="line">vi /etc/hosts.deny</span><br><span class="line">	ALL:ALL</span><br><span class="line"><span class="comment"># 修改允许策略</span></span><br><span class="line">vi /etc/hosts.allow</span><br><span class="line">	sshd: &lt;来访者IP地址&gt;</span><br></pre></td></tr></table></figure>
+
+<h6 id="不响应ICMP请求"><a href="#不响应ICMP请求" class="headerlink" title="不响应ICMP请求"></a>不响应ICMP请求</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 修改网络策略布尔值</span></span><br><span class="line"><span class="built_in">echo</span> 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all</span><br></pre></td></tr></table></figure>
+
+<h6 id="禁止处理无源路由"><a href="#禁止处理无源路由" class="headerlink" title="禁止处理无源路由"></a>禁止处理无源路由</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 防止被无源路由抓包  防arp攻击</span></span><br><span class="line"><span class="comment"># 检查是否开启了路由功能</span></span><br><span class="line">sysctl -n net.ipv4.conf.all.accept_source_route</span><br><span class="line"><span class="built_in">echo</span> 0 &gt; /proc/sys/net/ipv4/conf/all/accept_source_route</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h6 id="打开syn队列-syn-cookie"><a href="#打开syn队列-syn-cookie" class="headerlink" title="打开syn队列  syn cookie"></a>打开syn队列  syn cookie</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 缓解syn flood攻击  syn洪水</span><br><span class="line">vi /etc/sysctl.conf</span><br><span class="line">	net.ipv4.tcp_syncookies = 1</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+
+<h6 id="防御syn-flood攻击优化"><a href="#防御syn-flood攻击优化" class="headerlink" title="防御syn flood攻击优化"></a>防御syn flood攻击优化</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 修改半连接上限，缓解syn flood攻击</span></span><br><span class="line"><span class="comment"># 查询当前半连接上限</span></span><br><span class="line">sysctl net.ipv4.tcp_max_syn_backlog</span><br><span class="line"><span class="comment"># 修改半连接上限</span></span><br><span class="line">sysctl -w net.ipv4.tcp_max_synn_backlog =<span class="string">&quot;2048&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>FTP使用黑白名单限制</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 防止非法账户访问ftp</span></span><br><span class="line"><span class="comment"># 检查黑名单文件是否包括高危账户</span></span><br><span class="line">/etc/ftpusers</span><br><span class="line">root daemon bin sys adm lp uucp nuucp listen nobody noaccess nobody4</span><br><span class="line"><span class="comment"># 使用白名单文件</span></span><br><span class="line">/etc/user_list</span><br><span class="line">	userlist_deny=NO</span><br><span class="line">	userlist_enable=YES</span><br></pre></td></tr></table></figure>
+
+<h6 id="设置FTP上传的文件权限"><a href="#设置FTP上传的文件权限" class="headerlink" title="设置FTP上传的文件权限"></a>设置FTP上传的文件权限</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 防止被上传执行脚本</span></span><br><span class="line"><span class="comment"># 检查主配置文件/etc/vsftpd.conf是否存在如下内容</span></span><br><span class="line">	write_enable=YES</span><br><span class="line">	local_umask=022</span><br><span class="line">	anon_umask=022</span><br></pre></td></tr></table></figure>
+
+<h6 id="检查账户目录中是否存在高危文件-netrc、-rhosts"><a href="#检查账户目录中是否存在高危文件-netrc、-rhosts" class="headerlink" title="检查账户目录中是否存在高危文件.netrc、.rhosts"></a>检查账户目录中是否存在高危文件.netrc、.rhosts</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 防止被使用远程登录漏洞</span></span><br><span class="line"><span class="comment"># 检查账户home目录中是否存在远程主机文件</span></span><br><span class="line"><span class="keyword">for</span> DIR <span class="keyword">in</span> <span class="string">&#x27;cut -d&quot;:&quot; -f6 /etc/passwd&#x27;</span>; <span class="keyword">do</span></span><br><span class="line"><span class="keyword">if</span> [ -e <span class="variable">$DIR</span>/.netrc ]; <span class="keyword">then</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$DIR</span>/.netrc&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="comment"># 无返回值则表示正常</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="FTP设置banner信息"><a href="#FTP设置banner信息" class="headerlink" title="FTP设置banner信息"></a>FTP设置banner信息</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 防止泄露服务信息</span></span><br><span class="line">/etc/vsftpd.conf <span class="comment"># 是否存在如下内容  有的话删除掉</span></span><br><span class="line">	ftpd_banner=<span class="string">&quot;Authorized users only. All activity may be monitored and reported.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>配置可信任的NTP服务器，并确保服务开启</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 保持时间同步，防止某些服务错误</span></span><br><span class="line"><span class="comment"># 检查主配置文件/etc/ntp.conf是否存在如下内容</span></span><br><span class="line">	server X.X.X.X</span><br><span class="line"><span class="comment"># 确保服务被启用</span></span><br><span class="line">systemctl <span class="built_in">enable</span> ntpd</span><br><span class="line">systemctl status ntpd</span><br></pre></td></tr></table></figure>
+
+<h6 id="固化常用DNS解析"><a href="#固化常用DNS解析" class="headerlink" title="固化常用DNS解析"></a>固化常用DNS解析</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 修改hosts文件</span></span><br><span class="line">vi /etc/hosts</span><br><span class="line">	61.59.123.22 www.baidu.com</span><br></pre></td></tr></table></figure>
+
+<h6 id="关闭telnet"><a href="#关闭telnet" class="headerlink" title="关闭telnet"></a>关闭telnet</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 降低被抓包后获取系统关键信息</span></span><br><span class="line"><span class="comment"># 修改telnet配置文件</span></span><br><span class="line">vim /etc/xinetd.d/telnet</span><br><span class="line">	<span class="built_in">disable</span>=<span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="补丁管理"><a href="#补丁管理" class="headerlink" title="补丁管理"></a>补丁管理</h5><h6 id="补丁装载"><a href="#补丁装载" class="headerlink" title="补丁装载"></a>补丁装载</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 最好去官方找rpm包，安装补丁，下载时一定要进行签名校验</span><br><span class="line">yum update</span><br><span class="line"># http://www.redhat.com/corp/support/errata</span><br><span class="line">rpm -Fvh rpm包</span><br><span class="line"># 测试环境测试完，在安装</span><br></pre></td></tr></table></figure>
+
+<h5 id="服务进程与启动"><a href="#服务进程与启动" class="headerlink" title="服务进程与启动"></a>服务进程与启动</h5><h6 id="关闭NFS服务"><a href="#关闭NFS服务" class="headerlink" title="关闭NFS服务"></a>关闭NFS服务</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 防止被外挂文件系统，导致入侵</span></span><br><span class="line"><span class="comment"># 检查是否存在敏感进程</span></span><br><span class="line">ps aux | grep -E <span class="string">&quot;lockd|nfsd|statd|mountd&quot;</span></span><br><span class="line"><span class="comment"># 检查关闭NFS相关服务</span></span><br><span class="line">systemctl list-unit-files |grep nfs</span><br><span class="line">systemctl <span class="built_in">disable</span> nfs-client.target</span><br></pre></td></tr></table></figure>
+
+<h6 id="关闭无用服务"><a href="#关闭无用服务" class="headerlink" title="关闭无用服务"></a>关闭无用服务</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 关闭无用服务，提高系统性能，降低漏洞风险</span></span><br><span class="line"><span class="comment"># 检查有哪些自启动服务，并记录列表</span></span><br><span class="line">systemctl list-unit-files |grep <span class="built_in">enable</span></span><br><span class="line"><span class="comment"># 禁用无用服务</span></span><br><span class="line">systemctl stop &lt; 服务名&gt;</span><br><span class="line">systemctl disabled &lt;服务名&gt;</span><br></pre></td></tr></table></figure>
+
+<h6 id="建议关闭的服务"><a href="#建议关闭的服务" class="headerlink" title="建议关闭的服务"></a>建议关闭的服务</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rpm -qa | grep -E &quot;^amanda|^chargen|^chargen-udp|^cups|^cups-lpd|^daytime|^daytime-udp|^echo|^echo-udp|^eklogin|^ekrb5-telnet|^finger|^gssftp|^imapl^imaps|^ipop2|ipop3|^klogin|^krb5-telnet|^kshell|^ktalk|^ntalk|^rexec|^rlogin|^rsh|^rsync|^talk|^tcpmux-server|^telnet|^tftp|^time-dgram|^time-stream|^uucp&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="banner与自动注销"><a href="#banner与自动注销" class="headerlink" title="banner与自动注销"></a>banner与自动注销</h5><h6 id="隐藏系统提示信息"><a href="#隐藏系统提示信息" class="headerlink" title="隐藏系统提示信息"></a>隐藏系统提示信息</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看登录banner信息</span></span><br><span class="line"><span class="built_in">cat</span> /etc/issus</span><br><span class="line"><span class="comment"># 清空banner文件</span></span><br><span class="line"><span class="built_in">echo</span> &gt; /etc/issus</span><br></pre></td></tr></table></figure>
+
+<p>设置登录超时注销</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 修改信息</span></span><br><span class="line">vi /etc/profile</span><br><span class="line">	HISTFILESIZE=50   <span class="comment"># 只能看50行</span></span><br><span class="line"><span class="comment"># 生效</span></span><br><span class="line">	<span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+<h6 id="跳过grup菜单"><a href="#跳过grup菜单" class="headerlink" title="跳过grup菜单"></a>跳过grup菜单</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 防止在grup菜单对引导过程进行修改</span><br><span class="line"># 修改grup配置文件</span><br><span class="line">vi /boot/grup2/grup.cfg</span><br><span class="line"># 修改等时</span><br><span class="line">set timeout=0</span><br></pre></td></tr></table></figure>
+
+<h6 id="关闭ctrl-alt-del重启功能"><a href="#关闭ctrl-alt-del重启功能" class="headerlink" title="关闭ctrl+alt+del重启功能"></a>关闭ctrl+alt+del重启功能</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 修改配置文件</span></span><br><span class="line">vi /usr/lib/systemd/system/ctrl-alt-del.target</span><br><span class="line">	<span class="comment">#注释所有内容</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="windows加固方向"><a href="#windows加固方向" class="headerlink" title="windows加固方向"></a>windows加固方向</h4><h5 id="账号管理与认证授权"><a href="#账号管理与认证授权" class="headerlink" title="账号管理与认证授权"></a>账号管理与认证授权</h5><p>按用户类型分配账户</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 根据系统要求，设定不同的账户和组，管理员，数据库sa，审计用户，来宾用户</span></span><br><span class="line">打开本地用户和计算机管理器</span><br><span class="line">	打开运行，输入lusrmgr.msc</span><br><span class="line">	根据用户要求将账号加入功能组</span><br><span class="line">		右击账户-&gt; 属性-&gt;更改隶属于</span><br><span class="line">		右击功能组-&gt;属性-&gt;成员</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h6 id="清理系统无用账户"><a href="#清理系统无用账户" class="headerlink" title="清理系统无用账户"></a>清理系统无用账户</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#目的: 删除或锁定设备运行，维护等工作无关的账号，提高系统账号安全性</span></span><br><span class="line">打开本地用户和计算机管理器</span><br><span class="line">	打开运行，输入lusrmgr.msc</span><br><span class="line">删除或者锁无关账号(删除操作不可逆)</span><br><span class="line">右击账户-&gt;删除</span><br><span class="line">右击账户-&gt;属性-&gt;账户已禁用</span><br></pre></td></tr></table></figure>
+
+<h6 id="重命名administrator-禁用guest"><a href="#重命名administrator-禁用guest" class="headerlink" title="重命名administrator,禁用guest"></a>重命名administrator,禁用guest</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 减少账户被爆破可能性，提高系统访问安全性</span></span><br><span class="line">打开本地用户和计算机管理器</span><br><span class="line">	打开运行，输入lusrmgr.msc</span><br><span class="line">为管理员administrator账户改名</span><br><span class="line">	右击administrator-&gt;重命名-&gt;属性-&gt;全名</span><br><span class="line">禁用来宾guest</span><br><span class="line">	右击guest -&gt;属性-&gt;账户已禁用</span><br></pre></td></tr></table></figure>
+
+<h6 id="设置密码策略"><a href="#设置密码策略" class="headerlink" title="设置密码策略"></a>设置密码策略</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 防止弱口令出现，降低爆破的可能性</span></span><br><span class="line">打开本地安全策略</span><br><span class="line">	打开运行，输入secpol.msc</span><br><span class="line">找到密码策略</span><br><span class="line">	用户策略-&gt;密码策略</span><br><span class="line">修改默认值</span><br><span class="line">	密码必须符合复杂性要求:禁用-&gt; 启用</span><br><span class="line">	密码长度最小值: 0-&gt;8</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+]]></content>
+      <tags>
+        <tag>配置</tag>
+        <tag>命令行</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>命令</title>
+    <url>/2023/06/11/%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<h5 id="推送到github"><a href="#推送到github" class="headerlink" title="推送到github"></a>推送到github</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo g    # generate生成</span><br><span class="line">hexo d    # deploy 推送</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">关闭防火墙和开启3389</span><br><span class="line">netsh firewall <span class="built_in">set</span> opmode mode=<span class="built_in">disable</span></span><br><span class="line"></span><br><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal<span class="string">&quot; &quot;</span>Server /v fDenyTSConnections /t REG_DWORD /d 0 /f</span><br></pre></td></tr></table></figure>
+
+
+
+<p>linux</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#切换账户到admin</span></span><br><span class="line">su -l admin </span><br><span class="line"></span><br><span class="line"><span class="comment">#创建账户</span></span><br><span class="line">useradd   name  </span><br><span class="line">passwd   name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置静态网卡</span></span><br><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-eno</span><br><span class="line">systemctl restart network</span><br><span class="line"><span class="comment">#关闭防火墙和临时禁用selinux安全模块</span></span><br><span class="line">systemctl stop firewalld</span><br><span class="line">setenforce 0</span><br><span class="line"><span class="comment">#清空防火墙规则</span></span><br><span class="line">iptables -F</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>配置</tag>
+        <tag>命令行</tag>
       </tags>
   </entry>
   <entry>
