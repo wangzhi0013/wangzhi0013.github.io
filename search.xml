@@ -126,7 +126,16 @@
   <entry>
     <title>漏洞复现</title>
     <url>/2023/06/13/%E6%BC%8F%E6%B4%9E/</url>
-    <content><![CDATA[<h3 id="OA系统"><a href="#OA系统" class="headerlink" title="OA系统"></a>OA系统</h3><h4 id="宏景HR系统-CNVD-2023-08743"><a href="#宏景HR系统-CNVD-2023-08743" class="headerlink" title="宏景HR系统 CNVD-2023-08743"></a>宏景HR系统 CNVD-2023-08743</h4><h5 id="fofa语法"><a href="#fofa语法" class="headerlink" title="fofa语法"></a>fofa语法</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">body = &#x27;&lt;div class=&quot;hj-hy-all-one-logo&quot;&#x27;</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<h3 id="php"><a href="#php" class="headerlink" title="php"></a>php</h3><h4 id="php-cgi的远程代码执行漏洞-CVE-2012-1823"><a href="#php-cgi的远程代码执行漏洞-CVE-2012-1823" class="headerlink" title="php-cgi的远程代码执行漏洞(CVE-2012-1823)"></a>php-cgi的远程代码执行漏洞(CVE-2012-1823)</h4><p>影响版本</p>
+<p>5.3.12&lt;php&lt;5.4.2</p>
+<p>流量包</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/img1687000658571.png" alt="1687000658571"></p>
+<p>url部分为</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/?-d+allow_url_include%3don+-d+auto_prepend_file%3dphp%3a//input</span><br><span class="line"><span class="comment">#解码</span></span><br><span class="line"><span class="comment"># +号是空格 %3d是=  %3a是：</span></span><br><span class="line">/?-d allow_url_include=on -d auto_prepend_file=php://input</span><br></pre></td></tr></table></figure>
+
+<p>通过该漏洞来修改WEB服务器的相关配置（本次攻击是为了开启allow_url_include、auto_prepend_file配置），从而使得一些远程执行代码的功能得以实现。</p>
+<p>简单来说，这个特殊请求的功能就是使后面的POST数据能以PHP文件格式执行</p>
+<h3 id="OA系统"><a href="#OA系统" class="headerlink" title="OA系统"></a>OA系统</h3><h4 id="宏景HR系统-CNVD-2023-08743"><a href="#宏景HR系统-CNVD-2023-08743" class="headerlink" title="宏景HR系统 CNVD-2023-08743"></a>宏景HR系统 CNVD-2023-08743</h4><h5 id="fofa语法"><a href="#fofa语法" class="headerlink" title="fofa语法"></a>fofa语法</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">body = &#x27;&lt;div class=&quot;hj-hy-all-one-logo&quot;&#x27;</span><br></pre></td></tr></table></figure>
 
 <h5 id="poc"><a href="#poc" class="headerlink" title="poc"></a>poc</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/servlet/codesettree?categories=（Hrms编码之后的sql语句）&amp;codesetid=1&amp;flag=c&amp;parentid=-1&amp;status=1</span><br></pre></td></tr></table></figure>
 
@@ -261,6 +270,16 @@
     <url>/2023/06/11/%E6%BC%94%E7%A4%BA/%E6%BC%94%E7%A4%BA/</url>
     <content><![CDATA[<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">a</span> ()&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;yanshi&quot;</span>)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="fastjson"><a href="#fastjson" class="headerlink" title="fastjson"></a>fastjson</h1><p>json格式的数据，@type，rmi和一些出网行为<br>shiro<br>550<br>cookie中的rememberme&#x3D;deleteme<br>命令-序列化-AES加密-&gt;base64-&gt;rememberme<br>721<br>AES-128-CBC  加密的cookike  rememberme 不要key<br>通过padding 加密生成的代码构造rememberme<br>log4j<br>{jndi:ldap&#x2F;&#x2F;}<br>{jndi:rmi&#x2F;&#x2F;}</p>
+<h5 id="面试"><a href="#面试" class="headerlink" title="面试"></a>面试</h5><p>牛客网</p>
+<p>weblogic</p>
+<p>fastjson</p>
+<p>框架</p>
+<p>mybatis&#x2F;puls</p>
+<p>任意文件</p>
+<p>修复办法</p>
+<p>ssm</p>
+<p>spring cloud</p>
+<p>spring s</p>
 ]]></content>
       <categories>
         <category>测试</category>
@@ -400,9 +419,65 @@
 
 <h6 id="清理系统无用账户"><a href="#清理系统无用账户" class="headerlink" title="清理系统无用账户"></a>清理系统无用账户</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#目的: 删除或锁定设备运行，维护等工作无关的账号，提高系统账号安全性</span></span><br><span class="line">打开本地用户和计算机管理器</span><br><span class="line">	打开运行，输入lusrmgr.msc</span><br><span class="line">删除或者锁无关账号(删除操作不可逆)</span><br><span class="line">右击账户-&gt;删除</span><br><span class="line">右击账户-&gt;属性-&gt;账户已禁用</span><br></pre></td></tr></table></figure>
 
-<h6 id="重命名administrator-禁用guest"><a href="#重命名administrator-禁用guest" class="headerlink" title="重命名administrator,禁用guest"></a>重命名administrator,禁用guest</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 减少账户被爆破可能性，提高系统访问安全性</span></span><br><span class="line">打开本地用户和计算机管理器</span><br><span class="line">	打开运行，输入lusrmgr.msc</span><br><span class="line">为管理员administrator账户改名</span><br><span class="line">	右击administrator-&gt;重命名-&gt;属性-&gt;全名</span><br><span class="line">禁用来宾guest</span><br><span class="line">	右击guest -&gt;属性-&gt;账户已禁用</span><br></pre></td></tr></table></figure>
+<h6 id="重命名administrator-禁用guest"><a href="#重命名administrator-禁用guest" class="headerlink" title="重命名administrator,禁用guest"></a>重命名administrator,禁用guest</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 减少账户被爆破可能性，提高系统访问安全性</span></span><br><span class="line">打开本地用户和计算机管理器</span><br><span class="line">	打开运行，输入lusrmgr.msc</span><br><span class="line">为管理员administrator账户改名</span><br><span class="line">	右击administrator-&gt;重命名-&gt;属性-&gt;全名</span><br><span class="line">禁用来宾guest</span><br><span class="line">	右击guest -&gt;属性-&gt;账户已禁用</span><br><span class="line">	</span><br><span class="line"><span class="comment">#power user 组 权限仅次于administrator</span></span><br></pre></td></tr></table></figure>
 
-<h6 id="设置密码策略"><a href="#设置密码策略" class="headerlink" title="设置密码策略"></a>设置密码策略</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 防止弱口令出现，降低爆破的可能性</span></span><br><span class="line">打开本地安全策略</span><br><span class="line">	打开运行，输入secpol.msc</span><br><span class="line">找到密码策略</span><br><span class="line">	用户策略-&gt;密码策略</span><br><span class="line">修改默认值</span><br><span class="line">	密码必须符合复杂性要求:禁用-&gt; 启用</span><br><span class="line">	密码长度最小值: 0-&gt;8</span><br></pre></td></tr></table></figure>
+<h6 id="设置密码策略"><a href="#设置密码策略" class="headerlink" title="设置密码策略"></a>设置密码策略</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 防止弱口令出现，降低爆破的可能性</span></span><br><span class="line">打开本地安全策略</span><br><span class="line">	打开运行，输入secpol.msc</span><br><span class="line">找到密码策略</span><br><span class="line">	账户策略-&gt;密码策略</span><br><span class="line">    修改默认值</span><br><span class="line">        密码必须符合复杂性要求:禁用-&gt; 启用</span><br><span class="line">        密码长度最小值: 0-&gt;8</span><br><span class="line">        密码最短使用期限: 0天</span><br><span class="line">        密码最长使用期限:42天-&gt;90天</span><br><span class="line">        强制密码历史:1-&gt;5</span><br><span class="line">        用可还原的加密来存储:禁用</span><br></pre></td></tr></table></figure>
+
+<h6 id="配置账户锁定策略"><a href="#配置账户锁定策略" class="headerlink" title="配置账户锁定策略"></a>配置账户锁定策略</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的:有效降低administrator以外的账户被爆破的几率</span></span><br><span class="line">打开本地安全策略</span><br><span class="line">	打开运行，输入secpol.msc</span><br><span class="line">找到账户锁定策略</span><br><span class="line">	账户策略-&gt;账户锁定策略</span><br><span class="line">		账户锁定时间: 未定义-&gt;30分钟</span><br><span class="line">		账户锁定阈值: 0-&gt;6</span><br><span class="line">		复位账户锁定计数器: 未定义-&gt;30分钟</span><br></pre></td></tr></table></figure>
+
+<p>远程关机权限设置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的:防止远程用户非法关闭系统</span></span><br><span class="line">打开本地安全策略</span><br><span class="line">	打开运行，输入secpol.msc</span><br><span class="line">找到用户权限分配</span><br><span class="line">	本地策略-&gt;用户权限分配</span><br><span class="line">	关闭系统策略中，只保留administrator组</span><br><span class="line">	从远程系统强制关机</span><br><span class="line">	拒绝本地登录</span><br><span class="line">	拒绝从网络访问这台计算器</span><br></pre></td></tr></table></figure>
+
+<h6 id="取得文件或对象的所有权设置"><a href="#取得文件或对象的所有权设置" class="headerlink" title="取得文件或对象的所有权设置"></a>取得文件或对象的所有权设置</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的:防止用户非法绕过NTFS权限，获取文件内容</span></span><br><span class="line">打开本地安全策略</span><br><span class="line">	打开运行，输入secpol.msc</span><br><span class="line">找到用户权限分配</span><br><span class="line">	本地策略-&gt;用户权限分配</span><br><span class="line">	取得文件或对象的所有权策略，只保留administrator组</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>设置从本地登录此计算机</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的:防止用户非法登录主机</span></span><br><span class="line">打开本地安全策略</span><br><span class="line">	打开运行，输入secpol.msc</span><br><span class="line">找到用户权限分配</span><br><span class="line">	本地策略-&gt;用户权限分配</span><br><span class="line">	从本地登陆此计算机策略，加入授权用户</span><br></pre></td></tr></table></figure>
+
+<h5 id="日志配置"><a href="#日志配置" class="headerlink" title="日志配置"></a>日志配置</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 通过审核策略，记录系统登录事件，对象访问事件，软件安装事件，安全事件等</span></span><br><span class="line">打开本地安全策略</span><br><span class="line">	打开运行，输入secpol.msc</span><br><span class="line">找到审核策略</span><br><span class="line">	本地策略-&gt;审核策略</span><br><span class="line">修改审核策略</span><br><span class="line">	<span class="string">&quot;审核策略更改&quot;</span>      设置为<span class="string">&quot;成功&quot;</span>和<span class="string">&quot;失败&quot;</span>都要审核</span><br><span class="line">	<span class="string">&quot;审核对象访问&quot;</span>      设置为<span class="string">&quot;成功&quot;</span>和<span class="string">&quot;失败&quot;</span>都要审核</span><br><span class="line">    <span class="string">&quot;审核目录服务器访问&quot;</span> 设置为<span class="string">&quot;成功&quot;</span>和<span class="string">&quot;失败&quot;</span>都要审核</span><br><span class="line">    <span class="string">&quot;审核特权使用&quot;</span> 	  设置为<span class="string">&quot;成功&quot;</span>和<span class="string">&quot;失败&quot;</span>都要审核</span><br><span class="line">    <span class="string">&quot;审核系统事件&quot;</span> 	  设置为<span class="string">&quot;成功&quot;</span>和<span class="string">&quot;失败&quot;</span>都要审核</span><br><span class="line">    <span class="string">&quot;审核账户管理&quot;</span> 	  设置为<span class="string">&quot;成功&quot;</span>和<span class="string">&quot;失败&quot;</span>都要审核</span><br><span class="line">    <span class="string">&quot;审核过程追踪&quot;</span> 	  设置为<span class="string">&quot;成功&quot;</span>和<span class="string">&quot;失败&quot;</span>都要审核</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 在具体的文件-&gt;属性-&gt;设置访问</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="日志记录策略设置"><a href="#日志记录策略设置" class="headerlink" title="日志记录策略设置"></a>日志记录策略设置</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#目的 </span></span><br><span class="line">进入事件查看器</span><br><span class="line">打开运行-&gt;eventvwr.msc</span><br><span class="line">在日志属性中设置日志大小不小于1024KB,设置当达到最大日志尺寸时，按需要改写事件</span><br></pre></td></tr></table></figure>
+
+<h5 id="IP协议安全"><a href="#IP协议安全" class="headerlink" title="IP协议安全"></a>IP协议安全</h5><h6 id="启用TCP-x2F-IP筛选"><a href="#启用TCP-x2F-IP筛选" class="headerlink" title="启用TCP&#x2F;IP筛选"></a>启用TCP&#x2F;IP筛选</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 过滤掉不必要的端口，提高网络安全性</span><br><span class="line">运维人员列出业务所需端口</span><br><span class="line">打开本地连接</span><br><span class="line">	控制面板-&gt;网络连接-&gt;本地连接</span><br><span class="line">找到高级TCP/IP设置</span><br><span class="line">	右击本地连接-&gt;internet协议属性-&gt;高级TCP/IP设置</span><br><span class="line">	在选项的属性中启用网络连接的tcp/IP筛选，是开放业务协议端口</span><br></pre></td></tr></table></figure>
+
+<h6 id="开启系统防火墙"><a href="#开启系统防火墙" class="headerlink" title="开启系统防火墙"></a>开启系统防火墙</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的:多角度封堵业务以外的端口连接</span></span><br><span class="line">运维人员列出业务所需端口</span><br><span class="line">打开本地连接中的防火墙</span><br><span class="line">	控制面板-&gt;网络连接-&gt;本地连接</span><br><span class="line">	在高级选项中设置启用windows防火墙</span><br><span class="line">设置例外</span><br><span class="line">	只允许业务端口接入网络</span><br></pre></td></tr></table></figure>
+
+<h6 id="设置空闲超时锁定系统"><a href="#设置空闲超时锁定系统" class="headerlink" title="设置空闲超时锁定系统"></a>设置空闲超时锁定系统</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 防止由疏忽导致的系统被非法使用</span></span><br><span class="line">进入控制面板-&gt;显示-&gt;屏幕保护程序</span><br><span class="line">启用屏幕保护程序，设置等待时间为5分钟，启用在恢复时使用密码保护功能</span><br></pre></td></tr></table></figure>
+
+<h6 id="设置网络服务挂起时间"><a href="#设置网络服务挂起时间" class="headerlink" title="设置网络服务挂起时间"></a>设置网络服务挂起时间</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的:防止远程登录时由于疏忽导致的系统被非法使用</span></span><br><span class="line">打开本地安全策略</span><br><span class="line">	打开运行，输入secpol.msc</span><br><span class="line">打开安全选项</span><br><span class="line">	本地策略—&gt;安全选项</span><br><span class="line">	<span class="string">&quot;microsoft网络服务器&quot;</span>设置<span class="string">&quot;在挂起会话之前所需空闲时间&quot;</span>为5分钟</span><br></pre></td></tr></table></figure>
+
+<h6 id="关闭默认共享"><a href="#关闭默认共享" class="headerlink" title="关闭默认共享"></a>关闭默认共享</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: windows默认共享分区，关闭后提高信息安全性</span></span><br><span class="line"><span class="comment"># win+r  mmc  可以查看</span></span><br><span class="line">打开注册表编辑器，编辑和新建键值</span><br><span class="line">	打开运行-&gt;regedit.msc</span><br><span class="line">展开lsa目录</span><br><span class="line">	HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa</span><br><span class="line">	调整Restrictanonymous键值为1</span><br><span class="line">	建两个DWORD值分别命名为AutoShareWks和AutoShareServer</span><br><span class="line">	</span><br></pre></td></tr></table></figure>
+
+<h6 id="设置共享文件夹权限"><a href="#设置共享文件夹权限" class="headerlink" title="设置共享文件夹权限"></a>设置共享文件夹权限</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 只允许授权账户访问共享文件夹</span></span><br><span class="line">进入系统工具</span><br><span class="line">	控制面板-&gt;管理工具-&gt;计算机管理</span><br><span class="line">		进入系统工具-&gt;共享文件夹</span><br><span class="line">		查看每个文件夹的共享权限并按需求更改</span><br><span class="line">		在共享权限中删除everyone动态组</span><br></pre></td></tr></table></figure>
+
+<h5 id="漏洞管理"><a href="#漏洞管理" class="headerlink" title="漏洞管理"></a>漏洞管理</h5><h6 id="安全系统补丁"><a href="#安全系统补丁" class="headerlink" title="安全系统补丁"></a>安全系统补丁</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的:修复系统漏洞，安装最新的service pack补丁集</span></span><br><span class="line">部署wsus服务器</span><br><span class="line">从microsoft update下载补丁</span><br><span class="line">在测试机上安装补丁后测试业务运行情况</span><br><span class="line">使用wsus服务器内网分发补丁</span><br></pre></td></tr></table></figure>
+
+<h6 id="安装和更新杀毒软件"><a href="#安装和更新杀毒软件" class="headerlink" title="安装和更新杀毒软件"></a>安装和更新杀毒软件</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的: 提高系统防御力，保护关键信息不被破坏</span></span><br><span class="line">在服务器上安装最新版企业防病毒软件的服务端</span><br><span class="line">使用C/S架构部署企业版防病毒软件</span><br><span class="line">制定统一安全查杀规则</span><br></pre></td></tr></table></figure>
+
+<h5 id="windows的服务"><a href="#windows的服务" class="headerlink" title="windows的服务"></a>windows的服务</h5><h6 id="关闭无用服务-1"><a href="#关闭无用服务-1" class="headerlink" title="关闭无用服务"></a>关闭无用服务</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的:关闭不必要的服务，提高系统性能和安全性</span></span><br><span class="line">打开服务管理器</span><br><span class="line">	打开运行-&gt;services.msc</span><br><span class="line">关闭禁用服务</span><br><span class="line">	右击无关服务-&gt;属性-&gt;启动类型(禁用)-&gt;运行状态-&gt;停止</span><br><span class="line">	系统必须服务见附表</span><br></pre></td></tr></table></figure>
+
+<h6 id="关闭无用自启动项"><a href="#关闭无用自启动项" class="headerlink" title="关闭无用自启动项"></a>关闭无用自启动项</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 目的: 减少开机自启动服务和软件，提高性能和安全性</span><br><span class="line">打开微软控制台</span><br><span class="line">	打开运行-&gt;msconnfig</span><br><span class="line">	在启动选项卡中去掉多余的启动项的&quot;√&quot;</span><br></pre></td></tr></table></figure>
+
+<h6 id="关闭windows自动播放功能"><a href="#关闭windows自动播放功能" class="headerlink" title="关闭windows自动播放功能"></a>关闭windows自动播放功能</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目的:防止从移动存储设备感染自运行病毒</span></span><br><span class="line">打开组策略编辑器</span><br><span class="line">	打开运行-&gt;gpedit.msc</span><br><span class="line">找到策略所在</span><br><span class="line">	计算机配置-&gt;管理模板-&gt;系统-&gt;设置</span><br><span class="line">	关闭自动播放-&gt;已启用</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
