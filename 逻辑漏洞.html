@@ -1,0 +1,344 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>标签: 网络安全,漏洞 | wangzhiii的博客</title><meta name="author" content="wangzhiii"><meta name="copyright" content="wangzhiii"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1.修改时间漏洞（修改本地时间，会员问题） 客户端本地时间校验 2.xxe漏洞攻击 工具准备 链接：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1dTkI2vHmLBwW6c3W4MRWRg?pwd&#x3D;53z7  提取码：53z7  core.xml文件，上传恶意xslx文件。然后查看vps有没有回连 3.不安全的资源调用（国企，银行不会存在这类漏洞） 免费调用接口查信息 4.自己添加参数，删除">
+<meta property="og:type" content="website">
+<meta property="og:title" content="逻辑漏洞">
+<meta property="og:url" content="http://wangzhi0013.github.io/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E.html">
+<meta property="og:site_name" content="wangzhiii的博客">
+<meta property="og:description" content="1.修改时间漏洞（修改本地时间，会员问题） 客户端本地时间校验 2.xxe漏洞攻击 工具准备 链接：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1dTkI2vHmLBwW6c3W4MRWRg?pwd&#x3D;53z7  提取码：53z7  core.xml文件，上传恶意xslx文件。然后查看vps有没有回连 3.不安全的资源调用（国企，银行不会存在这类漏洞） 免费调用接口查信息 4.自己添加参数，删除">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://wangzhi0013.github.io/img/5.jpg">
+<meta property="article:published_time" content="2023-07-30T13:42:56.495Z">
+<meta property="article:modified_time" content="2023-07-30T13:42:56.495Z">
+<meta property="article:author" content="wangzhiii">
+<meta property="article:tag" content="博客">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://wangzhi0013.github.io/img/5.jpg"><link rel="shortcut icon" href="/./img/favicon.ico"><link rel="canonical" href="http://wangzhi0013.github.io/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?https://hm.baidu.com/hm.js?c44cd7fc8da8c10c754cb732b14e77f3";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":true,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '标签: 网络安全,漏洞',
+  isPost: false,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-30 21:42:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="page" id="body-wrap"><header class="not-home-page" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347)"><nav id="nav"><span id="blog-info"><a href="/" title="wangzhiii的博客"><span class="site-name">wangzhiii的博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="page-site-info"><h1 id="site-title">逻辑漏洞</h1></div></header><main class="layout" id="content-inner"><div id="page"><div id="article-container"><p>1.修改时间漏洞（修改本地时间，会员问题）</p>
+<p>客户端本地时间校验</p>
+<p>2.xxe漏洞攻击</p>
+<p>工具准备 链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1dTkI2vHmLBwW6c3W4MRWRg?pwd=53z7">https://pan.baidu.com/s/1dTkI2vHmLBwW6c3W4MRWRg?pwd=53z7</a> </p>
+<p>提取码：53z7 </p>
+<p>core.xml文件，上传恶意xslx文件。然后查看vps有没有回连</p>
+<p>3.不安全的资源调用（国企，银行不会存在这类漏洞）</p>
+<p>免费调用接口查信息</p>
+<p>4.自己添加参数，删除参数</p>
+<p>xxx&#x2F;getuid 修改为 xxx&#x2F;getuid&#x3D;1</p>
+<p>5.鉴权，继续拼接参数或者删除参数</p>
+<h2 id="6-支付漏洞"><a href="#6-支付漏洞" class="headerlink" title="6.支付漏洞"></a>6.支付漏洞</h2><p>下单的时候有两个id值，图片和价格，修改一项，用第二个产品的价格购买第一个产品</p>
+<p><strong>7.生成订单的时候修改价格</strong>，</p>
+<p>—-有时候一个订单价格可以由好几个参数决定</p>
+<p>同一个请求包，num:0.01修改价格成功并且成功付款，算一个</p>
+<p>同一个请求包，price:0.01修改价格成功并且成功付款，算一个</p>
+<p>参数不同，就是多个漏洞</p>
+<p><strong>8.付款的时候提示禁止修改价格</strong></p>
+<p>吧第一个成功的返回包替换到第二个</p>
+<p><a target="_blank" rel="noopener" href="http://xxxx.com/buysomething/yesbuyid?id=12222">http://xxxx.com/buysomething/yesbuyid?id=12222</a></p>
+<p><strong>25.盲盒或者抽奖</strong></p>
+<p>盲盒是奖励是固定的，抽奖是随机奖励，抓包查看id。或者下单的时候查看。或者查询订单，就是订单未付款但是查询订单结果。</p>
+<p>一个盲盒 你先到达支付页面 然后再回收这个盲盒，再支付(支付邮费)。此时可能商品会待发货而且已经回收的状态</p>
+<p>支付时多次生成订单，然后对每个订单都付款。(多次付款同一个商品)</p>
+<p><strong>27.订单漏洞，</strong></p>
+<p>未付款提前发货，未付款退款问题，修改数量，修改价格，负数，小数，用微信支付，或者余额支付，所有漏洞都要等发货了再交，绕过人工审核这一环节</p>
+<p><strong>47.修改返回的length长度</strong></p>
+<p>论文查重  传文件 长度13000改成1500</p>
+<p>价格从300变成6块</p>
+<p><strong>30.溢出</strong></p>
+<p>-2147483648到2147483647</p>
+<p>2147483648比这个多1元，溢出就付1元了，可能会宕机，如果服务器无法计算</p>
+<p><strong>32.消耗订单数量漏洞</strong></p>
+<h2 id="14-验证码类"><a href="#14-验证码类" class="headerlink" title="14.验证码类"></a>14.验证码类</h2><p>验证码复用</p>
+<p>验证码可以爆破，验证码六位数可以爆破，如果可以复用，才可能存在爆破的可能性</p>
+<p>A手机的验证码B可以用 </p>
+<p>返回包内验证码回显</p>
+<p>验证码双发，phone&#x3D;18888888888&amp;phone&#x3D;15623652651,两个手机号获得同样的验证码</p>
+<p>验证码通用000000</p>
+<p>验证码转发 逗号接上下一个手机号，</p>
+<p>已知邮箱验证链接，观察跳转连接的url，token  </p>
+<p>修改返回包内容验证码绕过500改成200，false改成true</p>
+<p>短信轰炸有限制，<strong>可以删除cookie</strong>,尝试绕过手机号码前后加空格，86,086，0086</p>
+<p>&#x2F;r，&#x2F;n，以及特殊符号等修改cookie，变量，</p>
+<p>返回138888888889 12位经过短信网关取前11位，导致短信轰炸进行能解析的编码</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>9.学号改工号</p>
+<p>{“xh”:10000001}改为{“gh”:”sysadmin”} 返回包修改类型或者usertype:”2”改成1</p>
+<p>10.腾讯地图apikey泄露——低危</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;https://map.qg.com/api/gljs?v=1.exp&amp;key=ZBBZ-*********-N563Z-ISDSD5&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>11,。微信session_key泄露</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage.png"></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/t-PCV7pAs448wf3pKIZmgg">https://mp.weixin.qq.com/s/t-PCV7pAs448wf3pKIZmgg</a></p>
+<p>12.没登录的情况下，翻js，未授权等漏洞</p>
+<p>在登录的情况下翻js （有些js是动态加载的，翻管理员功能接口</p>
+<p>13.一闪而过的允许点击（三个功能点）</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230730203447700.png" alt="image-20230730203447700"></p>
+<p>点击选项三  url是   xxxx&#x2F;type&#x3D;3   修改成2</p>
+<p>15.<html><script>alert('XSS is easy');</script><html> png 图片会弹框</p>
+<p>16.host主机钓鱼 邮件发送 多添加一条hostreferer</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/angry_program/article/details/109034421">https://blog.csdn.net/angry_program/article/details/109034421</a></p>
+<p>17.email&#x3D;<a href="mailto:&#49;&#50;&#x33;&#64;&#101;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#49;&#50;&#x33;&#64;&#101;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;</a>&amp;email&#x3D;<a href="mailto:&#49;&#50;&#x33;&#x40;&#x65;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;">&#49;&#50;&#x33;&#x40;&#x65;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;</a></p>
+<p>email&#x3D;<a href="mailto:&#x31;&#50;&#x33;&#x40;&#x65;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;">&#x31;&#50;&#x33;&#x40;&#x65;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;</a> %20email&#x3D;<a href="mailto:&#49;&#50;&#x33;&#x40;&#x65;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#109;">&#49;&#50;&#x33;&#x40;&#x65;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#109;</a></p>
+<p>email&#x3D;<a href="mailto:&#49;&#x32;&#51;&#x40;&#x65;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#49;&#x32;&#51;&#x40;&#x65;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a> | email&#x3D;<a href="mailto:&#x31;&#50;&#x33;&#64;&#101;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x31;&#50;&#x33;&#64;&#101;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
+<p>%0a%0 ,  </p>
+<p>18.订单功能取消，true改成false钱退回来，订单还是成功的状态</p>
+<p>19.删除用户提示没有权限，将host改成localhost  绕403  x-forward-for:127.0.0.1</p>
+<p>插件fakeip</p>
+<p>20.领取新人礼包，然后换绑账号（注销继续领取）尝试继续领取</p>
+<p>21.领一次的东西   并发</p>
+<p>22并发导致越权，过waf  &lt; &gt; 拦截  大量发包        服务器反应不过来</p>
+<p>23.数字型溢出  0.1不行    一直加0</p>
+<p>24.签约漏洞</p>
+<p>升级会员普通会员10元，升级为超级会员在加5块，两个客户端同时登陆付款</p>
+<p>26.推广漏洞，新人无限刷，用户注销重新推广</p>
+<p>29.并发</p>
+<p>5块钱余额，提现两次或以上并发更容易成功</p>
+<p>所有只能一次的地方都要想着并发</p>
+<p>31.pdfxss  xss无任何作用只能弹窗</p>
+<p>33.spf邮件欺骗</p>
+<p>spf是一个记录邮件服务器的服务   25端口</p>
+<p><a target="_blank" rel="noopener" href="https://www.kitterman.com/spf/validate.html">https://www.kitterman.com/spf/validate.html</a> 利用网站     </p>
+<p>34.cookie可逆</p>
+<p>jwt  cookie 存在一段一段重复性的字母</p>
+<p>35.六位数密码可爆破</p>
+<p>36.黑产如何挖掘  卖信息</p>
+<p>37.url拼接</p>
+<p>上传一个文件   xxx.com&#x2F;file&#x2F;xx.jpg</p>
+<p>xxx.com&#x2F;file&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd</p>
+<p>38.文件可遍历，文件名为规律递增</p>
+<p><a target="_blank" rel="noopener" href="http://xxxxx.com/file/156316.jpg">http://xxxxx.com/file/156316.jpg</a></p>
+<p>39.一个网站注册可以多种职务，学生老师管理员，</p>
+<p>40.编辑器问题，，xss csrf,文件上传</p>
+<p>41.一个漏洞变两个</p>
+<p>重复挖掘是一方面，网站对应的小程序，网站对应的app，同域名的子域名的漏洞</p>
+<p>42.跨域漏洞  cors  jsonp</p>
+<p>43.注册的时候抓包，替换掉admin</p>
+<p>44.覆盖admin,修改用户名的时候也可以，修改之后无法登陆，遍历，全站用户无法登陆</p>
+<p>45.浏览器本地缓存修改，举例</p>
+<p>46.小程序，appid和appsecret泄露，返回包泄露，使用官方接口利用</p>
+<p>通过这两个参数可以找到小程序的access token</p>
+</div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/./img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">wangzhiii</div><div class="author-info__description">欢迎访问</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/wangzhi0013"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E6%94%AF%E4%BB%98%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">6.支付漏洞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-%E9%AA%8C%E8%AF%81%E7%A0%81%E7%B1%BB"><span class="toc-number">2.</span> <span class="toc-text">14.验证码类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">3.</span> <span class="toc-text">其他</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/07/26/%E5%AF%BC%E5%87%BA%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6/" title="导出谷歌浏览器插件"><img src="/./img/%E4%BD%A0%E5%BE%88%E7%89%9B%E5%90%97.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="导出谷歌浏览器插件"/></a><div class="content"><a class="title" href="/2023/07/26/%E5%AF%BC%E5%87%BA%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6/" title="导出谷歌浏览器插件">导出谷歌浏览器插件</a><time datetime="2023-07-26T03:26:51.405Z" title="发表于 2023-07-26 11:26:51">2023-07-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/26/aksk%E6%B3%84%E9%9C%B2%E5%8F%8A%E5%88%A9%E7%94%A8/" title="无题"><img src="/./img/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2023/07/26/aksk%E6%B3%84%E9%9C%B2%E5%8F%8A%E5%88%A9%E7%94%A8/" title="无题">无题</a><time datetime="2023-07-26T02:47:50.956Z" title="发表于 2023-07-26 10:47:50">2023-07-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/24/AccessKey%E7%89%B9%E5%BE%81/" title="AccessKey特征"><img src="/./img/4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AccessKey特征"/></a><div class="content"><a class="title" href="/2023/07/24/AccessKey%E7%89%B9%E5%BE%81/" title="AccessKey特征">AccessKey特征</a><time datetime="2023-07-24T15:01:50.807Z" title="发表于 2023-07-24 23:01:50">2023-07-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/24/%E6%BC%94%E7%A4%BA/Untitled/" title="无题"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2023/07/24/%E6%BC%94%E7%A4%BA/Untitled/" title="无题">无题</a><time datetime="2023-07-24T15:01:28.422Z" title="发表于 2023-07-24 23:01:28">2023-07-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/18/%E5%AE%89%E5%85%A8%E8%AE%BE%E5%A4%87%E5%9F%B9%E8%AE%AD/" title="安全设备培训"><img src="/./img/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="安全设备培训"/></a><div class="content"><a class="title" href="/2023/07/18/%E5%AE%89%E5%85%A8%E8%AE%BE%E5%A4%87%E5%9F%B9%E8%AE%AD/" title="安全设备培训">安全设备培训</a><time datetime="2023-07-18T06:17:07.210Z" title="发表于 2023-07-18 14:17:07">2023-07-18</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%B5%8B%E8%AF%95/"><span class="card-category-list-name">测试</span><span class="card-category-list-count">1</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/%E9%85%8D%E7%BD%AE/" style="font-size: 1.35em; color: rgb(99, 60, 117)">配置</a><a href="/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/" style="font-size: 1.25em; color: rgb(155, 143, 101)">命令行</a><a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" style="font-size: 1.45em; color: rgb(46, 120, 66)">网络安全</a><a href="/tags/web/" style="font-size: 1.15em; color: rgb(28, 169, 97)">web</a><a href="/tags/%E6%BC%8F%E6%B4%9E/" style="font-size: 1.25em; color: rgb(79, 144, 184)">漏洞</a><a href="/tags/%E6%BC%94%E7%A4%BA/" style="font-size: 1.15em; color: rgb(144, 168, 170)">演示</a><a href="/tags/java%E5%AE%89%E5%85%A8/" style="font-size: 1.15em; color: rgb(160, 44, 171)">java安全</a><a href="/tags/java/" style="font-size: 1.15em; color: rgb(7, 113, 2)">java</a><a href="/tags/%E5%86%85%E7%BD%91/" style="font-size: 1.15em; color: rgb(141, 198, 122)">内网</a><a href="/tags/%E4%BB%A3%E7%90%86/" style="font-size: 1.15em; color: rgb(35, 194, 148)">代理</a><a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 1.15em; color: rgb(71, 115, 55)">服务器</a><a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 1.15em; color: rgb(88, 11, 25)">面试</a><a href="/tags/%E8%AE%BE%E5%A4%87/" style="font-size: 1.15em; color: rgb(34, 5, 12)">设备</a><a href="/tags/%E7%89%B9%E5%BE%81/" style="font-size: 1.15em; color: rgb(189, 150, 173)">特征</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/07/"><span class="card-archive-list-date">七月 2023</span><span class="card-archive-list-count">10</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/06/"><span class="card-archive-list-date">六月 2023</span><span class="card-archive-list-count">11</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">21</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">34.1k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-07-30T18:59:00.757Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347)"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By wangzhiii</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (true){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="true" data-click="true"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

